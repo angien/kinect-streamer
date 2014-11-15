@@ -1,0 +1,9 @@
+\\acsnfs4.ucsd.edu\cifshomes\281\pphaneuf\visual studio 2013\Projects\HeyYouGui\HeyYouGui\bin\Debug\HeyYouGui.exe.config
+\\acsnfs4.ucsd.edu\cifshomes\281\pphaneuf\visual studio 2013\Projects\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.Form1.resources
+\\acsnfs4.ucsd.edu\cifshomes\281\pphaneuf\visual studio 2013\Projects\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.Properties.Resources.resources
+\\acsnfs4.ucsd.edu\cifshomes\281\pphaneuf\visual studio 2013\Projects\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.csproj.GenerateResource.Cache
+\\acsnfs4.ucsd.edu\cifshomes\281\pphaneuf\visual studio 2013\Projects\HeyYouGui\HeyYouGui\bin\Debug\HeyYouGui.exe
+\\acsnfs4.ucsd.edu\cifshomes\281\pphaneuf\visual studio 2013\Projects\HeyYouGui\HeyYouGui\bin\Debug\HeyYouGui.pdb
+\\acsnfs4.ucsd.edu\cifshomes\281\pphaneuf\visual studio 2013\Projects\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.exe
+\\acsnfs4.ucsd.edu\cifshomes\281\pphaneuf\visual studio 2013\Projects\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.pdb
+\\acsnfs4.ucsd.edu\cifshomes\281\pphaneuf\visual studio 2013\Projects\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.csprojResolveAssemblyReference.cache
