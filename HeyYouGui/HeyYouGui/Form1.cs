@@ -14,12 +14,18 @@ namespace HeyYouGui
 {
     public partial class Form1 : Form
     {
-
+        int currentprofile = 1;
         SpeechSynthesizer synthesizer;
 
         public Form1()
         {
             InitializeComponent();
+
+            label1.Text = Program.profiles[currentprofile][0];
+            button1.Text = Program.profiles[currentprofile][1];
+            button2.Text = Program.profiles[currentprofile][2];
+            button3.Text = Program.profiles[currentprofile][3];
+
 
             synthesizer = new SpeechSynthesizer();
 
@@ -29,17 +35,17 @@ namespace HeyYouGui
 
         private void button1_Click(object sender, EventArgs e)
         {
-            synthesizer.Speak("Hey you.");
+            synthesizer.Speak(button1.Text);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            synthesizer.Speak("Hello");
+            synthesizer.Speak(button2.Text);
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            synthesizer.Speak("Help me");
+            synthesizer.Speak(button3.Text);
         }
     }
 }
