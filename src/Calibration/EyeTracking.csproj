@@ -7,7 +7,7 @@
     <ProjectGuid>{C6D4DFEB-1D02-4719-8E98-C95E44C86991}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Calibration</RootNamespace>
+    <RootNamespace>HeyYou.EyeTribe</RootNamespace>
     <AssemblyName>Calibration</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

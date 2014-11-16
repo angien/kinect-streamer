@@ -17,7 +17,7 @@ using System.Windows.Interop;
 using TETCSharpClient;
 
 
-namespace Calibration
+namespace HeyYou.EyeTracking
 {
     public partial class MainWindow : IConnectionStateListener, IGazeListener
     {
