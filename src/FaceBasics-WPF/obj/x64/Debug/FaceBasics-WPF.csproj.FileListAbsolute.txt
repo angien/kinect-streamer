@@ -1,0 +1,45 @@
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\bin\x64\Debug\FaceBasics-WPF.exe.config
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\bin\x64\Debug\FaceBasics-WPF.exe
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\bin\x64\Debug\FaceBasics-WPF.pdb
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Face.dll
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Face.xml
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.csprojResolveAssemblyReference.cache
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\obj\x64\Debug\MainWindow.baml
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\obj\x64\Debug\MainWindow.g.cs
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\obj\x64\Debug\App.g.cs
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF_MarkupCompile.cache
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.g.resources
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\obj\x64\Debug\Microsoft.Samples.Kinect.FaceBasics.Properties.Resources.resources
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.csproj.GenerateResource.Cache
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.exe
+C:\Users\cse118FA14\Documents\Kinect Examples\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.pdb
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\bin\x64\Debug\FaceBasics-WPF.exe.config
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\bin\x64\Debug\FaceBasics-WPF.exe
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\bin\x64\Debug\FaceBasics-WPF.pdb
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Face.dll
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Face.xml
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.csprojResolveAssemblyReference.cache
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\obj\x64\Debug\MainWindow.baml
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\obj\x64\Debug\MainWindow.g.cs
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\obj\x64\Debug\App.g.cs
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF_MarkupCompile.cache
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.g.resources
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\obj\x64\Debug\Microsoft.Samples.Kinect.FaceBasics.Properties.Resources.resources
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.csproj.GenerateResource.Cache
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.exe
+C:\Users\ubicompadres\Desktop\heyyou\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.pdb
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\bin\x64\Debug\FaceBasics-WPF.exe.config
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\bin\x64\Debug\FaceBasics-WPF.exe
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\bin\x64\Debug\FaceBasics-WPF.pdb
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Face.dll
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\bin\x64\Debug\Microsoft.Kinect.Face.xml
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.csprojResolveAssemblyReference.cache
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\obj\x64\Debug\MainWindow.baml
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\obj\x64\Debug\MainWindow.g.cs
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\obj\x64\Debug\App.g.cs
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF_MarkupCompile.cache
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.g.resources
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\obj\x64\Debug\Microsoft.Samples.Kinect.FaceBasics.Properties.Resources.resources
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.csproj.GenerateResource.Cache
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.exe
+C:\Users\ubicompadres\Desktop\heyyou\src\FaceBasics-WPF\obj\x64\Debug\FaceBasics-WPF.pdb
