@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalibrationSample", "Calibration\CalibrationSample.csproj", "{C6D4DFEB-1D02-4719-8E98-C95E44C86991}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EyeTracking", "Calibration\EyeTracking.csproj", "{C6D4DFEB-1D02-4719-8E98-C95E44C86991}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceBasics-WPF", "FaceBasics-WPF\FaceBasics-WPF.csproj", "{269A7B21-FBFE-4E7A-8BBE-C8DE2EC0D833}"
 EndProject

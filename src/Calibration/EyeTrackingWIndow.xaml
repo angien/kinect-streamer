@@ -4,7 +4,7 @@
  *
  * This source code is licensed under the BSD-style license found in the LICENSE file in the root directory of this source tree. 
 -->
-<Window x:Class="HeyYou.EyeTracking.MainWindow"
+<Window x:Class="HeyYou.EyeTracking.EyeTrackingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="The Eye Tribe BasicUI"

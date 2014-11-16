@@ -19,42 +19,30 @@ using TETCSharpClient;
 
 namespace HeyYou.EyeTracking
 {
-    public partial class MainWindow : IConnectionStateListener, IGazeListener
+    public partial class EyeTrackingWindow : IConnectionStateListener, IGazeListener
     {
-    	Window output = new Window();
-        public MainWindow()
+        private double gazeX;
+        private double gazeY;
+
+        public EyeTrackingWindow()
         {
             ConnectClient();
             InitializeComponent();
             Loaded += (sender, args) => InitClient();
-            
-            output.Width = 500;
-            output.Height = 500;
-            output.Title = "aww";
-            output.Show();
         }
 
         private void ConnectClient()
         {
             // Create a client for the eye tracker
             GazeManager.Instance.Activate(GazeManager.ApiVersion.VERSION_1_0, GazeManager.ClientMode.Push);
-            
             GazeManager.Instance.AddGazeListener(this);
-
-	         
-	     }
+	    }
 	
-	     public void OnGazeUpdate(GazeData gazeData)
-	     {
-	         double gX = gazeData.SmoothedCoordinates.X;
-	         double gY = gazeData.SmoothedCoordinates.Y;
-	         Dispatcher.Invoke((Action) delegate() {
-	                           	output.Title = gX.ToString() + ", " + gY.ToString();
-	                           });
-	         
-	
-	         // Move point, do hit-testing, log coordinates etc.
-	     }
+	    public void OnGazeUpdate(GazeData gazeData)
+	    {
+	        gazeX = gazeData.SmoothedCoordinates.X;
+	        gazeY = gazeData.SmoothedCoordinates.Y;
+        }
 
         private void InitClient()
         {
@@ -164,6 +152,16 @@ namespace HeyYou.EyeTracking
                 RatingText.Text = "";
                 btnAction.Content = "Re-Connect";
             }
+        }
+
+        public double GetX()
+        {
+            return gazeX;
+        }
+
+        public double GetY()
+        {
+            return gazeY;
         }
     }
 }

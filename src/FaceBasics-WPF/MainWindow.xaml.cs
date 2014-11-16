@@ -18,6 +18,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     using System.Windows.Media.Media3D;
     using Microsoft.Kinect;
     using Microsoft.Kinect.Face;
+    using HeyYou.EyeTracking;
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -149,6 +150,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// </summary>
         private string statusText = null;
 
+        private EyeTrackingWindow eyeTracker;
+
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
@@ -250,6 +253,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             this.InitializeComponent();
 
             System.Diagnostics.Debug.Write("Is this looping?\n\n");
+
+            this.eyeTracker = new EyeTrackingWindow();
+            this.eyeTracker.Show();
         }
 
         /// <summary>

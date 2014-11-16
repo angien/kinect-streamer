@@ -7,7 +7,7 @@
     <ProjectGuid>{C6D4DFEB-1D02-4719-8E98-C95E44C86991}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HeyYou.EyeTribe</RootNamespace>
+    <RootNamespace>HeyYou.EyeTracking</RootNamespace>
     <AssemblyName>Calibration</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,6 +43,10 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
+    <Reference Include="TETCSharpClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TETDLLs\TETCSharpClient.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -56,14 +60,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="EyeTrackingWIndow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="EyeTrackingWIndow.xaml.cs">
+      <DependentUpon>EyeTrackingWIndow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -95,10 +99,6 @@
     <Resource Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\tet-csharp-client-v.0.9.35\TETCSharpClient\TETCSharpClient.csproj">
-      <Project>{8F2DE36C-38EB-4CF2-B9D5-8746DCCFE4F7}</Project>
-      <Name>TETCSharpClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TETControls\TETControls.csproj">
       <Project>{c93b12c7-9872-47a3-a2db-d92623476fe5}</Project>
       <Name>TETControls</Name>
