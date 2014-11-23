@@ -19,6 +19,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     using Microsoft.Kinect;
     using Microsoft.Kinect.Face;
     using HeyYou.EyeTracking;
+    using TextToSpeech;
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -624,6 +625,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="drawingContext">drawing context to render to</param>
         private void DrawFaceFrameResults(int faceIndex, FaceFrameResult faceResult, DrawingContext drawingContext)
         {
+            SpeechOutput speaker = new SpeechOutput();
+
             // choose the brush based on the face index
             Brush drawingBrush = this.faceBrush[0];
             if (faceIndex < this.bodyCount)
@@ -646,6 +649,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 {
                     System.Diagnostics.Debug.Write("Say Hey You to person with tracking id: " + faceResult.TrackingId + "\n");
                     eyeTracker.ResetBlinkCount();
+
+                    speaker.OutputToAudio("I'm hungry for brains");
+
                 }
             }
             else
