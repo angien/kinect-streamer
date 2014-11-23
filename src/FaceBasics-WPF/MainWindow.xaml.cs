@@ -639,7 +639,19 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             double faceBoxThickness = DrawFaceShapeThickness;
 
             //determine if user is looking at the person. if so, bolden the user's face box
-            if (faceBox.Contains(colorBitmap.Width - eyeTracker.GetX(), eyeTracker.GetY())) faceBoxThickness *= 4;
+            if (faceBox.Contains(colorBitmap.Width - eyeTracker.GetX(), eyeTracker.GetY()))
+            {
+                faceBoxThickness *= 4;
+                if (eyeTracker.GetBlinkCount() >= 2)
+                {
+                    System.Diagnostics.Debug.Write("Say Hey You to person with tracking id: " + faceResult.TrackingId + "\n");
+                    eyeTracker.ResetBlinkCount();
+                }
+            }
+            else
+            {
+                //eyeTracker.ResetBlinkCount();
+            }
 
             Pen drawingPen = new Pen(drawingBrush, faceBoxThickness);
             drawingContext.DrawRectangle(null, drawingPen, faceBox);

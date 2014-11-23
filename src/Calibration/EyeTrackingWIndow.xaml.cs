@@ -23,6 +23,8 @@ namespace HeyYou.EyeTracking
     {
         private double gazeX;
         private double gazeY;
+        private int blinkCounter = 0;
+        private ulong blinkTrackingId = 0;
 
         public EyeTrackingWindow()
         {
@@ -42,6 +44,11 @@ namespace HeyYou.EyeTracking
 	    {
 	        gazeX = gazeData.SmoothedCoordinates.X;
 	        gazeY = gazeData.SmoothedCoordinates.Y;
+
+            if (gazeX == 0 && gazeY == 0)
+            {
+                blinkCounter++;
+            }
         }
 
         private void InitClient()
@@ -163,5 +170,66 @@ namespace HeyYou.EyeTracking
         {
             return gazeY;
         }
+
+        public int GetBlinkCount()
+        {
+            return blinkCounter;
+        }
+
+        public void ResetBlinkCount()
+        {
+            blinkCounter = 0;
+            blinkTrackingId = 0;
+        }
+
+        public ulong GetBlinkTrackingId()
+        {
+            return blinkTrackingId;
+        }
+
+        public void SetBlinkTrackingId(ulong id)
+        {
+            blinkTrackingId = id;
+        }
+
+        // check for double blinks
+        /*
+        /// <summary>
+        /// Keeps count of blinks for selecting
+        /// </summary>
+        private int blinkCounter = 0;
+
+        /// <summary>
+        /// Keeps track of who is being looked at to select
+        /// </summary>
+        private ulong blinkTrackingId = 0;
+        
+        if (eyeTracker.GetX() == 0 && eyeTracker.GetY() == 0)
+        {
+            if (blinkTrackingId == 0)
+            {
+                blinkTrackingId = faceFrameSources[i].TrackingId;
+                blinkCounter++;
+            }
+            else
+            {
+                if (blinkTrackingId == faceFrameSources[i].TrackingId)
+                {
+                    blinkCounter++;
+                }
+                else
+                {
+                    blinkTrackingId = faceFrameSources[i].TrackingId;
+                    blinkCounter = 1;
+                }
+            }
+        }
+        if (blinkCounter == 2)
+        {
+            Console.WriteLine("Say Hey You to person with tracking id: " + faceFrameSources[i].TrackingId);
+            blinkTrackingId = 0;
+            blinkCounter = 0;
+        }
+         * */
     }
 }
