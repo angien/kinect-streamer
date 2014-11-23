@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceBasics-WPF", "FaceBasic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TETControls", "TETControls\TETControls.csproj", "{C93B12C7-9872-47A3-A2DB-D92623476FE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextToSpeech", "TextToSpeech\TextToSpeech.csproj", "{4826B81C-F513-4668-AEA5-F442DFD00C60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,18 @@ Global
 		{C93B12C7-9872-47A3-A2DB-D92623476FE5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C93B12C7-9872-47A3-A2DB-D92623476FE5}.Release|x64.ActiveCfg = Release|Any CPU
 		{C93B12C7-9872-47A3-A2DB-D92623476FE5}.Release|x86.ActiveCfg = Release|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Release|x64.ActiveCfg = Release|Any CPU
+		{4826B81C-F513-4668-AEA5-F442DFD00C60}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
