@@ -27,6 +27,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
 
+        private SpeechOutput speaker;
+
         /// <summary>
         /// Thickness of face bounding box and face points
         /// </summary>
@@ -46,7 +48,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// Text layout offset in X axis
         /// </summary>
         private const float TextLayoutOffsetX = -0.1f;
-        
+
         /// <summary>
         /// Text layout offset in Y axis
         /// </summary>
@@ -160,6 +162,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// </summary>
         public MainWindow()
         {
+            this.speaker = new SpeechOutput();
+
             System.Diagnostics.Debug.Write("MainWindow\n\n");
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
@@ -187,7 +191,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             // open the reader for the body frames
             this.bodyFrameReader = this.kinectSensor.BodyFrameSource.OpenReader();
             this.colorFrameReader = this.kinectSensor.ColorFrameSource.OpenReader();
-            
+
 
             // wire handler for body frame arrival and color
             this.bodyFrameReader.FrameArrived += this.Reader_BodyFrameArrived;
@@ -212,7 +216,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 | FaceFrameFeatures.LookingAway
                 | FaceFrameFeatures.MouthMoved
                 | FaceFrameFeatures.MouthOpen;
-            
+
             // create a face frame source + reader to track each face in the FOV
             this.faceFrameSources = new FaceFrameSource[this.bodyCount];
             this.faceFrameReaders = new FaceFrameReader[this.bodyCount];
@@ -253,19 +257,19 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             this.drawingGroup = new DrawingGroup();
             //DrawingImage drawingVideoFrame = new DrawingImage();
 
-/*
-            DrawingGroup myDrawingGroup = new DrawingGroup();
-            DrawingImage myDrawingImage = new DrawingImage();
-            myDrawingGroup.Children.Add(myDrawingImage);
+            /*
+                        DrawingGroup myDrawingGroup = new DrawingGroup();
+                        DrawingImage myDrawingImage = new DrawingImage();
+                        myDrawingGroup.Children.Add(myDrawingImage);
 
-            this.drawingGroup.Children.Add(myDrawingImage);
-            */
-            
+                        this.drawingGroup.Children.Add(myDrawingImage);
+                        */
+
             //transform the resulting image to so the view lines up with yours
             Matrix myMat = new Matrix(-1, 0, 0, 1, 0, 0);
             MatrixTransform matMirrorImage = new MatrixTransform(myMat);
             this.drawingGroup.Transform = matMirrorImage;
-            
+
 
             // Create an image source that we can use in our image control
             this.imageSource = new DrawingImage(this.drawingGroup);
@@ -398,7 +402,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     this.faceFrameSources[i] = null;
                 }
             }
-            
+
             if (this.bodyFrameReader != null)
             {
                 // BodyFrameReader is IDisposable
@@ -468,54 +472,66 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         //TODO
         private void Reader_ColorFrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
+
+            if (eyeTracker.getDoubleBlink())
+            {
+                speaker.OutputToAudio("double blink");
+                eyeTracker.resetDoubleBlink();
+            }
+            if (eyeTracker.getLongBlink())
+            {
+                speaker.OutputToAudio("long blink");
+                eyeTracker.resetLongBlink();
+            }
+
             //System.Diagnostics.Debug.Write("Color Frame Arived\n");
 
             // ColorFrame is IDisposable
             using (ColorFrame colorFrame = e.FrameReference.AcquireFrame())
             {
-                
 
-                    if (colorFrame != null)
+
+                if (colorFrame != null)
+                {
+
+                    FrameDescription colorFrameDescription = colorFrame.FrameDescription;
+
+                    using (KinectBuffer colorBuffer = colorFrame.LockRawImageBuffer())
                     {
-                        
-                        FrameDescription colorFrameDescription = colorFrame.FrameDescription;
+                        this.colorBitmap.Lock();
 
-                        using (KinectBuffer colorBuffer = colorFrame.LockRawImageBuffer())
+                        // verify data and write the new color frame data to the display bitmap
+                        if ((colorFrameDescription.Width == this.colorBitmap.PixelWidth) && (colorFrameDescription.Height == this.colorBitmap.PixelHeight))
                         {
-                            this.colorBitmap.Lock();
+                            //System.Diagnostics.Debug.Write("Inside If\n");
+                            colorFrame.CopyConvertedFrameDataToIntPtr(
+                                this.colorBitmap.BackBuffer,
+                                (uint)(colorFrameDescription.Width * colorFrameDescription.Height * 4),
+                                ColorImageFormat.Bgra);
 
-                            // verify data and write the new color frame data to the display bitmap
-                            if ((colorFrameDescription.Width == this.colorBitmap.PixelWidth) && (colorFrameDescription.Height == this.colorBitmap.PixelHeight))
-                            {
-                                //System.Diagnostics.Debug.Write("Inside If\n");
-                                colorFrame.CopyConvertedFrameDataToIntPtr(
-                                    this.colorBitmap.BackBuffer,
-                                    (uint)(colorFrameDescription.Width * colorFrameDescription.Height * 4),
-                                    ColorImageFormat.Bgra);
-
-                                this.colorBitmap.AddDirtyRect(new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight));
+                            this.colorBitmap.AddDirtyRect(new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight));
 
 
-                                /*
-                                TransformedBitmap myTransform = new TransformedBitmap();
-                                myTransform.BeginInit();
+                            /*
+                            TransformedBitmap myTransform = new TransformedBitmap();
+                            myTransform.BeginInit();
 
-                                myTransform.Source = this.colorBitmap;
+                            myTransform.Source = this.colorBitmap;
 
-                                //transform the resulting image to so the view lines up with yours
-                                Matrix myMat = new Matrix(-1, 0, 0, 1, 0, 0);
-                                MatrixTransform matMirrorImage = new MatrixTransform(myMat);
-                                //this.drawingGroup.Transform = matMirrorImage;
-                                myTransform.Transform = matMirrorImage;
+                            //transform the resulting image to so the view lines up with yours
+                            Matrix myMat = new Matrix(-1, 0, 0, 1, 0, 0);
+                            MatrixTransform matMirrorImage = new MatrixTransform(myMat);
+                            //this.drawingGroup.Transform = matMirrorImage;
+                            myTransform.Transform = matMirrorImage;
 
-                                myTransform.EndInit();
-                                 * */
+                            myTransform.EndInit();
+                             * */
 
-                            }
-
-                            this.colorBitmap.Unlock();
                         }
+
+                        this.colorBitmap.Unlock();
                     }
+                }
             }
         }
 
@@ -580,11 +596,11 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             // a body was tracked but the corresponding face was not tracked
                             // a body and the corresponding face was tracked though the face box or the face points were not valid
                             dc.DrawText(
-                                this.textFaceNotTracked, 
+                                this.textFaceNotTracked,
                                 this.textLayoutFaceNotTracked);
                         }
 
-                        
+
                         Brush myBrush = new SolidColorBrush(Colors.Red);
                         Pen drawingPen = new Pen(myBrush, 10);
 
@@ -612,7 +628,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
                     }
 
-                    
+
                 }
             }
         }
@@ -625,8 +641,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="drawingContext">drawing context to render to</param>
         private void DrawFaceFrameResults(int faceIndex, FaceFrameResult faceResult, DrawingContext drawingContext)
         {
-            SpeechOutput speaker = new SpeechOutput();
-
             // choose the brush based on the face index
             Brush drawingBrush = this.faceBrush[0];
             if (faceIndex < this.bodyCount)
@@ -637,20 +651,21 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
             // draw the face bounding box
             var faceBoxSource = faceResult.FaceBoundingBoxInColorSpace;
-            Rect faceBox = new Rect(faceBoxSource.Left - 0.5*(faceBoxSource.Right - faceBoxSource.Left), faceBoxSource.Top - 0.5*(faceBoxSource.Bottom - faceBoxSource.Top), 
-                                    2*(faceBoxSource.Right - faceBoxSource.Left), 4*(faceBoxSource.Bottom - faceBoxSource.Top));
+            Rect faceBox = new Rect(faceBoxSource.Left - 0.5 * (faceBoxSource.Right - faceBoxSource.Left), faceBoxSource.Top - 0.5 * (faceBoxSource.Bottom - faceBoxSource.Top),
+                                    2 * (faceBoxSource.Right - faceBoxSource.Left), 4 * (faceBoxSource.Bottom - faceBoxSource.Top));
             double faceBoxThickness = DrawFaceShapeThickness;
 
             //determine if user is looking at the person. if so, bolden the user's face box
             if (faceBox.Contains(colorBitmap.Width - eyeTracker.GetX(), eyeTracker.GetY()))
             {
                 faceBoxThickness *= 4;
-                if (eyeTracker.GetBlinkCount() >= 2)
+                if (eyeTracker.getDoubleBlink())
                 {
                     System.Diagnostics.Debug.Write("Say Hey You to person with tracking id: " + faceResult.TrackingId + "\n");
                     eyeTracker.ResetBlinkCount();
 
                     speaker.OutputToAudio("I'm hungry for brains");
+                    eyeTracker.resetDoubleBlink();
 
                 }
             }
@@ -658,6 +673,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             {
                 //eyeTracker.ResetBlinkCount();
             }
+
+
+
 
             Pen drawingPen = new Pen(drawingBrush, faceBoxThickness);
             drawingContext.DrawRectangle(null, drawingPen, faceBox);
@@ -767,7 +785,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
                 faceTextLayout.X = textPointInColor.X;
                 faceTextLayout.Y = textPointInColor.Y;
-                isLayoutValid = true;                
+                isLayoutValid = true;
             }
 
             return isLayoutValid;

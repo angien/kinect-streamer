@@ -23,8 +23,18 @@ namespace HeyYou.EyeTracking
     {
         private double gazeX;
         private double gazeY;
+        private double prevGazeX = 0, prevGazeY = 0;
+        private double prevTime = 0;
+        private double timeFixed = 0;
+
+        private bool isDoubleBlink = false, isLongBlink = false, eyesClosed = false;
+        private long prevTimeOfBlink = 0, timeOpened = 0, timeClosed = 0;
+        private int blinkCount = 0;
+
         private int blinkCounter = 0;
         private ulong blinkTrackingId = 0;
+
+        private bool usingFilter = true; //change this value to false if you wish to use raw eyetribe data
 
         public EyeTrackingWindow()
         {
@@ -38,17 +48,177 @@ namespace HeyYou.EyeTracking
             // Create a client for the eye tracker
             GazeManager.Instance.Activate(GazeManager.ApiVersion.VERSION_1_0, GazeManager.ClientMode.Push);
             GazeManager.Instance.AddGazeListener(this);
-	    }
-	
-	    public void OnGazeUpdate(GazeData gazeData)
-	    {
-	        gazeX = gazeData.SmoothedCoordinates.X;
-	        gazeY = gazeData.SmoothedCoordinates.Y;
+        }
 
-            if (gazeX == 0 && gazeY == 0)
+        public void OnGazeUpdate(GazeData gazeData)
+        {
+
+            //grab the gaze position and either filter it or use raw data
+            if (usingFilter)
             {
-                blinkCounter++;
+                filterGaze(gazeData.SmoothedCoordinates.X, gazeData.SmoothedCoordinates.Y, gazeData.TimeStamp, ref gazeX, ref gazeY);
+
             }
+            else
+            {
+                gazeX = gazeData.SmoothedCoordinates.X;
+                gazeY = gazeData.SmoothedCoordinates.Y;
+            }
+
+            checkForDoubleAndLongBlink(gazeData);
+
+
+
+            //check for double blink
+            //if (gazeX == 0 && gazeY == 0)
+            //{
+            //    blinkCounter++;
+            //}
+
+
+        }
+
+        private void filterGaze(double currGazeX, double currGazeY, double currTime, ref double gazeX, ref double gazeY)
+        {
+
+            double distance = 0;
+            double dTime = 0;
+
+            //if prev data exists, calculate the change in distance and time
+            if (prevGazeX != 0 && prevGazeY != 0 && prevTime != 0)
+            {
+                if (currGazeX != 0 && currGazeY != 0)
+                {
+                    distance = Math.Sqrt((currGazeX - prevGazeX) * (currGazeX - prevGazeX) + (currGazeY - prevGazeY) * (currGazeY - prevGazeY));
+                    dTime = currTime - prevTime;
+                }
+                else
+                {
+                    //distance and time remain 0 and the teleport to 0,0 is filtered out
+                    //Console.Write("Unable to detect eyes!\n");
+                }
+            }
+            //if the first callback, initialize the previous gaze data
+            else
+            {
+                prevGazeX = currGazeX;
+                prevGazeY = currGazeY;
+                prevTime = currTime;
+            }
+
+            //if the saccade is far enough, move the cursor
+            if (distance > 50 && timeFixed > 30000)
+            {
+                gazeX = currGazeX;
+                gazeY = currGazeY;
+
+                prevGazeX = currGazeX;
+                prevGazeY = currGazeY;
+
+                timeFixed = 0;
+            }
+            //otherwise, keep the point in its original postion
+            else
+            {
+                gazeX = prevGazeX;
+                gazeY = prevGazeY;
+
+                //increase the time spent at the original position
+                timeFixed += dTime;
+            }
+
+            //currTime = gazeData.TimeStamp;
+
+            //System.Diagnostics.Debug.WriteLine("Distance: {0}, Time: {1}", distance, dTime);
+            //Console.Write("Distance: {0}, Time: {1} TimeFixed: {2}\n", distance, dTime, timeFixed);
+
+        }
+
+        private void checkForDoubleAndLongBlink(GazeData gazeData)
+        {
+            long currTimeOfBlink = 0;
+            long betweenBlinksTime = 0;
+            long blinkDuration = 0;
+            //Console.Write("State {0}\n", gazeData.State);
+
+            //if the eyes just closed
+            if (gazeData.State == GazeData.STATE_TRACKING_FAIL && !eyesClosed)
+            {
+
+                eyesClosed = true;
+                timeClosed = gazeData.TimeStamp;
+            }
+            //when the eyes reopen
+            else if (gazeData.State == 7 && eyesClosed)
+            {
+                eyesClosed = false;
+                timeOpened = gazeData.TimeStamp;
+                //the time the blink occured is defined on opening
+                currTimeOfBlink = timeOpened;
+                blinkCount++;
+                blinkDuration = timeOpened - timeClosed;
+                Console.Write("Blink! {0} Duration: {1}\n", blinkCount, blinkDuration);
+
+                //check for a long blink gesture
+                if (blinkDuration > 600 && blinkDuration < 1000)
+                {
+                    isLongBlink = true;
+                }
+                else isLongBlink = false;
+
+                //check for the double blink
+                if (prevTimeOfBlink != 0)
+                {
+                    betweenBlinksTime = currTimeOfBlink - prevTimeOfBlink;
+                    Console.Write("Time between blinks: {0}\n", betweenBlinksTime);
+                    //the double blink is only triggered on the second blink and when meets the thresholds
+                    if (betweenBlinksTime > 100 && betweenBlinksTime < 500)
+                    {
+                        isDoubleBlink = true;
+                    }
+
+                    else
+                    {
+                        isDoubleBlink = false;
+                    }
+
+                    prevTimeOfBlink = currTimeOfBlink;
+                }
+                else
+                {
+
+                    isDoubleBlink = false;
+                    prevTimeOfBlink = currTimeOfBlink;
+                }
+            }
+
+            /*
+            if (gazeData.State == GazeData.STATE_TRACKING_FAIL) {
+                currTimeOfBlink = gazeData.TimeStamp;
+                Console.Write("Blink!\n");
+                //if on the second blink
+                if (prevTimeOfBlink != 0)
+                {
+                    dTime = currTimeOfBlink - prevTimeOfBlink;
+                    //Console.Write("Time between blinks: {0}\n", dTime);
+                    //the double blink is only triggered on the second blink and when meets the thresholds
+                    if (dTime > 2000 && dTime < 5000)
+                    {
+                        isDoubleBlink = true;
+                    }
+
+                    else {
+                        isDoubleBlink = false;
+                    }
+
+                    prevTimeOfBlink = 0;
+                }
+                else {
+
+                    isDoubleBlink = false;
+                    prevTimeOfBlink = currTimeOfBlink;
+                }
+            }*/
         }
 
         private void InitClient()
@@ -169,6 +339,24 @@ namespace HeyYou.EyeTracking
         public double GetY()
         {
             return gazeY;
+        }
+
+        public bool getDoubleBlink()
+        {
+            return isDoubleBlink;
+        }
+        public void resetDoubleBlink()
+        {
+            isDoubleBlink = false;
+        }
+
+        public bool getLongBlink()
+        {
+            return isLongBlink;
+        }
+        public void resetLongBlink()
+        {
+            isLongBlink = false;
         }
 
         public int GetBlinkCount()
