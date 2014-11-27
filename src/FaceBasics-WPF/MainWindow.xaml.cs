@@ -21,6 +21,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     using HeyYou.EyeTracking;
     using TextToSpeech;
 
+    using System.Windows.Shapes;
+    using System.Windows.Controls;
+
     /// <summary>
     /// Interaction logic for MainWindow
     /// </summary>
@@ -28,6 +31,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     {
 
         private SpeechOutput speaker;
+        private bool isConversationScreen = false;
+        private bool isVideoFeed = true;
 
         /// <summary>
         /// Thickness of face bounding box and face points
@@ -79,6 +84,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// Drawing group for body rendering output
         /// </summary>
         private DrawingGroup drawingGroup;
+        private DrawingGroup gazeDrawingGroup;
 
         private DrawingImage drawingVideoFrame;
 
@@ -86,6 +92,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// Drawing image that we will display
         /// </summary>
         private DrawingImage imageSource;
+        private DrawingImage gazeSource;
+
 
         /// <summary>
         /// Active Kinect sensor
@@ -255,6 +263,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
             // Create the drawing group we'll use for drawing the video feed
             this.drawingGroup = new DrawingGroup();
+            this.gazeDrawingGroup = new DrawingGroup();
             //DrawingImage drawingVideoFrame = new DrawingImage();
 
             /*
@@ -273,6 +282,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
             // Create an image source that we can use in our image control
             this.imageSource = new DrawingImage(this.drawingGroup);
+            this.gazeSource = new DrawingImage(this.gazeDrawingGroup);
 
             // use the window object as the view model in this simple example
             this.DataContext = this;
@@ -300,6 +310,15 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             {
                 //return this.colorBitmap;
                 return this.imageSource;
+            }
+        }
+
+        public ImageSource GazeSource
+        {
+            get
+            {
+                //return this.colorBitmap;
+                return this.gazeSource;
             }
         }
 
@@ -472,6 +491,39 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         //TODO
         private void Reader_ColorFrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
+            //Remove potentially
+            Ellipse eyePoint = new Ellipse();
+            eyePoint.StrokeThickness = 10;
+            eyePoint.Stroke = Brushes.Red;
+            eyePoint.Width = 20;
+            eyePoint.Height = 20;
+
+            Canvas.SetTop(eyePoint, eyeTracker.GetY());
+            Canvas.SetLeft(eyePoint, eyeTracker.GetX());
+            //conversationScreenCanvas.Children.Add(eyePoint);
+
+            using (DrawingContext dc = this.gazeDrawingGroup.Open())
+            {
+                //dc.DrawImage(colorBitmap, this.displayRect);
+
+                Brush myBrush = new SolidColorBrush(Colors.Red);
+                Pen drawingPen = new Pen(myBrush, 10);
+
+                Brush rectBrush = new SolidColorBrush(Colors.Green);
+                Pen rectPen = new Pen(rectBrush, 10);
+
+                dc.DrawRectangle(rectBrush, rectPen, this.displayRect);
+
+                //dc.DrawImage(new WriteableBitmap(1920, 1080, 96.0, 96.0, PixelFormats.Bgr32, BitmapPalette), this.displayRect);
+                dc.DrawEllipse(myBrush, drawingPen, new Point(eyeTracker.GetX(), eyeTracker.GetY()), 2, 2);
+
+                this.gazeDrawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
+
+
+                //WriteableBitmap mybit = new WriteableBitmap()
+
+            }
+
 
             if (eyeTracker.getDoubleBlink())
             {
@@ -482,6 +534,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             {
                 speaker.OutputToAudio("long blink");
                 eyeTracker.resetLongBlink();
+
+                toggleScreens();
+
             }
 
             //System.Diagnostics.Debug.Write("Color Frame Arived\n");
@@ -607,6 +662,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         //account for mirrored image.
                         dc.DrawEllipse(myBrush, drawingPen, new Point(colorBitmap.Width - eyeTracker.GetX(), eyeTracker.GetY()), 2, 2);
 
+
+
                         /*
                         String gazeMessage = string.Format("({0}, {1})", eyeTracker.GetX(), eyeTracker.GetY());
                         FormattedText gazeCenter = new FormattedText(
@@ -664,8 +721,10 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     System.Diagnostics.Debug.Write("Say Hey You to person with tracking id: " + faceResult.TrackingId + "\n");
                     eyeTracker.ResetBlinkCount();
 
-                    speaker.OutputToAudio("I'm hungry for brains");
+                    speaker.OutputToAudio("Hey you");
                     eyeTracker.resetDoubleBlink();
+
+                    toggleScreens();
 
                 }
             }
@@ -850,6 +909,29 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 // on failure, set the status text
                 this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                                 : Properties.Resources.SensorNotAvailableStatusText;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void toggleScreens()
+        {
+
+            if (isVideoFeed)
+            {
+                videoFeed.Visibility = System.Windows.Visibility.Collapsed;
+                conversationScreen.Visibility = System.Windows.Visibility.Visible;
+                isVideoFeed = false;
+                isConversationScreen = true;
+            }
+            else if (isConversationScreen)
+            {
+                conversationScreen.Visibility = System.Windows.Visibility.Collapsed;
+                videoFeed.Visibility = System.Windows.Visibility.Visible;
+                isConversationScreen = false;
+                isVideoFeed = true;
             }
         }
     }

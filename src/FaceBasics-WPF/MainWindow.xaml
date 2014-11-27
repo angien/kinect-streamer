@@ -4,29 +4,56 @@
         Title="Face Basics" 
         Height="768" Width="1024" 
         Loaded="MainWindow_Loaded"
-        Closing="MainWindow_Closing"> 
-  <Window.Resources>
-    <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e" />
-    <SolidColorBrush x:Key="KinectPurpleBrush" Color="#ff52318f" />
-    <SolidColorBrush x:Key="KinectBlueBrush" Color="#ff00BCF2" />
-  </Window.Resources>
-  <Grid Margin="10 0 10 0">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="*" />
-      <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
+        Closing="MainWindow_Closing">
+    <Window.Resources>
+        <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e" />
+        <SolidColorBrush x:Key="KinectPurpleBrush" Color="#ff52318f" />
+        <SolidColorBrush x:Key="KinectBlueBrush" Color="#ff00BCF2" />
+    </Window.Resources>
+    <Grid Margin="1 0 1 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-    <Image Grid.Row="0" Source="Images\Logo.png" HorizontalAlignment="Left" Stretch="Fill" Height="32" Width="81" Margin="0 10 0 5" />
-    <TextBlock Grid.Row="0" Margin="0 0 -1 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Face Basics</TextBlock>
-    <Image Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="0 0 0 5" />
+        <Image Name ="kinectLogo" Grid.Row="0" Source="Images\Logo.png" HorizontalAlignment="Left" Stretch="Fill" Height="32" Width="81" Margin="0 10 0 5" />
+        <TextBlock Name ="title" Grid.Row="0" Margin="0 0 -1 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Hey, you!</TextBlock>
+        <Image Name="kinectImage" Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="0 0 0 5" />
+        <TextBlock Name ="placeHolder" Visibility="Hidden" Grid.Row="0" Margin="0 0 -1 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Hey, you!</TextBlock>
 
-    <Viewbox Grid.Row="1" HorizontalAlignment="Center">
-      <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
-    </Viewbox>
-      
-    <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
-      <StatusBarItem Content="{Binding StatusText}" />
-    </StatusBar>
-  </Grid>
+        <Viewbox Name="videoFeed" Visibility="Visible" Grid.Row="1" HorizontalAlignment="Center">
+            <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
+        </Viewbox>
+
+
+        <Viewbox Name="conversationScreen" Visibility="Visible" Grid.Row="1" HorizontalAlignment="Center">
+            <Canvas Name="conversationScreenCanvas" Width="1920" Height="1080">
+
+
+                <Button Name ="Phrase1" Content="Hey, You" Width="432" Click="Button_Click" Height="152" Canvas.Left="1286" Canvas.Top="91" />
+                <Button Name ="Phrase2" Content="Hello" Width="432" Click="Button_Click" Height="164" Canvas.Left="1286" Canvas.Top="610" />
+                <Button Name ="Phrase3" Content="Help me" Width="432" Click="Button_Click" Height="151" Canvas.Left="1286" Canvas.Top="353" />
+                <Image Name ="profilePic" Source="Images\defaultProfilePic.jpg" HorizontalAlignment="Left" Stretch="Fill" Height="533" Width="410" Canvas.Left="469" Canvas.Top="152" RenderTransformOrigin="0.5,0.5" >
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="0.055"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
+
+                <Image Source="{Binding GazeSource}" Stretch="UniformToFill" Opacity=".50"/>
+
+
+            </Canvas>
+        </Viewbox>
+
+
+        <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
+            <StatusBarItem Content="{Binding StatusText}" />
+        </StatusBar>
+    </Grid>
 </Window>
