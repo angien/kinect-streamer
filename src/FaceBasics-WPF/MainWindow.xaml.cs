@@ -29,6 +29,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        //stores the buttons in an array
+        private Button[] buttons = new Button[3];
 
         private SpeechOutput speaker;
         private bool isConversationScreen = false;
@@ -170,6 +172,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// </summary>
         public MainWindow()
         {
+
+
             this.speaker = new SpeechOutput();
 
             System.Diagnostics.Debug.Write("MainWindow\n\n");
@@ -294,6 +298,13 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
             this.eyeTracker = new EyeTrackingWindow();
             this.eyeTracker.Show();
+            conversationScreen.Visibility = System.Windows.Visibility.Collapsed;
+
+            //populate the buttons array with the buttons
+            buttons[0] = Phrase1;
+            buttons[1] = Phrase2;
+            buttons[2] = Phrase3;
+            
         }
 
         /// <summary>
@@ -502,26 +513,44 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             Canvas.SetLeft(eyePoint, eyeTracker.GetX());
             //conversationScreenCanvas.Children.Add(eyePoint);
 
-            using (DrawingContext dc = this.gazeDrawingGroup.Open())
+            if (isConversationScreen)
             {
-                //dc.DrawImage(colorBitmap, this.displayRect);
+                //handle the events for the conversation screen
+                using (DrawingContext dc = this.gazeDrawingGroup.Open())
+                {
+                    //dc.DrawImage(colorBitmap, this.displayRect);
 
-                Brush myBrush = new SolidColorBrush(Colors.Red);
-                Pen drawingPen = new Pen(myBrush, 10);
+                    Brush myBrush = new SolidColorBrush(Colors.Red);
+                    Pen drawingPen = new Pen(myBrush, 10);
 
-                Brush rectBrush = new SolidColorBrush(Colors.Green);
-                Pen rectPen = new Pen(rectBrush, 10);
+                    Brush rectBrush = new SolidColorBrush(Colors.Green);
+                    Pen rectPen = new Pen(rectBrush, .01);
 
-                dc.DrawRectangle(rectBrush, rectPen, this.displayRect);
+                    //create a rectangle to draw the ellipse on
+                    Rect falseRect = displayRect;
+                    falseRect.Width = 0;
+                    falseRect.Height = 0;
+                    dc.DrawRectangle(rectBrush, rectPen, falseRect);
 
-                //dc.DrawImage(new WriteableBitmap(1920, 1080, 96.0, 96.0, PixelFormats.Bgr32, BitmapPalette), this.displayRect);
-                dc.DrawEllipse(myBrush, drawingPen, new Point(eyeTracker.GetX(), eyeTracker.GetY()), 2, 2);
+                    //dc.DrawImage(new WriteableBitmap(1920, 1080, 96.0, 96.0, PixelFormats.Bgr32, BitmapPalette), this.displayRect);
+                    dc.DrawEllipse(myBrush, drawingPen, new Point(eyeTracker.GetX(), eyeTracker.GetY()), 2, 2);
 
-                this.gazeDrawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
+                    this.gazeDrawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
+
+                    System.Diagnostics.Debug.WriteLine("Phrase1 actual height, width: {0}, {1}", Phrase1.ActualHeight, Phrase1.ActualWidth);
+                    System.Diagnostics.Debug.WriteLine("Phrase1 height, width: {0}, {1}", Phrase1.Height, Phrase1.Width);
+                    System.Diagnostics.Debug.WriteLine("Phrase1 left, top: {0}, {1}", Canvas.GetLeft(Phrase1), Canvas.GetTop(Phrase1));
+
+                    System.Diagnostics.Debug.WriteLine("Phrase1 content: {0}\n", Phrase1.Content);
 
 
-                //WriteableBitmap mybit = new WriteableBitmap()
+                    //determine if gaze is on any button, and if a double blink occurs
+                    handleButtons(buttons, eyeTracker.GetX(), eyeTracker.GetY());
 
+
+                    //WriteableBitmap mybit = new WriteableBitmap()
+
+                }
             }
 
 
@@ -932,6 +961,42 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 videoFeed.Visibility = System.Windows.Visibility.Visible;
                 isConversationScreen = false;
                 isVideoFeed = true;
+            }
+        }
+
+        private bool buttonContains(Button button, double x, double y) {
+
+            Rect temp = new Rect(Canvas.GetLeft(button), Canvas.GetTop(button), button.ActualWidth, button.ActualHeight); 
+         
+            if (temp.Contains(x, y)) {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+
+        }
+
+        private void handleButtons(Button[] buttons, double x, double y) {
+
+            for (int i = 0; i < buttons.Length; i++) {
+
+                if (buttonContains(buttons[i], x, y))
+                {
+                    buttons[i].Opacity = .3;
+
+                    if (eyeTracker.getDoubleBlink()) {
+                        speaker.OutputToAudio(buttons[i].Content.ToString());
+                        eyeTracker.resetDoubleBlink();
+                    }
+
+                    //stop checking to see if gaze is in any other button. can only be on one button at a time
+                    break;
+                }
+                else {
+                    buttons[i].Opacity = 1;
+                }
             }
         }
     }

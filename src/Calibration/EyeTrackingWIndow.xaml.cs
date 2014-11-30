@@ -34,7 +34,7 @@ namespace HeyYou.EyeTracking
         private int blinkCounter = 0;
         private ulong blinkTrackingId = 0;
 
-        private bool usingFilter = true; //change this value to false if you wish to use raw eyetribe data
+        private bool usingFilter = false; //change this value to false if you wish to use raw eyetribe data
 
         public EyeTrackingWindow()
         {

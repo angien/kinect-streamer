@@ -31,10 +31,10 @@
             <Canvas Name="conversationScreenCanvas" Width="1920" Height="1080">
 
 
-                <Button Name ="Phrase1" Content="Hey, You" Width="432" Click="Button_Click" Height="152" Canvas.Left="1286" Canvas.Top="91" />
-                <Button Name ="Phrase2" Content="Hello" Width="432" Click="Button_Click" Height="164" Canvas.Left="1286" Canvas.Top="610" />
-                <Button Name ="Phrase3" Content="Help me" Width="432" Click="Button_Click" Height="151" Canvas.Left="1286" Canvas.Top="353" />
-                <Image Name ="profilePic" Source="Images\defaultProfilePic.jpg" HorizontalAlignment="Left" Stretch="Fill" Height="533" Width="410" Canvas.Left="469" Canvas.Top="152" RenderTransformOrigin="0.5,0.5" >
+                <Button Name ="Phrase1" Content="Hey you, I'm hungry for brains!" Width="428" Click="Button_Click" Height="151" Canvas.Left="1286" Canvas.Top="131" />
+                <Button Name ="Phrase2" Content="Hey Akshat. I want you to die!" Width="432" Click="Button_Click" Height="164" Canvas.Left="1286" Canvas.Top="610" />
+                <Button Name ="Phrase3" Content="I'm locked in! Help me" Width="432" Click="Button_Click" Height="151" Canvas.Left="1286" Canvas.Top="353" />
+                <Image Name ="profilePic" Source="Images\defaultProfilePic.jpg" HorizontalAlignment="Left" Stretch="Fill" Height="533" Width="410" Canvas.Left="281" Canvas.Top="196" RenderTransformOrigin="0.5,0.5" >
                     <Image.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -45,7 +45,7 @@
                     </Image.RenderTransform>
                 </Image>
 
-                <Image Source="{Binding GazeSource}" Stretch="UniformToFill" Opacity=".50"/>
+                <Image Source="{Binding GazeSource}" Stretch="UniformToFill" Opacity="1"/>
 
 
             </Canvas>
