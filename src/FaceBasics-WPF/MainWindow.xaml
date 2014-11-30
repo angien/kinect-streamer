@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <Image Name ="kinectLogo" Grid.Row="0" Source="Images\Logo.png" HorizontalAlignment="Left" Stretch="Fill" Height="32" Width="81" Margin="0 10 0 5" />
-        <TextBlock Name ="title" Grid.Row="0" Margin="0 0 -1 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Hey, you!</TextBlock>
+        <TextBlock Name ="title" Grid.Row="0" Margin="0,0,52,18" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#FF2BB802" FontFamily="Segoe UI" FontSize="22" FontWeight="Bold">Hey, you!</TextBlock>
         <Image Name="kinectImage" Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="0 0 0 5" />
         <TextBlock Name ="placeHolder" Visibility="Hidden" Grid.Row="0" Margin="0 0 -1 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Hey, you!</TextBlock>
 
@@ -31,22 +31,12 @@
             <Canvas Name="conversationScreenCanvas" Width="1920" Height="1080">
 
 
-                <Button Name ="Phrase1" Content="Hey you, I'm hungry for brains!" Width="428" Click="Button_Click" Height="151" Canvas.Left="1286" Canvas.Top="131" />
-                <Button Name ="Phrase2" Content="Hey Akshat. I want you to die!" Width="432" Click="Button_Click" Height="164" Canvas.Left="1286" Canvas.Top="610" />
-                <Button Name ="Phrase3" Content="I'm locked in! Help me" Width="432" Click="Button_Click" Height="151" Canvas.Left="1286" Canvas.Top="353" />
-                <Image Name ="profilePic" Source="Images\defaultProfilePic.jpg" HorizontalAlignment="Left" Stretch="Fill" Height="533" Width="410" Canvas.Left="281" Canvas.Top="196" RenderTransformOrigin="0.5,0.5" >
-                    <Image.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="0.055"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Image.RenderTransform>
-                </Image>
+                <Button Name ="Phrase1" Content="Hey you, I'm hungry for brains!" Width="541" Click="Button_Click" Height="191" Canvas.Left="1133" Canvas.Top="190" FontSize="22" />
+                <Button Name ="Phrase2" Content="I'm. too sexy for my shirt!" Width="541" Click="Button_Click" Height="205" Canvas.Left="1133" Canvas.Top="453" FontSize="22" />
+                <Button Name ="Phrase3" Content="I'm locked in! Help me" Width="546" Click="Button_Click" Height="191" Canvas.Left="1133" Canvas.Top="732" FontSize="22" />
+                <Image Name ="profilePic" Source="Images\defaultProfilePic.jpg" HorizontalAlignment="Left" Stretch="Fill" Height="721" Width="555" Canvas.Left="253" Canvas.Top="186" />
 
                 <Image Source="{Binding GazeSource}" Stretch="UniformToFill" Opacity="1"/>
-
 
             </Canvas>
         </Viewbox>

@@ -155,7 +155,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\defaultProfilePic.jpg" />
+    <Resource Include="Images\defaultProfilePic.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\mike.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

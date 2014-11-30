@@ -61,8 +61,12 @@ namespace HeyYou.EyeTracking
             }
             else
             {
-                gazeX = gazeData.SmoothedCoordinates.X;
-                gazeY = gazeData.SmoothedCoordinates.Y;
+                //only update the gaze point if it is properly recorded
+                //if (gazeData.SmoothedCoordinates.X != 0 && gazeData.SmoothedCoordinates.Y != 0)
+                //{
+                    gazeX = gazeData.SmoothedCoordinates.X;
+                    gazeY = gazeData.SmoothedCoordinates.Y;
+                //}
             }
 
             checkForDoubleAndLongBlink(gazeData);

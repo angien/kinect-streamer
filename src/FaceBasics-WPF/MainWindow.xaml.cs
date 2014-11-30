@@ -29,6 +29,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        //set every new color frame. where the person is looking
+        private double gazeX, gazeY;
+
         //stores the buttons in an array
         private Button[] buttons = new Button[3];
 
@@ -454,28 +457,31 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="e">event arguments</param>
         private void Reader_FaceFrameArrived(object sender, FaceFrameArrivedEventArgs e)
         {
-            //System.Diagnostics.Debug.Write("Face Frame Arived\n");
-
-            using (FaceFrame faceFrame = e.FrameReference.AcquireFrame())
+            if (isVideoFeed)
             {
-                if (faceFrame != null)
-                {
-                    // get the index of the face source from the face source array
-                    int index = this.GetFaceSourceIndex(faceFrame.FaceFrameSource);
+                //System.Diagnostics.Debug.Write("Face Frame Arived\n");
 
-                    // check if this face frame has valid face frame results
-                    if (this.ValidateFaceBoxAndPoints(faceFrame.FaceFrameResult))
+                using (FaceFrame faceFrame = e.FrameReference.AcquireFrame())
+                {
+                    if (faceFrame != null)
                     {
-                        // store this face frame result to draw later
-                        this.faceFrameResults[index] = faceFrame.FaceFrameResult;
-                    }
-                    else
-                    {
-                        // indicates that the latest face frame result from this reader is invalid
-                        this.faceFrameResults[index] = null;
+                        // get the index of the face source from the face source array
+                        int index = this.GetFaceSourceIndex(faceFrame.FaceFrameSource);
+
+                        // check if this face frame has valid face frame results
+                        if (this.ValidateFaceBoxAndPoints(faceFrame.FaceFrameResult))
+                        {
+                            // store this face frame result to draw later
+                            this.faceFrameResults[index] = faceFrame.FaceFrameResult;
+                        }
+                        else
+                        {
+                            // indicates that the latest face frame result from this reader is invalid
+                            this.faceFrameResults[index] = null;
+                        }
                     }
                 }
-            }
+            }//end if videofeed
         }
 
         /// <summary>
@@ -502,16 +508,10 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         //TODO
         private void Reader_ColorFrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
-            //Remove potentially
-            Ellipse eyePoint = new Ellipse();
-            eyePoint.StrokeThickness = 10;
-            eyePoint.Stroke = Brushes.Red;
-            eyePoint.Width = 20;
-            eyePoint.Height = 20;
+            //color frame dictates the frequency that gaze point is updated
+            this.gazeX = eyeTracker.GetX();
+            this.gazeY = eyeTracker.GetY();
 
-            Canvas.SetTop(eyePoint, eyeTracker.GetY());
-            Canvas.SetLeft(eyePoint, eyeTracker.GetX());
-            //conversationScreenCanvas.Children.Add(eyePoint);
 
             if (isConversationScreen)
             {
@@ -533,7 +533,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     dc.DrawRectangle(rectBrush, rectPen, falseRect);
 
                     //dc.DrawImage(new WriteableBitmap(1920, 1080, 96.0, 96.0, PixelFormats.Bgr32, BitmapPalette), this.displayRect);
-                    dc.DrawEllipse(myBrush, drawingPen, new Point(eyeTracker.GetX(), eyeTracker.GetY()), 2, 2);
+                    dc.DrawEllipse(myBrush, drawingPen, new Point(gazeX, gazeY), 2, 2);
 
                     this.gazeDrawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
 
@@ -545,15 +545,12 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
 
                     //determine if gaze is on any button, and if a double blink occurs
-                    handleButtons(buttons, eyeTracker.GetX(), eyeTracker.GetY());
-
-
-                    //WriteableBitmap mybit = new WriteableBitmap()
+                    handleButtons(buttons, gazeX, gazeY);
 
                 }
             }
 
-
+            //generic audio debug messages
             if (eyeTracker.getDoubleBlink())
             {
                 speaker.OutputToAudio("double blink");
@@ -568,55 +565,56 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
             }
 
-            //System.Diagnostics.Debug.Write("Color Frame Arived\n");
-
-            // ColorFrame is IDisposable
-            using (ColorFrame colorFrame = e.FrameReference.AcquireFrame())
+            if (isVideoFeed)
             {
-
-
-                if (colorFrame != null)
+                // ColorFrame is IDisposable
+                using (ColorFrame colorFrame = e.FrameReference.AcquireFrame())
                 {
 
-                    FrameDescription colorFrameDescription = colorFrame.FrameDescription;
 
-                    using (KinectBuffer colorBuffer = colorFrame.LockRawImageBuffer())
+                    if (colorFrame != null)
                     {
-                        this.colorBitmap.Lock();
 
-                        // verify data and write the new color frame data to the display bitmap
-                        if ((colorFrameDescription.Width == this.colorBitmap.PixelWidth) && (colorFrameDescription.Height == this.colorBitmap.PixelHeight))
+                        FrameDescription colorFrameDescription = colorFrame.FrameDescription;
+
+                        using (KinectBuffer colorBuffer = colorFrame.LockRawImageBuffer())
                         {
-                            //System.Diagnostics.Debug.Write("Inside If\n");
-                            colorFrame.CopyConvertedFrameDataToIntPtr(
-                                this.colorBitmap.BackBuffer,
-                                (uint)(colorFrameDescription.Width * colorFrameDescription.Height * 4),
-                                ColorImageFormat.Bgra);
+                            this.colorBitmap.Lock();
 
-                            this.colorBitmap.AddDirtyRect(new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight));
+                            // verify data and write the new color frame data to the display bitmap
+                            if ((colorFrameDescription.Width == this.colorBitmap.PixelWidth) && (colorFrameDescription.Height == this.colorBitmap.PixelHeight))
+                            {
+                                //System.Diagnostics.Debug.Write("Inside If\n");
+                                colorFrame.CopyConvertedFrameDataToIntPtr(
+                                    this.colorBitmap.BackBuffer,
+                                    (uint)(colorFrameDescription.Width * colorFrameDescription.Height * 4),
+                                    ColorImageFormat.Bgra);
+
+                                this.colorBitmap.AddDirtyRect(new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight));
 
 
-                            /*
-                            TransformedBitmap myTransform = new TransformedBitmap();
-                            myTransform.BeginInit();
+                                /*
+                                TransformedBitmap myTransform = new TransformedBitmap();
+                                myTransform.BeginInit();
 
-                            myTransform.Source = this.colorBitmap;
+                                myTransform.Source = this.colorBitmap;
 
-                            //transform the resulting image to so the view lines up with yours
-                            Matrix myMat = new Matrix(-1, 0, 0, 1, 0, 0);
-                            MatrixTransform matMirrorImage = new MatrixTransform(myMat);
-                            //this.drawingGroup.Transform = matMirrorImage;
-                            myTransform.Transform = matMirrorImage;
+                                //transform the resulting image to so the view lines up with yours
+                                Matrix myMat = new Matrix(-1, 0, 0, 1, 0, 0);
+                                MatrixTransform matMirrorImage = new MatrixTransform(myMat);
+                                //this.drawingGroup.Transform = matMirrorImage;
+                                myTransform.Transform = matMirrorImage;
 
-                            myTransform.EndInit();
-                             * */
+                                myTransform.EndInit();
+                                 * */
 
+                            }
+
+                            this.colorBitmap.Unlock();
                         }
-
-                        this.colorBitmap.Unlock();
                     }
                 }
-            }
+            }//end if videofeed
         }
 
         /// <summary>
@@ -627,96 +625,97 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private void Reader_BodyFrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
             //Console.WriteLine("Body Frame Arrived");
-
-            using (var bodyFrame = e.FrameReference.AcquireFrame())
-            {
-                if (bodyFrame != null)
+            if (isVideoFeed) {
+                using (var bodyFrame = e.FrameReference.AcquireFrame())
                 {
-                    // update body data
-                    bodyFrame.GetAndRefreshBodyData(this.bodies);
-
-                    using (DrawingContext dc = this.drawingGroup.Open())
+                    if (bodyFrame != null)
                     {
-                        //TODO. draws the color frame into the display rect
-                        dc.DrawImage(colorBitmap, this.displayRect);
-                        // draw the dark background
-                        //dc.DrawRectangle(Brushes.Black, null, this.displayRect);
+                        // update body data
+                        bodyFrame.GetAndRefreshBodyData(this.bodies);
 
-                        bool drawFaceResult = false;
-
-                        // iterate through each face source
-                        for (int i = 0; i < this.bodyCount; i++)
+                        using (DrawingContext dc = this.drawingGroup.Open())
                         {
-                            // check if a valid face is tracked in this face source
-                            if (this.faceFrameSources[i].IsTrackingIdValid)
-                            {
-                                // check if we have valid face frame results
-                                if (this.faceFrameResults[i] != null)
-                                {
-                                    // draw face frame results
-                                    this.DrawFaceFrameResults(i, this.faceFrameResults[i], dc);
+                            //TODO. draws the color frame into the display rect
+                            dc.DrawImage(colorBitmap, this.displayRect);
+                            // draw the dark background
+                            //dc.DrawRectangle(Brushes.Black, null, this.displayRect);
 
-                                    if (!drawFaceResult)
+                            bool drawFaceResult = false;
+
+                            // iterate through each face source
+                            for (int i = 0; i < this.bodyCount; i++)
+                            {
+                                // check if a valid face is tracked in this face source
+                                if (this.faceFrameSources[i].IsTrackingIdValid)
+                                {
+                                    // check if we have valid face frame results
+                                    if (this.faceFrameResults[i] != null)
                                     {
-                                        drawFaceResult = true;
+                                        // draw face frame results
+                                        this.DrawFaceFrameResults(i, this.faceFrameResults[i], dc);
+
+                                        if (!drawFaceResult)
+                                        {
+                                            drawFaceResult = true;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // check if the corresponding body is tracked 
+                                    if (this.bodies[i].IsTracked)
+                                    {
+                                        // update the face frame source to track this body
+                                        this.faceFrameSources[i].TrackingId = this.bodies[i].TrackingId;
                                     }
                                 }
                             }
-                            else
+
+                            if (!drawFaceResult)
                             {
-                                // check if the corresponding body is tracked 
-                                if (this.bodies[i].IsTracked)
-                                {
-                                    // update the face frame source to track this body
-                                    this.faceFrameSources[i].TrackingId = this.bodies[i].TrackingId;
-                                }
+                                // if no faces were drawn then this indicates one of the following:
+                                // a body was not tracked 
+                                // a body was tracked but the corresponding face was not tracked
+                                // a body and the corresponding face was tracked though the face box or the face points were not valid
+                                dc.DrawText(
+                                    this.textFaceNotTracked,
+                                    this.textLayoutFaceNotTracked);
                             }
+
+
+                            Brush myBrush = new SolidColorBrush(Colors.Red);
+                            Pen drawingPen = new Pen(myBrush, 10);
+
+                            //account for mirrored image. draw gaze point on screen
+                            dc.DrawEllipse(myBrush, drawingPen, new Point(colorBitmap.Width - gazeX, gazeY), 2, 2);
+
+
+
+                            /*
+                            String gazeMessage = string.Format("({0}, {1})", eyeTracker.GetX(), eyeTracker.GetY());
+                            FormattedText gazeCenter = new FormattedText(
+                                        gazeMessage,
+                                        CultureInfo.GetCultureInfo("en-us"),
+                                        FlowDirection.LeftToRight,
+                                        new Typeface("Georgia"),
+                                        DrawTextFontSize,
+                                        Brushes.Red);
+
+                            //line the point up with the comma in the message
+                            Point center = new Point(eyeTracker.GetX() - 150, eyeTracker.GetY() - 20);
+                            dc.DrawText(gazeCenter, center);
+
+                            */
+
+                            this.drawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
+
+
                         }
-
-                        if (!drawFaceResult)
-                        {
-                            // if no faces were drawn then this indicates one of the following:
-                            // a body was not tracked 
-                            // a body was tracked but the corresponding face was not tracked
-                            // a body and the corresponding face was tracked though the face box or the face points were not valid
-                            dc.DrawText(
-                                this.textFaceNotTracked,
-                                this.textLayoutFaceNotTracked);
-                        }
-
-
-                        Brush myBrush = new SolidColorBrush(Colors.Red);
-                        Pen drawingPen = new Pen(myBrush, 10);
-
-                        //account for mirrored image.
-                        dc.DrawEllipse(myBrush, drawingPen, new Point(colorBitmap.Width - eyeTracker.GetX(), eyeTracker.GetY()), 2, 2);
-
-
-
-                        /*
-                        String gazeMessage = string.Format("({0}, {1})", eyeTracker.GetX(), eyeTracker.GetY());
-                        FormattedText gazeCenter = new FormattedText(
-                                    gazeMessage,
-                                    CultureInfo.GetCultureInfo("en-us"),
-                                    FlowDirection.LeftToRight,
-                                    new Typeface("Georgia"),
-                                    DrawTextFontSize,
-                                    Brushes.Red);
-
-                        //line the point up with the comma in the message
-                        Point center = new Point(eyeTracker.GetX() - 150, eyeTracker.GetY() - 20);
-                        dc.DrawText(gazeCenter, center);
-
-                        */
-
-                        this.drawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
 
 
                     }
-
-
                 }
-            }
+            }//end if isVideoFeed
         }
 
         /// <summary>
@@ -742,7 +741,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             double faceBoxThickness = DrawFaceShapeThickness;
 
             //determine if user is looking at the person. if so, bolden the user's face box
-            if (faceBox.Contains(colorBitmap.Width - eyeTracker.GetX(), eyeTracker.GetY()))
+            if (faceBox.Contains(colorBitmap.Width - gazeX, gazeY))
             {
                 faceBoxThickness *= 4;
                 if (eyeTracker.getDoubleBlink())
@@ -764,16 +763,16 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
 
 
-
+            //draw the rectangle around the person's face
             Pen drawingPen = new Pen(drawingBrush, faceBoxThickness);
             drawingContext.DrawRectangle(null, drawingPen, faceBox);
 
             //TODO. determine and print out center of box. this will be used in the eyeTribe app to check if looking at face.
-            int faceCenterX = faceBoxSource.Left + (faceBoxSource.Right - faceBoxSource.Left) / 2;
-            int faceCenterY = faceBoxSource.Top + (faceBoxSource.Bottom - faceBoxSource.Top) / 2;
+            //int faceCenterX = faceBoxSource.Left + (faceBoxSource.Right - faceBoxSource.Left) / 2;
+            //int faceCenterY = faceBoxSource.Top + (faceBoxSource.Bottom - faceBoxSource.Top) / 2;
 
             //System.Diagnostics.Debug.WriteLine("face center: ({0}, {1})", faceCenterX, faceCenterY);
-
+            /*
             String faceMessage = string.Format("Face center: ({0}, {1})", faceCenterX, faceCenterY);
             FormattedText faceCenter = new FormattedText(
                         faceMessage,
@@ -785,7 +784,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
             Point center = new Point(faceCenterX, faceCenterY);
             //drawingContext.DrawText(faceCenter, center);
-
+            */
             /*
             if (faceResult.FacePointsInColorSpace != null)
             {
