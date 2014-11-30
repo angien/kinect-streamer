@@ -1,4 +1,6 @@
 *obj/
 *bin/
 *.suo
-
+*Debug/
+ipch/
+*.opensdf
