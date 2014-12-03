@@ -16,7 +16,7 @@ namespace TextToSpeech
 
         public void OutputToAudio( string output )
         {
-            synthesizer.Speak( output );
+            synthesizer.SpeakAsync( output );
         }
     }
 }

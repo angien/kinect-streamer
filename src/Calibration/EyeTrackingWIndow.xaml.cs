@@ -34,7 +34,7 @@ namespace HeyYou.EyeTracking
         private int blinkCounter = 0;
         private ulong blinkTrackingId = 0;
 
-        private bool usingFilter = true; //change this value to false if you wish to use raw eyetribe data
+        private bool usingFilter = false; //change this value to false if you wish to use raw eyetribe data
 
         public EyeTrackingWindow()
         {
@@ -61,8 +61,12 @@ namespace HeyYou.EyeTracking
             }
             else
             {
-                gazeX = gazeData.SmoothedCoordinates.X;
-                gazeY = gazeData.SmoothedCoordinates.Y;
+                //only update the gaze point if it is properly recorded
+                //if (gazeData.SmoothedCoordinates.X != 0 && gazeData.SmoothedCoordinates.Y != 0)
+                //{
+                    gazeX = gazeData.SmoothedCoordinates.X;
+                    gazeY = gazeData.SmoothedCoordinates.Y;
+                //}
             }
 
             checkForDoubleAndLongBlink(gazeData);
