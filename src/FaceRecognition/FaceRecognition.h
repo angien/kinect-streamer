@@ -30,6 +30,8 @@ namespace FaceRecognition {
 
 		FaceRecognitionResult^ Predict(Bitmap^ image, System::Windows::Rect faceCrop);
 		void Train(array<Bitmap^>^ images, array<int>^ labels);
+
+	private:
 		Ptr<FaceRecognizer>* faceRecognizer;
 	};
 }
