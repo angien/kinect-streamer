@@ -145,6 +145,10 @@
       <Project>{c6d4dfeb-1d02-4719-8e98-c95e44c86991}</Project>
       <Name>EyeTracking</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FaceEnrollment\FaceEnrollment.csproj">
+      <Project>{7a12533d-a823-4d1c-8c88-3622919308b3}</Project>
+      <Name>FaceEnrollment</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FaceRecognition\FaceRecognition.vcxproj">
       <Project>{e533259a-a7bc-4e49-be9a-8edadaf17bab}</Project>
       <Name>FaceRecognition</Name>
