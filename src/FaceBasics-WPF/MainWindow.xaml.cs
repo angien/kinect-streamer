@@ -169,6 +169,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private string statusText = null;
 
         private EyeTrackingWindow eyeTracker;
+        static public List<List<String>> profiles;
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -176,6 +177,26 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         public MainWindow()
         {
 
+            //profiles object
+            profiles = new List<List<String>>();
+            //creates the database
+            ReadWriteCsv.CsvFileReader read = new ReadWriteCsv.CsvFileReader("dbcsv.csv");
+            int count = 0;
+            while (true)
+            {
+                ReadWriteCsv.CsvRow row = new ReadWriteCsv.CsvRow();
+                if (!read.ReadRow(row))
+                {
+                    break;
+                }
+
+                profiles.Add(new List<String>());
+                foreach (String value in row)
+                {
+                    profiles[count].Add(value);
+                }
+                count++;
+            } //end creation of the database
 
             this.speaker = new SpeechOutput();
 
@@ -560,7 +581,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             {
                 speaker.OutputToAudio("long blink");
                 eyeTracker.resetLongBlink();
-
+                setProfile(0);
                 toggleScreens();
 
             }
@@ -752,6 +773,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     speaker.OutputToAudio("Hey you");
                     eyeTracker.resetDoubleBlink();
 
+                    setProfile(1); //sets profile to person's number in database
                     toggleScreens();
 
                 }
@@ -943,6 +965,14 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+        private void setProfile (int i)
+        {
+            Phrase1.Content = profiles[i][2];
+            Phrase2.Content = profiles[i][3];
+            Phrase3.Content = profiles[i][4];
+            String imageloc = "profileImages" + "\\" + "profile" + profiles[i][0] + ".jpg";
+            //profilePic.Source = new BitmapImage(new Uri(imageloc));
         }
         private void toggleScreens()
         {

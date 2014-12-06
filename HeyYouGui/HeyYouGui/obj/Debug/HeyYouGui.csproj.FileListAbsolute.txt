@@ -8,3 +8,13 @@ C:\Users\jjc053\Desktop\CSE118_Project\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.P
 C:\Users\jjc053\Desktop\CSE118_Project\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.csproj.GenerateResource.Cache
 C:\Users\jjc053\Desktop\CSE118_Project\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.exe
 C:\Users\jjc053\Desktop\CSE118_Project\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.pdb
+C:\Users\cse118FA14\Documents\HeyYouApp4\HeyYouGui\HeyYouGui\bin\Debug\HeyYouGui.exe.config
+C:\Users\cse118FA14\Documents\HeyYouApp4\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.exe
+C:\Users\cse118FA14\Documents\HeyYouApp4\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.pdb
+C:\Users\cse118FA14\Documents\HeyYouApp4\HeyYouGui\HeyYouGui\bin\Debug\dbcsv.csv
+C:\Users\cse118FA14\Documents\HeyYouApp4\HeyYouGui\HeyYouGui\bin\Debug\HeyYouGui.exe
+C:\Users\cse118FA14\Documents\HeyYouApp4\HeyYouGui\HeyYouGui\bin\Debug\HeyYouGui.pdb
+C:\Users\cse118FA14\Documents\HeyYouApp4\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.csprojResolveAssemblyReference.cache
+C:\Users\cse118FA14\Documents\HeyYouApp4\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.Form1.resources
+C:\Users\cse118FA14\Documents\HeyYouApp4\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.Properties.Resources.resources
+C:\Users\cse118FA14\Documents\HeyYouApp4\HeyYouGui\HeyYouGui\obj\Debug\HeyYouGui.csproj.GenerateResource.Cache
