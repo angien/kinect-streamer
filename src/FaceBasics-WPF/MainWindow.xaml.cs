@@ -74,13 +74,14 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <summary>
         /// Formatted text to indicate that there are no bodies/faces tracked in the FOV
         /// </summary>
-        private FormattedText textFaceNotTracked = new FormattedText(
+        /*private FormattedText textFaceNotTracked = new FormattedText(
                         "No bodies or faces are tracked ...",
                         CultureInfo.GetCultureInfo("en-us"),
                         FlowDirection.LeftToRight,
                         new Typeface("Georgia"),
                         DrawTextFontSize,
                         Brushes.White);
+        */
 
         /// <summary>
         /// Text layout for the no face tracked message
@@ -170,6 +171,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
         private EyeTrackingWindow eyeTracker;
         static public List<List<String>> profiles;
+        
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -653,20 +655,26 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     {
                         // update body data
                         bodyFrame.GetAndRefreshBodyData(this.bodies);
-
+                        /*
                         if (EnrollmentManager.Active)
                         {
+                            
                             IEnumerable<RectI> faceRectis = this.faceFrameResults
                                 .Where(faceResult => faceResult != null)
                                 .Select((faceResult) => faceResult.FaceBoundingBoxInColorSpace);
                             IEnumerable<Rect> faceRects =
                                 faceRectis.Select((rect) => new Rect(new Point(rect.Left, rect.Top), new Point(rect.Right, rect.Bottom)));
                             EnrollmentManager.UpdateFrame(colorBitmap, faceRects);
+                            
                         }
                         else
                         {
                             DrawTheWholeFrame();
-                        }
+
+                        }*/
+                        DrawTheWholeFrame();
+
+
                     }
                 }
             }//end if isVideoFeed
@@ -721,9 +729,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     // a body was not tracked 
                     // a body was tracked but the corresponding face was not tracked
                     // a body and the corresponding face was tracked though the face box or the face points were not valid
-                    dc.DrawText(
-                        this.textFaceNotTracked,
-                        this.textLayoutFaceNotTracked);
+                    //dc.DrawText(
+                    //    this.textFaceNotTracked,
+                    //    this.textLayoutFaceNotTracked);
                 }
 
 
@@ -744,12 +752,12 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             new Typeface("Georgia"),
                             DrawTextFontSize,
                             Brushes.Red);
-
+                
                 //line the point up with the comma in the message
                 Point center = new Point(eyeTracker.GetX() - 150, eyeTracker.GetY() - 20);
                 dc.DrawText(gazeCenter, center);
-
                 */
+                
 
                 this.drawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
 

@@ -12,22 +12,28 @@ using System.Windows;
 using System.Windows.Forms;
 using TETControls.Calibration;
 using TETControls.TrackBox;
+using TETControls;
 using TETCSharpClient.Data;
 using System.Windows.Interop;
 using TETCSharpClient;
+
 
 
 namespace HeyYou.EyeTracking
 {
     public partial class EyeTrackingWindow : IConnectionStateListener, IGazeListener
     {
-        private double gazeX;
-        private double gazeY;
+        private double gazeX, gazeXBuff;
+        private double gazeY, gazeYBuff;
+
+        private double [] gazeXBuf;
+        private double[] gazeYBuf;
+
         private double prevGazeX = 0, prevGazeY = 0;
         private double prevTime = 0;
         private double timeFixed = 0;
 
-        private bool isDoubleBlink = false, isLongBlink = false, eyesClosed = false;
+        private bool isDoubleBlink = false, isLongBlink = false, eyesClosed = false, justBlinked = false, justOpened = false;
         private long prevTimeOfBlink = 0, timeOpened = 0, timeClosed = 0;
         private int blinkCount = 0;
 
@@ -48,11 +54,17 @@ namespace HeyYou.EyeTracking
             // Create a client for the eye tracker
             GazeManager.Instance.Activate(GazeManager.ApiVersion.VERSION_1_0, GazeManager.ClientMode.Push);
             GazeManager.Instance.AddGazeListener(this);
+
+            gazeXBuf = new double[3];
+            gazeYBuf = new double[3];
+
         }
 
         public void OnGazeUpdate(GazeData gazeData)
         {
 
+            checkForDoubleAndLongBlink(gazeData);
+            
             //grab the gaze position and either filter it or use raw data
             if (usingFilter)
             {
@@ -64,12 +76,66 @@ namespace HeyYou.EyeTracking
                 //only update the gaze point if it is properly recorded
                 //if (gazeData.SmoothedCoordinates.X != 0 && gazeData.SmoothedCoordinates.Y != 0)
                 //{
-                    gazeX = gazeData.SmoothedCoordinates.X;
-                    gazeY = gazeData.SmoothedCoordinates.Y;
-                //}
+
+                //do not update gazeX and gazeY when eyes are closed(keep the previous point) (prevents jumpy point when blinking)
+                if (false)
+                {
+                    //do not update the gaze
+                }
+                else {
+                    //gazeX = gazeData.SmoothedCoordinates.X;
+                    //gazeY = gazeData.SmoothedCoordinates.Y;
+                    
+                    var d = Utility.Instance.ScaleDpi;
+                    //var x = Utility.Instance.RecordingPosition.X;
+                    //var y = Utility.Instance.RecordingPosition.Y;
+
+                    //var gX = gazeData.RawCoordinates.X;
+                    //var gY = gazeData.RawCoordinates.Y;
+
+                    var gX = gazeData.SmoothedCoordinates.X;
+                    var gY = gazeData.SmoothedCoordinates.Y;
+
+                    if (!eyesClosed && !justBlinked)
+                    {
+
+                        //buffer the gaze points so it lags 3 cycles behind reality
+                        //this allows unwanted blink point flutter to be eliminated
+                        if (justOpened)
+                        {
+                            //if the eyes just opened, an uncertain point has entered the buffer.
+                            //flush the buffer with the point known to be valid
+                            gazeX = gazeXBuf[2];
+                            gazeY = gazeYBuf[2];
+
+                            gazeXBuf[1] = gazeXBuf[2];
+                            gazeYBuf[1] = gazeYBuf[2];
+                            gazeXBuf[0] = gazeXBuf[2];
+                            gazeYBuf[0] = gazeYBuf[2];
+
+                        }
+                        else
+                        {
+                            gazeX = gazeXBuf[2];
+                            gazeY = gazeYBuf[2];
+
+                            gazeXBuf[2] = gazeXBuf[1];
+                            gazeYBuf[2] = gazeYBuf[1];
+
+                            gazeXBuf[1] = gazeXBuf[0];
+                            gazeYBuf[1] = gazeYBuf[0];
+
+                            gazeXBuf[0] = d * gX;
+                            gazeYBuf[0] = d * gY;
+                        }
+                    }
+                    
+                    
+         
+                }
+                
             }
 
-            checkForDoubleAndLongBlink(gazeData);
 
 
 
@@ -143,7 +209,17 @@ namespace HeyYou.EyeTracking
             long currTimeOfBlink = 0;
             long betweenBlinksTime = 0;
             long blinkDuration = 0;
+            justOpened = false; //is always false unless just opened
             //Console.Write("State {0}\n", gazeData.State);
+
+            if (gazeData.TimeStamp - timeOpened < 100)
+            {
+                justBlinked = true;
+            }
+
+            else {
+                justBlinked = false;
+            }
 
             //if the eyes just closed
             if (gazeData.State == GazeData.STATE_TRACKING_FAIL && !eyesClosed)
@@ -157,6 +233,7 @@ namespace HeyYou.EyeTracking
             {
                 eyesClosed = false;
                 timeOpened = gazeData.TimeStamp;
+                justOpened = true;
                 //the time the blink occured is defined on opening
                 currTimeOfBlink = timeOpened;
                 blinkCount++;
@@ -236,6 +313,7 @@ namespace HeyYou.EyeTracking
 
             // Add listener if EyeTribe Server is closed
             GazeManager.Instance.AddConnectionStateListener(this);
+
 
             // What is the current connection state
             OnConnectionStateChanged(GazeManager.Instance.IsActivated);
