@@ -12,6 +12,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
@@ -23,6 +24,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
     using System.Windows.Shapes;
     using System.Windows.Controls;
+    using FaceEnrollment;
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -90,8 +92,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// </summary>
         private DrawingGroup drawingGroup;
         private DrawingGroup gazeDrawingGroup;
-
-        private DrawingImage drawingVideoFrame;
 
         /// <summary>
         /// Drawing image that we will display
@@ -176,7 +176,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// </summary>
         public MainWindow()
         {
-
             //profiles object
             profiles = new List<List<String>>();
             //creates the database
@@ -417,6 +416,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="e">event arguments</param>
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            EnrollmentManager.Launch(this);
+
             for (int i = 0; i < this.bodyCount; i++)
             {
                 if (this.faceFrameReaders[i] != null)
@@ -645,7 +646,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="e">event arguments</param>
         private void Reader_BodyFrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
-            //Console.WriteLine("Body Frame Arrived");
             if (isVideoFeed) {
                 using (var bodyFrame = e.FrameReference.AcquireFrame())
                 {
@@ -654,89 +654,107 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         // update body data
                         bodyFrame.GetAndRefreshBodyData(this.bodies);
 
-                        using (DrawingContext dc = this.drawingGroup.Open())
+                        if (EnrollmentManager.Active)
                         {
-                            //TODO. draws the color frame into the display rect
-                            dc.DrawImage(colorBitmap, this.displayRect);
-                            // draw the dark background
-                            //dc.DrawRectangle(Brushes.Black, null, this.displayRect);
-
-                            bool drawFaceResult = false;
-
-                            // iterate through each face source
-                            for (int i = 0; i < this.bodyCount; i++)
-                            {
-                                // check if a valid face is tracked in this face source
-                                if (this.faceFrameSources[i].IsTrackingIdValid)
-                                {
-                                    // check if we have valid face frame results
-                                    if (this.faceFrameResults[i] != null)
-                                    {
-                                        // draw face frame results
-                                        this.DrawFaceFrameResults(i, this.faceFrameResults[i], dc);
-
-                                        if (!drawFaceResult)
-                                        {
-                                            drawFaceResult = true;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    // check if the corresponding body is tracked 
-                                    if (this.bodies[i].IsTracked)
-                                    {
-                                        // update the face frame source to track this body
-                                        this.faceFrameSources[i].TrackingId = this.bodies[i].TrackingId;
-                                    }
-                                }
-                            }
-
-                            if (!drawFaceResult)
-                            {
-                                // if no faces were drawn then this indicates one of the following:
-                                // a body was not tracked 
-                                // a body was tracked but the corresponding face was not tracked
-                                // a body and the corresponding face was tracked though the face box or the face points were not valid
-                                dc.DrawText(
-                                    this.textFaceNotTracked,
-                                    this.textLayoutFaceNotTracked);
-                            }
-
-
-                            Brush myBrush = new SolidColorBrush(Colors.Red);
-                            Pen drawingPen = new Pen(myBrush, 10);
-
-                            //account for mirrored image. draw gaze point on screen
-                            dc.DrawEllipse(myBrush, drawingPen, new Point(colorBitmap.Width - gazeX, gazeY), 2, 2);
-
-
-
-                            /*
-                            String gazeMessage = string.Format("({0}, {1})", eyeTracker.GetX(), eyeTracker.GetY());
-                            FormattedText gazeCenter = new FormattedText(
-                                        gazeMessage,
-                                        CultureInfo.GetCultureInfo("en-us"),
-                                        FlowDirection.LeftToRight,
-                                        new Typeface("Georgia"),
-                                        DrawTextFontSize,
-                                        Brushes.Red);
-
-                            //line the point up with the comma in the message
-                            Point center = new Point(eyeTracker.GetX() - 150, eyeTracker.GetY() - 20);
-                            dc.DrawText(gazeCenter, center);
-
-                            */
-
-                            this.drawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
-
-
+                            IEnumerable<RectI> faceRectis = this.faceFrameResults
+                                .Where(faceResult => faceResult != null)
+                                .Select((faceResult) => faceResult.FaceBoundingBoxInColorSpace);
+                            IEnumerable<Rect> faceRects =
+                                faceRectis.Select((rect) => new Rect(new Point(rect.Left, rect.Top), new Point(rect.Right, rect.Bottom)));
+                            EnrollmentManager.UpdateFrame(colorBitmap, faceRects);
                         }
-
-
+                        else
+                        {
+                            DrawTheWholeFrame();
+                        }
                     }
                 }
             }//end if isVideoFeed
+        }
+
+        /// <summary>
+        /// This method draws everything. Really. (called when body frame arrives)
+        /// </summary>
+        private void DrawTheWholeFrame()
+        {
+            using (DrawingContext dc = this.drawingGroup.Open())
+            {
+                //TODO. draws the color frame into the display rect
+                dc.DrawImage(colorBitmap, this.displayRect);
+                // draw the dark background
+                //dc.DrawRectangle(Brushes.Black, null, this.displayRect);
+
+                bool drawFaceResult = false;
+
+                // iterate through each face source
+                for (int i = 0; i < this.bodyCount; i++)
+                {
+                    // check if a valid face is tracked in this face source
+                    if (this.faceFrameSources[i].IsTrackingIdValid)
+                    {
+                        // check if we have valid face frame results
+                        if (this.faceFrameResults[i] != null)
+                        {
+                            // draw face frame results
+                            this.DrawFaceFrameResults(i, this.faceFrameResults[i], dc);
+
+                            if (!drawFaceResult)
+                            {
+                                drawFaceResult = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // check if the corresponding body is tracked 
+                        if (this.bodies[i].IsTracked)
+                        {
+                            // update the face frame source to track this body
+                            this.faceFrameSources[i].TrackingId = this.bodies[i].TrackingId;
+                        }
+                    }
+                }
+
+                if (!drawFaceResult)
+                {
+                    // if no faces were drawn then this indicates one of the following:
+                    // a body was not tracked 
+                    // a body was tracked but the corresponding face was not tracked
+                    // a body and the corresponding face was tracked though the face box or the face points were not valid
+                    dc.DrawText(
+                        this.textFaceNotTracked,
+                        this.textLayoutFaceNotTracked);
+                }
+
+
+                Brush myBrush = new SolidColorBrush(Colors.Red);
+                Pen drawingPen = new Pen(myBrush, 10);
+
+                //account for mirrored image. draw gaze point on screen
+                dc.DrawEllipse(myBrush, drawingPen, new Point(colorBitmap.Width - gazeX, gazeY), 2, 2);
+
+
+
+                /*
+                String gazeMessage = string.Format("({0}, {1})", eyeTracker.GetX(), eyeTracker.GetY());
+                FormattedText gazeCenter = new FormattedText(
+                            gazeMessage,
+                            CultureInfo.GetCultureInfo("en-us"),
+                            FlowDirection.LeftToRight,
+                            new Typeface("Georgia"),
+                            DrawTextFontSize,
+                            Brushes.Red);
+
+                //line the point up with the comma in the message
+                Point center = new Point(eyeTracker.GetX() - 150, eyeTracker.GetY() - 20);
+                dc.DrawText(gazeCenter, center);
+
+                */
+
+                this.drawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
+
+
+            }
         }
 
         /// <summary>

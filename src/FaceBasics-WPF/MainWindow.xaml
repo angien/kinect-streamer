@@ -4,6 +4,8 @@
         Title="Face Basics" 
         Height="768" Width="1024" 
         Loaded="MainWindow_Loaded"
+        WindowState="Maximized"
+        WindowStyle="None"
         Closing="MainWindow_Closing">
     <Window.Resources>
         <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e" />
@@ -40,7 +42,6 @@
 
             </Canvas>
         </Viewbox>
-
 
         <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
             <StatusBarItem Content="{Binding StatusText}" />
