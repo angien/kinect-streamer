@@ -212,6 +212,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             FrameDescription frameDescription = this.kinectSensor.ColorFrameSource.FrameDescription;
             FrameDescription colorFrameDescription = this.kinectSensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Bgra);
 
+            
+
             // set the display specifics
             this.displayWidth = frameDescription.Width;
             this.displayHeight = frameDescription.Height;
@@ -229,7 +231,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             this.bodyFrameReader = this.kinectSensor.BodyFrameSource.OpenReader();
             this.colorFrameReader = this.kinectSensor.ColorFrameSource.OpenReader();
 
-
             // wire handler for body frame arrival and color
             this.bodyFrameReader.FrameArrived += this.Reader_BodyFrameArrived;
             this.colorFrameReader.FrameArrived += this.Reader_ColorFrameArrived;
@@ -241,7 +242,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             this.bodies = new Body[this.bodyCount];
 
             // specify the required face frame results
-            FaceFrameFeatures faceFrameFeatures =
+ /*           FaceFrameFeatures faceFrameFeatures =
                 FaceFrameFeatures.BoundingBoxInColorSpace
                 | FaceFrameFeatures.PointsInColorSpace
                 | FaceFrameFeatures.RotationOrientation
@@ -253,6 +254,10 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 | FaceFrameFeatures.LookingAway
                 | FaceFrameFeatures.MouthMoved
                 | FaceFrameFeatures.MouthOpen;
+*/
+            FaceFrameFeatures faceFrameFeatures = FaceFrameFeatures.BoundingBoxInColorSpace
+                | FaceFrameFeatures.PointsInColorSpace;
+
 
             // create a face frame source + reader to track each face in the FOV
             this.faceFrameSources = new FaceFrameSource[this.bodyCount];
@@ -329,6 +334,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             buttons[0] = Phrase1;
             buttons[1] = Phrase2;
             buttons[2] = Phrase3;
+            
             
         }
 
@@ -586,6 +592,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 eyeTracker.resetLongBlink();
                 setProfile(0);
                 toggleScreens();
+                
 
             }
 
@@ -793,10 +800,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 faceBoxThickness *= 4;
                 if (eyeTracker.getDoubleBlink())
                 {
-                    System.Diagnostics.Debug.Write("Say Hey You to person with tracking id: " + faceResult.TrackingId + "\n");
                     eyeTracker.ResetBlinkCount();
 
-                    speaker.OutputToAudio("Hey you");
+                    speaker.OutputToAudio("Hey you"); //TODO say person's name
                     eyeTracker.resetDoubleBlink();
 
                     setProfile(1); //sets profile to person's number in database
@@ -1009,6 +1015,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 conversationScreen.Visibility = System.Windows.Visibility.Visible;
                 isVideoFeed = false;
                 isConversationScreen = true;
+
+                //bodyFrameReader.IsPaused = true;
+
             }
             else if (isConversationScreen)
             {
@@ -1016,6 +1025,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 videoFeed.Visibility = System.Windows.Visibility.Visible;
                 isConversationScreen = false;
                 isVideoFeed = true;
+
+                //bodyFrameReader.IsPaused = false;
             }
         }
 
