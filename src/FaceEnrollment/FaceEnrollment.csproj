@@ -97,6 +97,7 @@
     <Compile Include="Page4.xaml.cs">
       <DependentUpon>Page4.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PersonTrainingData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

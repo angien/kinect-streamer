@@ -4,14 +4,14 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="722.667" d:DesignWidth="544.667"
 	Title="Page4">
 
     <Grid>
-        <Image  HorizontalAlignment="Left" Margin="40,50,0,0" VerticalAlignment="Top" Width="120" Height="220"/>
+        <Image Name="liveImage" HorizontalAlignment="Left" Margin="40,50,0,0" VerticalAlignment="Top" Width="120" Height="220"/>
+        <Image Name="snapshotImage" Margin="130,120,9.667,29.667" Width="400" Height="500"></Image>
         <Button Content="Snap Picture" Click="Snap_Click" HorizontalAlignment="Left" Margin="203,100,0,0" VerticalAlignment="Top" Width="75"/>
         <Button Content="Next Person" Click="Next_Click" HorizontalAlignment="Left" Margin="203,130,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Done" Click="Done_Click" HorizontalAlignment="Left" Margin="203,160,0,0" VerticalAlignment="Top" Width="75"/> 
-        <Image Name="liveImage" />
+        <Button Content="Done" Click="Done_Click" HorizontalAlignment="Left" Margin="203,160,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Page>

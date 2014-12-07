@@ -9,7 +9,7 @@
 
     <Grid>
 		<Label Content="Enter Name" HorizontalAlignment="Left" Margin="88,123,0,0" VerticalAlignment="Top" Width="136"/>
-        <TextBox HorizontalAlignment="Left" Margin="62,203,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Enter" Click="Button_Click2" HorizontalAlignment="Left" Margin="173,203,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBox Name="personName" HorizontalAlignment="Left" Margin="62,203,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Enter" Click="Enter_Click" HorizontalAlignment="Left" Margin="173,203,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Page>

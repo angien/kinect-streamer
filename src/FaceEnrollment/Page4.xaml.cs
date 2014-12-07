@@ -22,6 +22,7 @@ namespace FaceEnrollment
     /// </summary>
     public partial class Page4 : Page
     {
+        private BitmapSource lastFrame;
         public Page4()
         {
             InitializeComponent();
@@ -31,15 +32,18 @@ namespace FaceEnrollment
         private void ReceiveFrame(BitmapSource frame, IEnumerable<Rect> faceBoxes)
         {
             liveImage.Source = frame;
+            lastFrame = frame;
         }
 
         private void Snap_Click(object sender, RoutedEventArgs e)
         {
-            return;
+            snapshotImage.Source = lastFrame.CloneCurrentValue();
+            EnrollmentManager.trainingData[EnrollmentManager.currentTrainingId].trainingImages.Add(BitmapFromSource(lastFrame));
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
+            EnrollmentManager.currentTrainingId++;
             EnrollmentManager.OnFrameReceived -= ReceiveFrame;
             EnrollmentManager.window.Content = new Page3();
         }
@@ -63,5 +67,15 @@ namespace FaceEnrollment
 
             return bitmap;
         }
+
+        public static BitmapSource ConvertBitmap(Bitmap source)
+        {
+            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                          source.GetHbitmap(),
+                          IntPtr.Zero,
+                          Int32Rect.Empty,
+                          BitmapSizeOptions.FromEmptyOptions());
+        }
+
     }
 }
