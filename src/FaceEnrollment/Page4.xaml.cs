@@ -44,7 +44,7 @@ namespace FaceEnrollment
                 var pen = new System.Windows.Media.Pen(brush, 5);
                 foreach (Rect faceBox in faceBoxes)
                 {
-                    drawingContext.DrawRectangle(null, pen, faceBox);
+                    drawingContext.DrawRectangle(null, pen, TransformFace(faceBox));
                 }
                 drawingContext.DrawRectangle(null, pen, new Rect(0, 0, 100, 100));
             }
@@ -67,8 +67,9 @@ namespace FaceEnrollment
             {
                 snapshotImage.Source = lastFrame.CloneCurrentValue();
                 PersonTrainingData person = EnrollmentManager.trainingData[EnrollmentManager.currentTrainingId];
-                person.trainingImages.Add(GetBitmap(lastFrame));
-                person.faceBoxes.Add(lastFaceBoxes.First());
+                person.trainingImages.Add(Util.SourceToBitmap(lastFrame));
+                Rect faceBox = TransformFace(lastFaceBoxes.First());
+                person.faceBoxes.Add(faceBox);
                 output.Content = "Success";
             }
         }
@@ -86,45 +87,12 @@ namespace FaceEnrollment
             EnrollmentManager.Finish();
         }
 
-        private static Bitmap BitmapFromSource(BitmapSource bitmapsource)
+        private Rect TransformFace(Rect faceBox)
         {
-            Bitmap bitmap;
-            using (var outStream = new MemoryStream())
-            {
-                BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(bitmapsource));
-                enc.Save(outStream);
-                bitmap = new Bitmap(outStream);
-            }
-
-            return bitmap;
-        }
-
-        public static BitmapSource ConvertBitmap(Bitmap source)
-        {
-            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                          source.GetHbitmap(),
-                          IntPtr.Zero,
-                          Int32Rect.Empty,
-                          BitmapSizeOptions.FromEmptyOptions());
-        }
-
-        Bitmap GetBitmap(BitmapSource source) {
-          Bitmap bmp = new Bitmap(
-            source.PixelWidth,
-            source.PixelHeight,
-            System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
-          BitmapData data = bmp.LockBits(
-            new System.Drawing.Rectangle(System.Drawing.Point.Empty, bmp.Size),
-            ImageLockMode.WriteOnly,
-            System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
-          source.CopyPixels(
-            Int32Rect.Empty,
-            data.Scan0,
-            data.Height * data.Stride,
-            data.Stride);
-          bmp.UnlockBits(data);
-          return bmp;
+            return new Rect(faceBox.Left - 0.5 * (faceBox.Right - faceBox.Left),
+                    faceBox.Top - 1 * (faceBox.Bottom - faceBox.Top),
+                    2 * (faceBox.Right - faceBox.Left),
+                    2.5 * (faceBox.Bottom - faceBox.Top));
         }
     }
 }

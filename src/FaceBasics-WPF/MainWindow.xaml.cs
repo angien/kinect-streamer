@@ -43,6 +43,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private double gazeX, gazeY;
 
         private FaceRecognizerBridge faceRecognizer = new FaceRecognizerBridge();
+        private Dictionary<int, string> labelToName = new Dictionary<int, string>();
+        private FaceRecognitionResult[] faceToResult;
 
         //stores the buttons in an array
         private Button[] buttons = new Button[3];
@@ -278,6 +280,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
             // allocate storage to store face frame results for each face in the FOV
             this.faceFrameResults = new FaceFrameResult[this.bodyCount];
+            this.faceToResult = new FaceRecognitionResult[this.bodyCount];
 
             // populate face result colors - one for each face index
             this.faceBrush = new List<Brush>()
@@ -460,6 +463,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 {
                     ids.Add(data.trainingId);
                 }
+                labelToName[data.trainingId] = data.name;
             }
 
             if (images.Count() > 1)
@@ -716,12 +720,13 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         else
                         {
                             DrawTheWholeFrame();
-
                         }
                     }
                 }
             }//end if isVideoFeed
         }
+
+        int counter = 0; // delete this
 
         /// <summary>
         /// This method draws everything. Really. (called when body frame arrives)
@@ -749,10 +754,31 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             // draw face frame results
                             this.DrawFaceFrameResults(i, this.faceFrameResults[i], dc);
 
-                            if (!drawFaceResult)
+                            RectI recti = faceFrameResults[i].FaceBoundingBoxInColorSpace;
+                            Rect rect = new Rect(recti.Left, recti.Top, recti.Right - recti.Left, recti.Bottom - recti.Top);
+
+                            if (!EnrollmentManager.Active && faceToResult[i] != null)
                             {
-                                drawFaceResult = true;
+                                FaceRecognitionResult result = faceToResult[i];
+                                string name = labelToName[result.label];
+                                string text = name + '\n' + result.confidence.ToString();
+                                FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
+                                    System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 20,
+                                    new SolidColorBrush(Colors.Yellow));
+                                dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Bottom));
                             }
+
+                            if (counter % 20 == 0 && !EnrollmentManager.Active)
+                            {
+                                FaceRecognitionResult faceResult = faceRecognizer.Predict(Util.SourceToBitmap(colorBitmap), rect);
+                                faceToResult[i] = faceResult;
+
+                                if (!drawFaceResult)
+                                {
+                                    drawFaceResult = true;
+                                }
+                            }
+                            counter++;
                         }
                     }
                     else
