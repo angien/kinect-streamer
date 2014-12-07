@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Drawing.Imaging;
 
 namespace FaceEnrollment
 {
@@ -23,22 +24,53 @@ namespace FaceEnrollment
     public partial class Page4 : Page
     {
         private BitmapSource lastFrame;
+        private IEnumerable<Rect> lastFaceBoxes;
+        private DrawingGroup drawingGroup = new DrawingGroup();
+
         public Page4()
         {
             InitializeComponent();
             EnrollmentManager.OnFrameReceived += ReceiveFrame;
+            liveImage.Source = new DrawingImage(drawingGroup);
         }
 
         private void ReceiveFrame(BitmapSource frame, IEnumerable<Rect> faceBoxes)
         {
-            liveImage.Source = frame;
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext drawingContext = drawingGroup.Open())
+            {
+                drawingContext.DrawImage(frame, new Rect(new System.Windows.Size(frame.Width, frame.Height)));
+                var brush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
+                var pen = new System.Windows.Media.Pen(brush, 5);
+                foreach (Rect faceBox in faceBoxes)
+                {
+                    drawingContext.DrawRectangle(null, pen, faceBox);
+                }
+                drawingContext.DrawRectangle(null, pen, new Rect(0, 0, 100, 100));
+            }
+
             lastFrame = frame;
+            lastFaceBoxes = faceBoxes;
         }
 
         private void Snap_Click(object sender, RoutedEventArgs e)
         {
-            snapshotImage.Source = lastFrame.CloneCurrentValue();
-            EnrollmentManager.trainingData[EnrollmentManager.currentTrainingId].trainingImages.Add(BitmapFromSource(lastFrame));
+            if (lastFaceBoxes.Count() < 1)
+            {
+                output.Content = "No faces found";
+            }
+            else if (lastFaceBoxes.Count() > 1)
+            {
+                output.Content = "Too many faces found: " + lastFaceBoxes.Count().ToString();
+            }
+            else
+            {
+                snapshotImage.Source = lastFrame.CloneCurrentValue();
+                PersonTrainingData person = EnrollmentManager.trainingData[EnrollmentManager.currentTrainingId];
+                person.trainingImages.Add(GetBitmap(lastFrame));
+                person.faceBoxes.Add(lastFaceBoxes.First());
+                output.Content = "Success";
+            }
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
@@ -77,5 +109,22 @@ namespace FaceEnrollment
                           BitmapSizeOptions.FromEmptyOptions());
         }
 
+        Bitmap GetBitmap(BitmapSource source) {
+          Bitmap bmp = new Bitmap(
+            source.PixelWidth,
+            source.PixelHeight,
+            System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+          BitmapData data = bmp.LockBits(
+            new System.Drawing.Rectangle(System.Drawing.Point.Empty, bmp.Size),
+            ImageLockMode.WriteOnly,
+            System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+          source.CopyPixels(
+            Int32Rect.Empty,
+            data.Scan0,
+            data.Height * data.Stride,
+            data.Stride);
+          bmp.UnlockBits(data);
+          return bmp;
+        }
     }
 }

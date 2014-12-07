@@ -8,10 +8,11 @@
 	Title="Page4">
 
     <Grid>
-        <Image Name="liveImage" HorizontalAlignment="Left" Margin="40,50,0,0" VerticalAlignment="Top" Width="120" Height="220"/>
+        <Image Name="liveImage" HorizontalAlignment="Left" Margin="40,50,0,0" VerticalAlignment="Top" Width="600" Height="600"/>
         <Image Name="snapshotImage" Margin="130,120,9.667,29.667" Width="400" Height="500"></Image>
         <Button Content="Snap Picture" Click="Snap_Click" HorizontalAlignment="Left" Margin="203,100,0,0" VerticalAlignment="Top" Width="75"/>
         <Button Content="Next Person" Click="Next_Click" HorizontalAlignment="Left" Margin="203,130,0,0" VerticalAlignment="Top" Width="75"/>
         <Button Content="Done" Click="Done_Click" HorizontalAlignment="Left" Margin="203,160,0,0" VerticalAlignment="Top" Width="75"/>
+        <Label Name="output" Content="hello" Margin="260,232,74.667,452.667"/>
     </Grid>
 </Page>

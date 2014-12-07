@@ -25,6 +25,14 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     using System.Windows.Shapes;
     using System.Windows.Controls;
     using FaceEnrollment;
+    using FaceRecognition;
+    using System.Drawing;
+
+    using Point = System.Windows.Point;
+    using PointF = Microsoft.Kinect.PointF;
+    using Brush = System.Windows.Media.Brush;
+    using Brushes = System.Windows.Media.Brushes;
+    using Pen = System.Windows.Media.Pen;
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -33,6 +41,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     {
         //set every new color frame. where the person is looking
         private double gazeX, gazeY;
+
+        private FaceRecognizerBridge faceRecognizer = new FaceRecognizerBridge();
 
         //stores the buttons in an array
         private Button[] buttons = new Button[3];
@@ -419,6 +429,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             EnrollmentManager.Launch(this);
+            EnrollmentManager.Done += EnrollmentManager_Done;
 
             for (int i = 0; i < this.bodyCount; i++)
             {
@@ -433,6 +444,27 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             {
                 // wire handler for body frame arrival
                 this.bodyFrameReader.FrameArrived += this.Reader_BodyFrameArrived;
+            }
+        }
+
+        void EnrollmentManager_Done()
+        {
+            List<Bitmap> images = new List<Bitmap>();
+            List<int> ids = new List<int>();
+            List<Rect> faceCrops = new List<Rect>();
+            foreach (PersonTrainingData data in EnrollmentManager.trainingData)
+            {
+                images.AddRange(data.trainingImages);
+                faceCrops.AddRange(data.faceBoxes);
+                foreach (var image in data.trainingImages)
+                {
+                    ids.Add(data.trainingId);
+                }
+            }
+
+            if (images.Count() > 1)
+            {
+                faceRecognizer.Train(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
             }
         }
 
@@ -658,6 +690,21 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         
                         if (EnrollmentManager.Active)
                         {
+                            // iterate through each face source
+                            for (int i = 0; i < this.bodyCount; i++)
+                            {
+                                // check if a valid face is tracked in this face source
+                                if (!this.faceFrameSources[i].IsTrackingIdValid)
+                                {
+                                    // check if the corresponding body is tracked 
+                                    if (this.bodies[i].IsTracked)
+                                    {
+                                        // update the face frame source to track this body
+                                        this.faceFrameSources[i].TrackingId = this.bodies[i].TrackingId;
+                                    }
+                                }
+                            }
+
                             IEnumerable<RectI> faceRectis = this.faceFrameResults
                                 .Where(faceResult => faceResult != null)
                                 .Select((faceResult) => faceResult.FaceBoundingBoxInColorSpace);

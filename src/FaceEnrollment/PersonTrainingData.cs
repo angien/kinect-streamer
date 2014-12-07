@@ -11,6 +11,7 @@ namespace FaceEnrollment
     {
         public string name;
         public List<Bitmap> trainingImages = new List<Bitmap>();
+        public List<System.Windows.Rect> faceBoxes = new List<System.Windows.Rect>();
         public int trainingId;
     }
 }

@@ -16,10 +16,10 @@ namespace FaceEnrollment
 
         internal static Window window;
         internal static int currentTrainingId;
-        internal static List<PersonTrainingData> trainingData = new List<PersonTrainingData>();
         internal static event Action<BitmapSource, IEnumerable<Rect>> OnFrameReceived;
 
         public static event Action Done;
+        public static List<PersonTrainingData> trainingData = new List<PersonTrainingData>();
         public static bool Active
         {
             get
