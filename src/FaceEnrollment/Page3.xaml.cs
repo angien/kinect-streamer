@@ -25,8 +25,11 @@ namespace FaceEnrollment
             InitializeComponent();
         }
 
-        private void Button_Click2(object sender, RoutedEventArgs e)
+        private void Enter_Click(object sender, RoutedEventArgs e)
         {
+            PersonTrainingData person = new PersonTrainingData();
+            person.name = personName.Text;
+            EnrollmentManager.trainingData.Add(person);
             EnrollmentManager.window.Content = new Page4();
         }
     }

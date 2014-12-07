@@ -34,13 +34,16 @@ FaceRecognitionResult^ FaceRecognizerBridge::Predict(Bitmap^ image, System::Wind
 	return result;
 }
 
-void FaceRecognizerBridge::Train(array<Bitmap^>^ images, array<int>^ labels) {
+void FaceRecognizerBridge::Train(array<Bitmap^>^ images, array<int>^ labels, array<System::Windows::Rect>^ faceCrops) {
 	vector<Mat> nativeImages;
 	vector<int> nativeLabels;
 
 	for (int i = 0; i < images->Length; i++)
 	{
-		nativeImages.push_back(bitmapToMat(images[i]));
+		System::Windows::Rect faceCrop = faceCrops[i];
+		Mat image = bitmapToMat(images[i]);
+		Mat croppedImage = image(Rect(faceCrop.Left, faceCrop.Top, faceCrop.Width, faceCrop.Height));
+		nativeImages.push_back(croppedImage);
 		int id = labels[i];
 		nativeLabels.push_back(id);
 	}
