@@ -7,6 +7,7 @@
 namespace Microsoft.Samples.Kinect.FaceBasics
 {
     using System;
+    using System.Threading;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -775,10 +776,16 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                 dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Bottom));
                             }
 
-                            if (counter % 20 == 0 && !EnrollmentManager.Active)
+                            if (counter % 100 == 0 && !EnrollmentManager.Active)
                             {
-                                FaceRecognitionResult faceResult = faceRecognizer.Predict(Util.SourceToBitmap(colorBitmap), rect);
-                                faceToResult[i] = faceResult;
+                                Bitmap colorBitmapBuffer = Util.SourceToBitmap(colorBitmap);
+                                int index = i;
+                                Thread thread = new Thread(new ThreadStart(() =>
+                                {
+                                    FaceRecognitionResult faceResult = faceRecognizer.Predict(colorBitmapBuffer, rect);
+                                    faceToResult[index] = faceResult;
+                                }));
+                                thread.Start();
 
                                 if (!drawFaceResult)
                                 {
