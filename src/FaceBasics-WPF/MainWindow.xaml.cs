@@ -341,7 +341,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             System.Diagnostics.Debug.Write("Is this looping?\n\n");
 
             this.eyeTracker = new EyeTrackingWindow();
-            // this.eyeTracker.Show();
+            this.eyeTracker.Show();
+
             conversationScreen.Visibility = System.Windows.Visibility.Collapsed;
 
             //populate the buttons array with the buttons
