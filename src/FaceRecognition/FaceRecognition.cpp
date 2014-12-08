@@ -27,7 +27,7 @@ FaceRecognitionResult^ FaceRecognizerBridge::Predict(Bitmap^ image, System::Wind
 
 	double confidence;
 	int label;
-	(*faceRecognizer)->predict(croppedImage, label, confidence);
+	(*faceRecognizer)->predict(croppedImage, label, confidence); 
 	FaceRecognitionResult^ result = gcnew FaceRecognitionResult();
 	result->confidence = confidence;
 	result->label = label;
