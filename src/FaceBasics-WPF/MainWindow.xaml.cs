@@ -1142,7 +1142,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         //if the voice toggle button
                         if (i == 3)
                         {
-                            speaker.nextVoice();
+                            voiceToggleText.Text = speaker.nextVoice(); //change voice style as well as set button text
+
                             speaker.OutputToAudio("How do you like this voice?");
                         }
                         else {

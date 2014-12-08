@@ -42,6 +42,7 @@
 
 
                 <Image Source="{Binding GazeSource}" Stretch="UniformToFill" Opacity="1"/>
+                <TextBlock x:Name="voiceToggleText" Height="34" Width="236" Canvas.Left="115" Canvas.Top="377" Text="Male: US English" FontSize="24" TextAlignment="Center"/>
 
             </Canvas>
         </Viewbox>
