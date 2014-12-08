@@ -4,7 +4,7 @@
     {
         static void Main( string[] args )
         {
-            SpeechOutput speaker = new SpeechOutput();
+            SpeechOutput speaker = new SpeechOutput("Microsoft David Desktop");
             speaker.OutputToAudio( "I'm hungry for brains" );
         }
     }

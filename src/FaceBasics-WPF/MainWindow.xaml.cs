@@ -42,14 +42,15 @@ namespace Microsoft.Samples.Kinect.FaceBasics
     {
         //set every new color frame. where the person is looking
         private double gazeX, gazeY;
+        private int numberOfProfiles;
+        private Random randomNum = new Random();
 
         private FaceRecognizerBridge faceRecognizer = new FaceRecognizerBridge();
         private Dictionary<int, string> labelToName = new Dictionary<int, string>();
         private FaceRecognitionResult[] faceToResult;
 
         //stores the buttons in an array
-        private Button[] buttons = new Button[3];
-
+        private Button[] buttons = new Button[4];
         private SpeechOutput speaker;
         private bool isConversationScreen = false;
         private bool isVideoFeed = true;
@@ -212,7 +213,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 count++;
             } //end creation of the database
 
-            this.speaker = new SpeechOutput();
+            numberOfProfiles = count;
+
+            this.speaker = new SpeechOutput("Microsoft David Desktop");
 
             System.Diagnostics.Debug.Write("MainWindow\n\n");
             // one sensor is currently supported
@@ -349,6 +352,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             buttons[0] = Phrase1;
             buttons[1] = Phrase2;
             buttons[2] = Phrase3;
+            buttons[3] = toggleVoice;
             
             
         }
@@ -783,8 +787,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                 int index = i;
                                 Thread thread = new Thread(new ThreadStart(() =>
                                 {
-                                    FaceRecognitionResult faceResult = faceRecognizer.Predict(colorBitmapBuffer, rect);
-                                    faceToResult[index] = faceResult;
+                                    //FaceRecognitionResult faceResult = faceRecognizer.Predict(colorBitmapBuffer, rect);
+                                    //faceToResult[index] = faceResult;
                                 }));
                                 thread.Start();
 
@@ -879,10 +883,12 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 {
                     eyeTracker.ResetBlinkCount();
 
-                    speaker.OutputToAudio("Hey you"); //TODO say person's name
                     eyeTracker.resetDoubleBlink();
 
-                    setProfile(1); //sets profile to person's number in database
+
+                    int profileNumber = randomNum.Next(1, numberOfProfiles); //Change to the number predicted by the recognizer
+                    setProfile(profileNumber); //sets profile to person's number in database
+                    speaker.OutputToAudio(profiles[profileNumber][2]); //says greeting
                     toggleScreens();
 
                 }
@@ -1077,11 +1083,13 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         }
         private void setProfile (int i)
         {
-            Phrase1.Content = profiles[i][2];
-            Phrase2.Content = profiles[i][3];
-            Phrase3.Content = profiles[i][4];
-            String imageloc = "profileImages" + "\\" + "profile" + profiles[i][0] + ".jpg";
-            //profilePic.Source = new BitmapImage(new Uri(imageloc));
+            String imageLocation = "profileImages" + "\\" + "profile" + profiles[i][0] + ".jpg";
+            profilePic.Source = new BitmapImage(new Uri(imageLocation, UriKind.Relative));
+
+            profileName.Text = profiles[i][1];
+            Phrase1.Content = profiles[i][3];
+            Phrase2.Content = profiles[i][4];
+            Phrase3.Content = profiles[i][5];
         }
         private void toggleScreens()
         {
@@ -1093,7 +1101,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 isVideoFeed = false;
                 isConversationScreen = true;
 
-                //bodyFrameReader.IsPaused = true;
+                bodyFrameReader.IsPaused = true;
 
             }
             else if (isConversationScreen)
@@ -1103,7 +1111,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 isConversationScreen = false;
                 isVideoFeed = true;
 
-                //bodyFrameReader.IsPaused = false;
+                bodyFrameReader.IsPaused = false;
             }
         }
 
@@ -1130,7 +1138,18 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     buttons[i].Opacity = .3;
 
                     if (eyeTracker.getDoubleBlink()) {
-                        speaker.OutputToAudio(buttons[i].Content.ToString());
+
+                        //if the voice toggle button
+                        if (i == 3)
+                        {
+                            speaker.nextVoice();
+                            speaker.OutputToAudio("How do you like this voice?");
+                        }
+                        else {
+                            speaker.OutputToAudio(buttons[i].Content.ToString());
+
+                        }
+
                         eyeTracker.resetDoubleBlink();
                     }
 
@@ -1142,5 +1161,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 }
             }
         }
+
+
     }
 }

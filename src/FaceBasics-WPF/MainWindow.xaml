@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Face Basics" 
-        Height="768" Width="1024" 
+        Height="1080" Width="1920" 
         Loaded="MainWindow_Loaded"
         WindowState="Maximized"
         WindowStyle="None"
@@ -12,16 +12,12 @@
         <SolidColorBrush x:Key="KinectPurpleBrush" Color="#ff52318f" />
         <SolidColorBrush x:Key="KinectBlueBrush" Color="#ff00BCF2" />
     </Window.Resources>
-    <Grid Margin="1 0 1 0">
+    <Grid Margin="1,0,1.333,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
-        <Image Name ="kinectLogo" Grid.Row="0" Source="Images\Logo.png" HorizontalAlignment="Left" Stretch="Fill" Height="32" Width="81" Margin="0 10 0 5" />
-        <TextBlock Name ="title" Grid.Row="0" Margin="0,0,52,18" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#FF2BB802" FontFamily="Segoe UI" FontSize="22" FontWeight="Bold">Hey, you!</TextBlock>
-        <Image Name="kinectImage" Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="0 0 0 5" />
+        <TextBlock Name ="title" Grid.Row="0" Margin="0,0,661,9.667" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#FF2BB802" FontFamily="Segoe UI" FontSize="24" FontWeight="Bold" Width="647" TextAlignment="Center">Hey, you!</TextBlock>
         <TextBlock Name ="placeHolder" Visibility="Hidden" Grid.Row="0" Margin="0 0 -1 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Hey, you!</TextBlock>
 
         <Viewbox Name="videoFeed" Visibility="Visible" Grid.Row="1" HorizontalAlignment="Center">
@@ -33,18 +29,26 @@
             <Canvas Name="conversationScreenCanvas" Width="1920" Height="1080">
 
 
-                <Button Name ="Phrase1" Content="Hey you, I'm hungry for brains!" Width="541" Click="Button_Click" Height="191" Canvas.Left="1133" Canvas.Top="190" FontSize="22" />
-                <Button Name ="Phrase2" Content="I'm. too sexy for my shirt!" Width="541" Click="Button_Click" Height="205" Canvas.Left="1133" Canvas.Top="453" FontSize="22" />
-                <Button Name ="Phrase3" Content="I'm locked in! Help me" Width="546" Click="Button_Click" Height="191" Canvas.Left="1133" Canvas.Top="732" FontSize="22" />
-                <Image Name ="profilePic" Source="Images\defaultProfilePic.jpg" HorizontalAlignment="Left" Stretch="Fill" Height="721" Width="555" Canvas.Left="253" Canvas.Top="186" />
+                <Button Name ="Phrase1" Content="Hey you, I'm hungry for brains!" Width="540" Click="Button_Click" Height="191" Canvas.Left="1192" Canvas.Top="168" FontSize="22" />
+                <Button Name ="Phrase2" Content="I'm. too sexy for my shirt!" Width="540" Click="Button_Click" Height="196" Canvas.Left="1192" Canvas.Top="414" FontSize="22" />
+                <Button Name ="Phrase3" Content="I'm locked in! Help me" Width="540" Click="Button_Click" Height="191" Canvas.Left="1192" Canvas.Top="671" FontSize="22" />
+                <Button Name="toggleVoice" Canvas.Left="115" Canvas.Top="169" Height="190" Width="236" FontSize="48" BorderBrush="#FF707070" Background="#FFDDDDDD" >
+                    <StackPanel>
+                        <Image Source="Images/speak.png" Stretch="UniformToFill" Height="162" Width="170" Opacity=".6"/>
+                    </StackPanel>
+                </Button>
+                <TextBlock Name="profileName" Height="67" Width="555" Canvas.Left="478" Canvas.Top="55" Text="Profile Name" FontSize="48" TextAlignment="Center"/>
+                <Image Name ="profilePic" Source="profileImages\profile0.jpg" HorizontalAlignment="Left" Stretch="Fill" Height="722" Width="555" Canvas.Left="481" Canvas.Top="168" />
+
 
                 <Image Source="{Binding GazeSource}" Stretch="UniformToFill" Opacity="1"/>
 
             </Canvas>
         </Viewbox>
-
+        <!--
         <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
             <StatusBarItem Content="{Binding StatusText}" />
         </StatusBar>
+-->
     </Grid>
 </Window>
