@@ -194,6 +194,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         {
             //profiles object
             profiles = new List<List<String>>();
+            
             //creates the database
             ReadWriteCsv.CsvFileReader read = new ReadWriteCsv.CsvFileReader("dbcsv.csv");
             int count = 0;

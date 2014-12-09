@@ -29,6 +29,7 @@ namespace HeyYouGui
 
             synthesizer = new SpeechSynthesizer();
 
+            synthesizer.SelectVoice("VW James");
             synthesizer.Volume = 100;  // 0...100
             synthesizer.Rate = -2;     // -10...10
         }
