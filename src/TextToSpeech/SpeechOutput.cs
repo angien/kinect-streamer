@@ -10,7 +10,8 @@ namespace TextToSpeech
     {
         SpeechSynthesizer synthesizer;
         private int toggleCount = 0;
-        private int numberOfVoices = 3;
+        private bool neoSpeechValid = true;
+        private int numberOfVoices;
 
         public SpeechOutput(string voiceType)
         {
@@ -19,7 +20,7 @@ namespace TextToSpeech
             {
                 Console.WriteLine("Name:{0}, Gender:{1}, Age:{2}", v.Description, v.Gender, v.Age);
             }
-
+    
             Console.WriteLine("SelectVoice Example");
             SpeechSynthesizer ttsSynth = new SpeechSynthesizer();
 
@@ -65,6 +66,11 @@ namespace TextToSpeech
         }
 
         public string nextVoice() {
+            if (neoSpeechValid == true)
+                numberOfVoices = 9;
+            else
+                numberOfVoices = 3;
+           
             int choice = toggleCount % numberOfVoices;
             string voiceStyle = "Magic Voice";
             if (choice == 0) {
@@ -82,6 +88,44 @@ namespace TextToSpeech
                 synthesizer.SelectVoice("Microsoft David Desktop");
                 voiceStyle = "Male: English US";
 
+            }
+            else if (choice == 3)
+            {
+                synthesizer.SelectVoice("VW James");
+                voiceStyle = "Male: English US - NeoSpeech";
+
+
+            }
+            else if (choice == 4)
+            {
+                synthesizer.SelectVoice("VW Paul");
+                voiceStyle = "Male: English US - NeoSpeech";
+
+
+            }
+            else if (choice == 5)
+            {
+                synthesizer.SelectVoice("VW Hugh");
+                voiceStyle = "Male: English UK - NeoSpeech";
+
+
+            }
+            else if (choice == 6)
+            {
+                synthesizer.SelectVoice("VW Julie");
+                voiceStyle = "Female: English US - NeoSpeech";
+
+            }
+            else if (choice == 7)
+            {
+                synthesizer.SelectVoice("VW Kate");
+                voiceStyle = "Female: English US - NeoSpeech";
+
+            }
+            else if (choice == 8)
+            {
+                synthesizer.SelectVoice("VW Bridget");
+                voiceStyle = "Female: English UK - NeoSpeech";
 
             }
             toggleCount++;
