@@ -163,13 +163,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\defaultProfilePic.jpg" />
+    <Resource Include="profileImages\profile0.jpg" />
+    <Resource Include="profileImages\profile1.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\mike.jpg" />
+    <Resource Include="profileImages\profile2.jpg" />
+    <Resource Include="profileImages\profile3.jpg" />
+    <Resource Include="profileImages\profile4.jpg" />
+    <Resource Include="profileImages\profile5.jpg" />
+    <Resource Include="profileImages\profile6.jpg" />
+    <Resource Include="profileImages\profile7.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="profileImages\" />
+    <Resource Include="Images\speak.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
