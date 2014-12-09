@@ -193,6 +193,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         {
             //profiles object
             profiles = new List<List<String>>();
+            
             //creates the database
             ReadWriteCsv.CsvFileReader read = new ReadWriteCsv.CsvFileReader("dbcsv.csv");
             int count = 0;
@@ -341,7 +342,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             System.Diagnostics.Debug.Write("Is this looping?\n\n");
 
             this.eyeTracker = new EyeTrackingWindow();
-            // this.eyeTracker.Show();
+            this.eyeTracker.Show();
+
             conversationScreen.Visibility = System.Windows.Visibility.Collapsed;
 
             //populate the buttons array with the buttons
