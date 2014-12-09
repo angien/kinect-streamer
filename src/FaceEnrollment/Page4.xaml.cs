@@ -51,7 +51,6 @@ namespace FaceEnrollment
                 {
                     drawingContext.DrawRectangle(null, pen, faceBox);
                 }
-                drawingContext.DrawRectangle(null, pen, new Rect(0, 0, 100, 100));
             }
 
             lastFrame = frame;

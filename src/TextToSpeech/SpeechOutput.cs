@@ -10,7 +10,7 @@ namespace TextToSpeech
     {
         SpeechSynthesizer synthesizer;
         private int toggleCount = 0;
-        private bool neoSpeechValid = true;
+        private bool neoSpeechValid = false;
         private int numberOfVoices;
 
         public SpeechOutput(string voiceType)
