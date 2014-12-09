@@ -31,5 +31,23 @@ namespace FaceEnrollment
             bmp.UnlockBits(data);
             return bmp;
         }
+
+        public static Rect TransformFace(Rect faceBox)
+        {
+            double size = 1;
+            double yOffset = .25;
+
+            var x = faceBox.Left - (size / 2) * (faceBox.Right - faceBox.Left);
+            var y = faceBox.Top - (size / 2) * (faceBox.Bottom - faceBox.Top) - yOffset * (faceBox.Bottom - faceBox.Top);
+            var width = size * 2 * (faceBox.Right - faceBox.Left);
+            var height = size * 2 * (faceBox.Bottom - faceBox.Top);
+
+            return new Rect(x, y, width, height);
+        }
+
+        public static bool IsValidRect(Rect faceBox, Rect entireImage)
+        {
+            return entireImage.Contains(faceBox);
+        }
     }
 }

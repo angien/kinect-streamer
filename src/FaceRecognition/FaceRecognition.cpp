@@ -21,13 +21,20 @@ Mat bitmapToMat(Bitmap^ image) {
 	return imdecode(buffer, CV_LOAD_IMAGE_GRAYSCALE);
 }
 
+Mat cropAndResize(Mat image, System::Windows::Rect crop) {
+	Mat croppedImage = image(Rect(crop.Left, crop.Top, crop.Width, crop.Height));
+	Mat croppedImageResized;
+	resize(croppedImage, croppedImageResized, cv::Size(100, 100), 0, 0, INTER_LINEAR);
+	return croppedImageResized;
+}
+
 FaceRecognitionResult^ FaceRecognizerBridge::Predict(Bitmap^ image, System::Windows::Rect faceCrop) {
 	Mat nativeImage = bitmapToMat(image);
-	Mat croppedImage = nativeImage(Rect(faceCrop.Left, faceCrop.Top, faceCrop.Width, faceCrop.Height));
+	Mat croppedImageResized = cropAndResize(nativeImage, faceCrop);
 
 	double confidence;
 	int label;
-	(*faceRecognizer)->predict(croppedImage, label, confidence); 
+	(*faceRecognizer)->predict(croppedImageResized, label, confidence); 
 	FaceRecognitionResult^ result = gcnew FaceRecognitionResult();
 	result->confidence = confidence;
 	result->label = label;
@@ -42,11 +49,17 @@ void FaceRecognizerBridge::Train(array<Bitmap^>^ images, array<int>^ labels, arr
 	{
 		System::Windows::Rect faceCrop = faceCrops[i];
 		Mat image = bitmapToMat(images[i]);
-		Mat croppedImage = image(Rect(faceCrop.Left, faceCrop.Top, faceCrop.Width, faceCrop.Height));
-		nativeImages.push_back(croppedImage);
+		Mat croppedImageResized = cropAndResize(image, faceCrop);
+
+		nativeImages.push_back(croppedImageResized);
 		int id = labels[i];
 		nativeLabels.push_back(id);
 	}
 
 	(*faceRecognizer)->train(nativeImages, nativeLabels);
+}
+
+void FaceRecognizerBridge::Preview(Bitmap^ image, System::Windows::Rect faceCrop) {
+	Mat nativeImage = bitmapToMat(image);
+	imwrite("preview.jpg", cropAndResize(nativeImage, faceCrop));
 }

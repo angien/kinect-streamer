@@ -29,6 +29,7 @@ namespace FaceEnrollment
         {
             PersonTrainingData person = new PersonTrainingData();
             person.name = personName.Text;
+            person.trainingId = EnrollmentManager.currentTrainingId;
             EnrollmentManager.trainingData.Add(person);
             EnrollmentManager.window.Content = new Page4();
         }

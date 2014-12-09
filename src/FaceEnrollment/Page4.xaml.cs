@@ -36,21 +36,26 @@ namespace FaceEnrollment
 
         private void ReceiveFrame(BitmapSource frame, IEnumerable<Rect> faceBoxes)
         {
+            Rect bounds = new Rect(new System.Windows.Size(frame.Width, frame.Height));
+            IEnumerable<Rect> filteredFaceBoxes = faceBoxes.Select((box) => Util.TransformFace(box));
+            filteredFaceBoxes = filteredFaceBoxes.Where((box) => Util.IsValidRect(box, bounds));
+            
+
             DrawingVisual drawingVisual = new DrawingVisual();
             using (DrawingContext drawingContext = drawingGroup.Open())
             {
                 drawingContext.DrawImage(frame, new Rect(new System.Windows.Size(frame.Width, frame.Height)));
                 var brush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
                 var pen = new System.Windows.Media.Pen(brush, 5);
-                foreach (Rect faceBox in faceBoxes)
+                foreach (Rect faceBox in filteredFaceBoxes)
                 {
-                    drawingContext.DrawRectangle(null, pen, TransformFace(faceBox));
+                    drawingContext.DrawRectangle(null, pen, faceBox);
                 }
                 drawingContext.DrawRectangle(null, pen, new Rect(0, 0, 100, 100));
             }
 
             lastFrame = frame;
-            lastFaceBoxes = faceBoxes;
+            lastFaceBoxes = filteredFaceBoxes;
         }
 
         private void Snap_Click(object sender, RoutedEventArgs e)
@@ -65,12 +70,22 @@ namespace FaceEnrollment
             }
             else
             {
-                snapshotImage.Source = lastFrame.CloneCurrentValue();
                 PersonTrainingData person = EnrollmentManager.trainingData[EnrollmentManager.currentTrainingId];
-                person.trainingImages.Add(Util.SourceToBitmap(lastFrame));
-                Rect faceBox = TransformFace(lastFaceBoxes.First());
+                Bitmap image = Util.SourceToBitmap(lastFrame);
+                person.trainingImages.Add(image);
+                Rect faceBox = lastFaceBoxes.First();
                 person.faceBoxes.Add(faceBox);
                 output.Content = "Success";
+
+                FaceRecognition.FaceRecognizerBridge.Preview(image, faceBox);
+                MemoryStream ms = new MemoryStream();
+                BitmapImage bi = new BitmapImage();
+                byte[] bytArray = File.ReadAllBytes(@"preview.jpg");
+                ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
+                bi.BeginInit();
+                bi.StreamSource = ms;
+                bi.EndInit();
+                snapshotImage.Source = bi;
             }
         }
 
@@ -85,14 +100,6 @@ namespace FaceEnrollment
         {
             EnrollmentManager.OnFrameReceived -= ReceiveFrame;
             EnrollmentManager.Finish();
-        }
-
-        private Rect TransformFace(Rect faceBox)
-        {
-            return new Rect(faceBox.Left - 0.5 * (faceBox.Right - faceBox.Left),
-                    faceBox.Top - 1 * (faceBox.Bottom - faceBox.Top),
-                    2 * (faceBox.Right - faceBox.Left),
-                    2.5 * (faceBox.Bottom - faceBox.Top));
         }
     }
 }
