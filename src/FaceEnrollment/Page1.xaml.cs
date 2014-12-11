@@ -27,7 +27,8 @@ namespace FaceEnrollment
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            EnrollmentManager.window.Content = new Page2();
+            return;
+          //  EnrollmentManager.window.Content = new Page2();
         }
         private void Button_Click2(object sender, RoutedEventArgs e)
         {

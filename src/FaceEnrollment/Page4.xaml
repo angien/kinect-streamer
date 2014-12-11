@@ -3,16 +3,16 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      mc:Ignorable="d" 
-      d:DesignHeight="722.667" d:DesignWidth="544.667"
-	Title="Page4">
-
-    <Grid>
-        <Image Name="liveImage" HorizontalAlignment="Left" Margin="40,50,0,0" VerticalAlignment="Top" Width="600" Height="600"/>
-        <Image Name="snapshotImage" Margin="130,120,9.667,29.667" Width="400" Height="500"></Image>
-        <Button Content="Snap Picture" Click="Snap_Click" HorizontalAlignment="Left" Margin="203,100,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Next Person" Click="Next_Click" HorizontalAlignment="Left" Margin="203,130,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Done" Click="Done_Click" HorizontalAlignment="Left" Margin="203,160,0,0" VerticalAlignment="Top" Width="75"/>
-        <Label Name="output" Content="hello" Margin="260,232,74.667,452.667"/>
-    </Grid>
+      mc:Ignorable="d" d:DesignWidth="544.667"
+	Title="Page4" Height="1080" Width="1920">
+    <Viewbox Margin="0,10,0,92">
+        <Grid Height="466">
+            <Image Name="liveImage" HorizontalAlignment="Left" Margin="69,50,0,0" VerticalAlignment="Top" Width="524" Height="242"/>
+            <Image Name="snapshotImage" Margin="173,338,367,28" Width="100" Height="100"></Image>
+            <Button Content="Snap Picture" Click="Snap_Click" HorizontalAlignment="Left" Margin="421,338,0,-160" VerticalAlignment="Top" Width="75" Height="25"/>
+            <Button Content="Next Person" Click="Next_Click" HorizontalAlignment="Left" Margin="421,368,0,-190" VerticalAlignment="Top" Width="75" Height="25"/>
+            <Button Content="Done" Click="Done_Click" HorizontalAlignment="Left" Margin="421,398,0,-220" VerticalAlignment="Top" Width="75" Height="25"/>
+            <Label Name="output" Content="" Margin="260,232,74.667,452.667"/>
+        </Grid>
+    </Viewbox>
 </Page>

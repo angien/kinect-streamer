@@ -4,12 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="300" d:DesignWidth="1000"
 	Title="Page3">
-
-    <Grid>
-		<Label Content="Enter Name" HorizontalAlignment="Left" Margin="88,123,0,0" VerticalAlignment="Top" Width="136"/>
-        <TextBox Name="personName" HorizontalAlignment="Left" Margin="62,203,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Enter" Click="Enter_Click" HorizontalAlignment="Left" Margin="173,203,0,0" VerticalAlignment="Top" Width="75"/>
+<Viewbox>
+        <Grid Height="284">
+            <Label Content="Enter Name" HorizontalAlignment="Left" Margin="60,120,0,0" VerticalAlignment="Top" Height="42" Width="262"/>
+            <TextBox Name="personName" HorizontalAlignment="Left" Margin="62,203,0,0" VerticalAlignment="Top" Width="75"/>
+            <Button Content="Enter" Click="Enter_Click" HorizontalAlignment="Left" Margin="173,203,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
+    </Viewbox>
 </Page>
