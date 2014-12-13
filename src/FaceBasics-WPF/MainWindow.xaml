@@ -37,6 +37,7 @@
                         <Image Source="Images/speak.png" Stretch="UniformToFill" Height="162" Width="170" Opacity=".6"/>
                     </StackPanel>
                 </Button>
+                
                 <TextBlock Name="profileName" Height="67" Width="555" Canvas.Left="478" Canvas.Top="55" Text="Profile Name" FontSize="48" TextAlignment="Center"/>
                 <Image Name ="profilePic" Source="profileImages\profile0.jpg" HorizontalAlignment="Left" Stretch="Fill" Height="722" Width="555" Canvas.Left="481" Canvas.Top="168" />
 

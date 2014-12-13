@@ -8,9 +8,9 @@
 	Title="Page3">
 <Viewbox>
         <Grid Height="284">
-            <Label Content="Enter Name" HorizontalAlignment="Left" Margin="60,120,0,0" VerticalAlignment="Top" Height="42" Width="262"/>
-            <TextBox Name="personName" HorizontalAlignment="Left" Margin="62,203,0,0" VerticalAlignment="Top" Width="75"/>
-            <Button Content="Enter" Click="Enter_Click" HorizontalAlignment="Left" Margin="173,203,0,0" VerticalAlignment="Top" Width="75"/>
+            <Label Content="Enter Name" HorizontalAlignment="Center" Margin="0,80,0,0" VerticalAlignment="Top"/>
+            <TextBox Name="personName" HorizontalAlignment="Center" Margin="-100,183,0,0" VerticalAlignment="Top" Width="75"/>
+            <Button Content="Enter" Click="Enter_Click" HorizontalAlignment="Center" Margin="100,183,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
     </Viewbox>
 </Page>

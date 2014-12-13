@@ -8,9 +8,13 @@
 	Title="Page1">
     <Viewbox>
         <Grid Height="284">
-        <Button Content="Yes" Click="Button_Click2" HorizontalAlignment="Left" Margin="62,203,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="No" Click="Button_Click" HorizontalAlignment="Left" Margin="173,203,0,0" VerticalAlignment="Top" Width="75"/>
-        <Label Content="Do you want to add a new person?" HorizontalAlignment="Left" Margin="38,120,0,0" VerticalAlignment="Top" Height="42" Width="262"/>
+        <Button Content="Yes" Click="Button_Click2" HorizontalAlignment="Center" Margin="-100,183,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="No" Click="Button_Click" HorizontalAlignment="Center" Margin="100,183,0,0" VerticalAlignment="Top" Width="75"/>
+
+            <Border BorderBrush="SaddleBrown" BorderThickness="3" HorizontalAlignment="Center" Margin="0,80,0,0" VerticalAlignment="Top">
+
+                <Label Content="Do you want to add a new person?" />
+                </Border>
     </Grid>
     </Viewbox>
 </Page>

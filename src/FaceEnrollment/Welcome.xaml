@@ -1,0 +1,16 @@
+﻿<Page x:Class="FaceEnrollment.Welcome"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="310"
+	Title="Welcome">
+<Viewbox>
+        <Grid Height="284">
+            <TextBlock Name ="title" Margin="0,10,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FF2BB802" FontFamily="Segoe UI" FontSize="24" FontWeight="Bold" TextAlignment="Center">Hey, you!</TextBlock>
+            <Label FontSize="50" Content="Welcome!" HorizontalAlignment="Center" Margin="0,80,0,0" VerticalAlignment="Top" Width="262"/>
+        <Button Content="Continue" Click="Button_Click2" HorizontalAlignment="Center" Margin="0,183,0,0" VerticalAlignment="Top" Width="75"/>
+    </Grid>
+    </Viewbox>
+</Page>

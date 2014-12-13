@@ -177,6 +177,9 @@
   <ItemGroup>
     <Resource Include="Images\speak.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\eyeFilter.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(KINECTSDK20_DIR)Redist\Face\$(Platform)\NuiDatabase" "$(TargetDir)\NuiDatabase" /S /R /Y /I</PostBuildEvent>

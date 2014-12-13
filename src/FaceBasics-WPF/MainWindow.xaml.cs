@@ -353,8 +353,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             buttons[0] = Phrase1;
             buttons[1] = Phrase2;
             buttons[2] = Phrase3;
-            buttons[3] = toggleVoice;
-            
+            buttons[3] = toggleVoice;            
             
         }
 
@@ -775,11 +774,13 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             {
                                 FaceRecognitionResult result = faceToResult[i];
                                 string name = labelToName[result.label];
-                                string text = name + '\n' + result.confidence.ToString();
+                                string text = name; //+ '\n' + result.confidence.ToString()
                                 FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
-                                    System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 20,
+                                    System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 40,
                                     new SolidColorBrush(Colors.Yellow));
-                                dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Bottom));
+                                
+                                dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Top - 1.0*(rect.Bottom - rect.Top)));
+                              
                             }
 
                             if (counter % 300 == 0 && !EnrollmentManager.Active)
@@ -1158,7 +1159,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
                             speaker.OutputToAudio("How do you like this voice?");
                         }
-                        else {
+                        
+                        else
+                        {
                             speaker.OutputToAudio(buttons[i].Content.ToString());
 
                         }
