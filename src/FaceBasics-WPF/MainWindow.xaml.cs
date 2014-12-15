@@ -787,19 +787,18 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             {
                                 Bitmap colorBitmapBuffer = Util.SourceToBitmap(colorBitmap);
                                 int index = i;
-                                Rect transformedFace = Util.TransformFace(rect);
-                                Rect bounds = new Rect(new System.Windows.Size(colorBitmapBuffer.Width, colorBitmapBuffer.Height));
-                                if (Util.IsValidRect(transformedFace, bounds))
+                                
+                                Thread thread = new Thread(new ThreadStart(() =>
                                 {
-                                    FaceRecognitionResult faceResult = faceRecognizer.Predict(colorBitmapBuffer, Util.TransformFace(rect));
-                                    faceToResult[index] = faceResult;
-                                }
-
-                                //Thread thread = new Thread(new ThreadStart(() =>
-                                //{
-                                    
-                                //}));
-                                //thread.Start();
+                                    Rect transformedFace = Util.TransformFace(rect);
+                                    Rect bounds = new Rect(new System.Windows.Size(colorBitmapBuffer.Width, colorBitmapBuffer.Height));
+                                    if (Util.IsValidRect(transformedFace, bounds))
+                                    {
+                                        FaceRecognitionResult faceResult = faceRecognizer.Predict(colorBitmapBuffer, Util.TransformFace(rect));
+                                        faceToResult[index] = faceResult;
+                                    }
+                                }));
+                                thread.Start();
 
                                 if (!drawFaceResult)
                                 {
@@ -894,9 +893,10 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
                     eyeTracker.resetDoubleBlink();
 
-                    string name = labelToName[faceToResult[faceIndex].label];
+                    FaceRecognitionResult recognitionResult = faceToResult[faceIndex];
+                    string name = recognitionResult == null ? "unknown" : labelToName[recognitionResult.label];
                     List<String> result = profiles.FirstOrDefault((profile) => profile[1] == name);
-                    int profileNumber = result == null ? 6 : int.Parse(result[0]);
+                    int profileNumber = result == null ? 0 : int.Parse(result[0]);
                     setProfile(name); //sets profile to person's number in database
                     speaker.OutputToAudio(profiles[profileNumber][2]); //says greeting
                     toggleScreens();
@@ -1094,7 +1094,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private void setProfile(string name)
         {
             List<String> result = profiles.FirstOrDefault((profile) => profile[1] == name);
-            int i = result == null ? 6 : int.Parse(result[0]);
+            int i = result == null ? 0 : int.Parse(result[0]);
 
             String imageLocation = "profileImages" + "\\" + "profile" + profiles[i][0] + ".jpg";
             profilePic.Source = new BitmapImage(new Uri(imageLocation, UriKind.Relative));
