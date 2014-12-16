@@ -779,7 +779,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                 //string text = name + '\n' + result.confidence.ToString();
                                 FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
                                     System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 40,
-                                    new SolidColorBrush(Colors.Yellow));
+                                    faceBrush[i]);
                                 
                                 dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Top - 1.0*(rect.Bottom - rect.Top)));
                               
