@@ -39,7 +39,17 @@ namespace FaceEnrollment
             Rect bounds = new Rect(new System.Windows.Size(frame.Width, frame.Height));
             IEnumerable<Rect> filteredFaceBoxes = faceBoxes.Select((box) => Util.TransformFace(box));
             filteredFaceBoxes = filteredFaceBoxes.Where((box) => Util.IsValidRect(box, bounds));
-            
+            Rect faceBox = filteredFaceBoxes.First();
+            foreach (Rect rect in filteredFaceBoxes)
+            {
+                if (rect.Width > faceBox.Width)
+                {
+                    faceBox = rect;
+                }
+            }
+
+            lastFaceBoxes = new List<Rect>();
+            ((List<Rect>)lastFaceBoxes).Add(faceBox);
 
             DrawingVisual drawingVisual = new DrawingVisual();
             using (DrawingContext drawingContext = drawingGroup.Open())
@@ -47,32 +57,26 @@ namespace FaceEnrollment
                 drawingContext.DrawImage(frame, new Rect(new System.Windows.Size(frame.Width, frame.Height)));
                 var brush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
                 var pen = new System.Windows.Media.Pen(brush, 5);
-                foreach (Rect faceBox in filteredFaceBoxes)
-                {
-                    drawingContext.DrawRectangle(null, pen, faceBox);
-                }
+                drawingContext.DrawRectangle(null, pen, faceBox);
             }
 
             lastFrame = frame;
-            lastFaceBoxes = filteredFaceBoxes;
         }
 
         private void Snap_Click(object sender, RoutedEventArgs e)
         {
+            
+
             if (lastFaceBoxes.Count() < 1)
             {
                 output.Content = "No faces found";
             }
-            else if (lastFaceBoxes.Count() > 1)
-            {
-                output.Content = "Too many faces found: " + lastFaceBoxes.Count().ToString();
-            }
             else
             {
+                Rect faceBox = lastFaceBoxes.First();
                 PersonTrainingData person = EnrollmentManager.trainingData[EnrollmentManager.currentTrainingId];
                 Bitmap image = Util.SourceToBitmap(lastFrame);
                 person.trainingImages.Add(image);
-                Rect faceBox = lastFaceBoxes.First();
                 person.faceBoxes.Add(faceBox);
                 output.Content = "Success";
 
