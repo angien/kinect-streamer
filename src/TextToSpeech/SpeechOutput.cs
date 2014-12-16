@@ -10,7 +10,7 @@ namespace TextToSpeech
     {
         SpeechSynthesizer synthesizer;
         private int toggleCount = 0;
-        private bool neoSpeechValid = true;
+        private bool neoSpeechValid = false;
         private int numberOfVoices;
 
         public SpeechOutput(string voiceType)
@@ -56,6 +56,10 @@ namespace TextToSpeech
 
         public void OutputToAudio( string output )
         {
+            if (synthesizer.State == SynthesizerState.Speaking)
+            {
+                synthesizer.SpeakAsyncCancelAll();
+            }
             synthesizer.SpeakAsync( output );
         }
 
