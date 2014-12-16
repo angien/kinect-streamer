@@ -465,25 +465,52 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             }
         }
 
-        void EnrollmentManager_Done()
+        void EnrollmentManager_Done(bool saveDB, bool loadDB)
         {
-            List<Bitmap> images = new List<Bitmap>();
-            List<int> ids = new List<int>();
-            List<Rect> faceCrops = new List<Rect>();
-            foreach (PersonTrainingData data in EnrollmentManager.trainingData)
+            if (loadDB)
             {
-                images.AddRange(data.trainingImages);
-                faceCrops.AddRange(data.faceBoxes);
-                foreach (var image in data.trainingImages)
+                faceRecognizer.Load();
+                var lines = File.ReadAllLines("nameDB.txt");
+                foreach (var line in lines)
                 {
-                    ids.Add(data.trainingId);
+                    var components = line.Split('|');
+                    var label = int.Parse(components[0]);
+                    var name = components[1];
+                    labelToName[label] = name;
                 }
-                labelToName[data.trainingId] = data.name;
+            }
+            else
+            {
+                List<Bitmap> images = new List<Bitmap>();
+                List<int> ids = new List<int>();
+                List<Rect> faceCrops = new List<Rect>();
+                foreach (PersonTrainingData data in EnrollmentManager.trainingData)
+                {
+                    images.AddRange(data.trainingImages);
+                    faceCrops.AddRange(data.faceBoxes);
+                    foreach (var image in data.trainingImages)
+                    {
+                        ids.Add(data.trainingId);
+                    }
+                    labelToName[data.trainingId] = data.name;
+                }
+
+                if (images.Count() > 1)
+                {
+                    faceRecognizer.Train(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                }
             }
 
-            if (images.Count() > 1)
+            if (saveDB)
             {
-                faceRecognizer.Train(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                faceRecognizer.Save();
+                List<string> lines = new List<string>();
+                foreach (var entry in labelToName)
+                {
+                    lines.Add(entry.Key.ToString() + '|' + entry.Value);
+                }
+
+                File.WriteAllLines("nameDB.txt", lines);
             }
         }
 

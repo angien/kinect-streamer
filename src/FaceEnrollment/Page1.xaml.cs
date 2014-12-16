@@ -34,5 +34,13 @@ namespace FaceEnrollment
         {
             EnrollmentManager.window.Content = new Page3();
         }
+        private void Load_Click(object sender, RoutedEventArgs e)
+        {
+            EnrollmentManager.Finish(false, true);
+        }
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            EnrollmentManager.Finish(true, false);
+        }
     }
 }

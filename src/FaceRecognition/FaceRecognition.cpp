@@ -63,3 +63,11 @@ void FaceRecognizerBridge::Preview(Bitmap^ image, System::Windows::Rect faceCrop
 	Mat nativeImage = bitmapToMat(image);
 	imwrite("preview.jpg", cropAndResize(nativeImage, faceCrop));
 }
+
+void FaceRecognizerBridge::Save() {
+	(*faceRecognizer)->save("faceDB.txt");
+}
+
+void FaceRecognizerBridge::Load() {
+	(*faceRecognizer)->load("faceDB.txt");
+}

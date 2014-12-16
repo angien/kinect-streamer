@@ -105,7 +105,7 @@ namespace FaceEnrollment
         private void Done_Click(object sender, RoutedEventArgs e)
         {
             EnrollmentManager.OnFrameReceived -= ReceiveFrame;
-            EnrollmentManager.Finish();
+            EnrollmentManager.Finish(false, false);
         }
     }
 }
