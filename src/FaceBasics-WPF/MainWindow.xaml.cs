@@ -48,6 +48,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private FaceRecognizerBridge faceRecognizer = new FaceRecognizerBridge();
         private Dictionary<int, string> labelToName = new Dictionary<int, string>();
         private FaceRecognitionResult[] faceToResult;
+        private int[] faceToCounter;
 
         //stores the buttons in an array
         private Button[] buttons = new Button[4];
@@ -291,6 +292,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             // allocate storage to store face frame results for each face in the FOV
             this.faceFrameResults = new FaceFrameResult[this.bodyCount];
             this.faceToResult = new FaceRecognitionResult[this.bodyCount];
+            this.faceToCounter = new int[this.bodyCount];
+            faceToCounter = faceToCounter.Select((x) => 299).ToArray();
 
             // populate face result colors - one for each face index
             this.faceBrush = new List<Brush>()
@@ -753,8 +756,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 // draw the dark background
                 //dc.DrawRectangle(Brushes.Black, null, this.displayRect);
 
-                bool drawFaceResult = false;
-
                 // iterate through each face source
                 for (int i = 0; i < this.bodyCount; i++)
                 {
@@ -783,11 +784,12 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                               
                             }
 
-                            if (counter % 300 == 0 && !EnrollmentManager.Active)
+                            if (faceToCounter[i] > 300 && !EnrollmentManager.Active)
                             {
+                                faceToCounter[i] = 0;
                                 Bitmap colorBitmapBuffer = Util.SourceToBitmap(colorBitmap);
                                 int index = i;
-                                
+
                                 Thread thread = new Thread(new ThreadStart(() =>
                                 {
                                     Rect transformedFace = Util.TransformFace(rect);
@@ -799,13 +801,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                     }
                                 }));
                                 thread.Start();
-
-                                if (!drawFaceResult)
-                                {
-                                    drawFaceResult = true;
-                                }
                             }
-                            counter++;
+                            faceToCounter[i]++;
                         }
                     }
                     else
@@ -817,17 +814,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             this.faceFrameSources[i].TrackingId = this.bodies[i].TrackingId;
                         }
                     }
-                }
-
-                if (!drawFaceResult)
-                {
-                    // if no faces were drawn then this indicates one of the following:
-                    // a body was not tracked 
-                    // a body was tracked but the corresponding face was not tracked
-                    // a body and the corresponding face was tracked though the face box or the face points were not valid
-                    //dc.DrawText(
-                    //    this.textFaceNotTracked,
-                    //    this.textLayoutFaceNotTracked);
                 }
 
 
