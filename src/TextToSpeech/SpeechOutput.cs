@@ -10,16 +10,16 @@ namespace TextToSpeech
     {
         SpeechSynthesizer synthesizer;
         private int toggleCount = 0;
-        private bool neoSpeechValid = false;
+        private bool neoSpeechValid = true;
         private int numberOfVoices;
 
         public SpeechOutput(string voiceType)
         {
-    /*
+            /*
             foreach(var v in synthesizer.GetInstalledVoices().Select(v => v.VoiceInfo))
             {
                 Console.WriteLine("Name:{0}, Gender:{1}, Age:{2}", v.Description, v.Gender, v.Age);
-            }
+            }  */
     
             Console.WriteLine("SelectVoice Example");
             SpeechSynthesizer ttsSynth = new SpeechSynthesizer();
@@ -50,7 +50,7 @@ namespace TextToSpeech
                 Console.WriteLine();
             }
 
-    */
+    
 
            
             synthesizer = new SpeechSynthesizer();
