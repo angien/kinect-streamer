@@ -39,7 +39,7 @@ namespace FaceEnrollment
             Rect bounds = new Rect(new System.Windows.Size(frame.Width, frame.Height));
             IEnumerable<Rect> filteredFaceBoxes = faceBoxes.Select((box) => Util.TransformFace(box));
             filteredFaceBoxes = filteredFaceBoxes.Where((box) => Util.IsValidRect(box, bounds));
-            Rect faceBox = filteredFaceBoxes.First();
+            Rect faceBox = filteredFaceBoxes.FirstOrDefault();
             foreach (Rect rect in filteredFaceBoxes)
             {
                 if (rect.Width > faceBox.Width)
@@ -49,7 +49,10 @@ namespace FaceEnrollment
             }
 
             lastFaceBoxes = new List<Rect>();
-            ((List<Rect>)lastFaceBoxes).Add(faceBox);
+            if (faceBox != null)
+            {
+                ((List<Rect>)lastFaceBoxes).Add(faceBox);
+            }
 
             DrawingVisual drawingVisual = new DrawingVisual();
             using (DrawingContext drawingContext = drawingGroup.Open())

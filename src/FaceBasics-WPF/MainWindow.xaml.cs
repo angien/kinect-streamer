@@ -896,9 +896,17 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     FaceRecognitionResult recognitionResult = faceToResult[faceIndex];
                     string name = recognitionResult == null ? "unknown" : labelToName[recognitionResult.label];
                     List<String> result = profiles.FirstOrDefault((profile) => profile[1].ToLower() == name.ToLower());
-                    int profileNumber = result == null ? 0 : int.Parse(result[0]);
                     setProfile(name); //sets profile to person's number in database
-                    speaker.OutputToAudio(profiles[profileNumber][2]); //says greeting
+
+                    int profileNumber = result == null ? 0 : int.Parse(result[0]);
+                    if (recognitionResult != null && result == null) {
+                        speaker.OutputToAudio("Hey " + name);
+                    }
+                    else
+                    {
+                        speaker.OutputToAudio(profiles[profileNumber][2]); //says greeting
+                    }
+
                     toggleScreens();
 
                 }
