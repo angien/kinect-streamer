@@ -34,8 +34,9 @@ namespace FaceEnrollment
 
         public static Rect TransformFace(Rect faceBox)
         {
-            double size = 1;
-            double yOffset = .25;
+            double size = .8;
+            double yOffset = 0;
+            //double yOffset = .25;
 
             var x = faceBox.Left - (size / 2) * (faceBox.Right - faceBox.Left);
             var y = faceBox.Top - (size / 2) * (faceBox.Bottom - faceBox.Top) - yOffset * (faceBox.Bottom - faceBox.Top);

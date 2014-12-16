@@ -24,7 +24,7 @@ Mat bitmapToMat(Bitmap^ image) {
 Mat cropAndResize(Mat image, System::Windows::Rect crop) {
 	Mat croppedImage = image(Rect(crop.Left, crop.Top, crop.Width, crop.Height));
 	Mat croppedImageResized;
-	resize(croppedImage, croppedImageResized, cv::Size(100, 100), 0, 0, INTER_LINEAR);
+	resize(croppedImage, croppedImageResized, cv::Size(200, 200), 0, 0, INTER_LINEAR);
 	return croppedImageResized;
 }
 

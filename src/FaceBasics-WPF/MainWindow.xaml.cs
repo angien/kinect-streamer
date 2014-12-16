@@ -775,7 +775,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             {
                                 FaceRecognitionResult result = faceToResult[i];
                                 string name = labelToName[result.label];
-                                string text = name; //+ '\n' + result.confidence.ToString()
+                                string text = name;
+                                //string text = name + '\n' + result.confidence.ToString();
                                 FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
                                     System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 40,
                                     new SolidColorBrush(Colors.Yellow));
@@ -784,7 +785,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                               
                             }
 
-                            if (faceToCounter[i] > 300 && !EnrollmentManager.Active)
+                            if (faceToCounter[i] > 200 && !EnrollmentManager.Active)
                             {
                                 faceToCounter[i] = 0;
                                 Bitmap colorBitmapBuffer = Util.SourceToBitmap(colorBitmap);
@@ -797,7 +798,22 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                     if (Util.IsValidRect(transformedFace, bounds))
                                     {
                                         FaceRecognitionResult faceResult = faceRecognizer.Predict(colorBitmapBuffer, Util.TransformFace(rect));
-                                        faceToResult[index] = faceResult;
+                                        bool valid = true;
+                                        for (int j = 0; j < faceToResult.Length; j++)
+                                        {
+                                            if (j == i) break;
+                                            if (faceToResult[j] == null) break;
+                                            if (faceFrameResults[j] == null) break;
+                                            if (faceToResult[j].label == faceResult.label && faceResult.confidence > faceToResult[j].confidence)
+                                            {
+                                                valid = false;
+                                            }
+                                        }
+
+                                        if (valid)
+                                        {
+                                            faceToResult[index] = faceResult;
+                                        }
                                     }
                                 }));
                                 thread.Start();
