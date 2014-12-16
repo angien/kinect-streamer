@@ -895,7 +895,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
                     FaceRecognitionResult recognitionResult = faceToResult[faceIndex];
                     string name = recognitionResult == null ? "unknown" : labelToName[recognitionResult.label];
-                    List<String> result = profiles.FirstOrDefault((profile) => profile[1] == name);
+                    List<String> result = profiles.FirstOrDefault((profile) => profile[1].ToLower() == name.ToLower());
                     int profileNumber = result == null ? 0 : int.Parse(result[0]);
                     setProfile(name); //sets profile to person's number in database
                     speaker.OutputToAudio(profiles[profileNumber][2]); //says greeting
@@ -1093,7 +1093,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         }
         private void setProfile(string name)
         {
-            List<String> result = profiles.FirstOrDefault((profile) => profile[1] == name);
+            List<String> result = profiles.FirstOrDefault((profile) => profile[1].ToLower() == name.ToLower());
             int i = result == null ? 0 : int.Parse(result[0]);
 
             String imageLocation = "profileImages" + "\\" + "profile" + profiles[i][0] + ".jpg";
