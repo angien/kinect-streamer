@@ -15,40 +15,34 @@ namespace TextToSpeech
 
         public SpeechOutput(string voiceType)
         {
-            /*
-            foreach(var v in synthesizer.GetInstalledVoices().Select(v => v.VoiceInfo))
-            {
-                Console.WriteLine("Name:{0}, Gender:{1}, Age:{2}", v.Description, v.Gender, v.Age);
-            }  */
-    
-            Console.WriteLine("SelectVoice Example");
-            SpeechSynthesizer ttsSynth = new SpeechSynthesizer();
+            //Console.WriteLine("SelectVoice Example");
+            //SpeechSynthesizer ttsSynth = new SpeechSynthesizer();
 
-            Console.WriteLine("Listing installed speech synthesizer voices...");
-            foreach (InstalledVoice ttsVoice in ttsSynth.GetInstalledVoices())
-            {
-                Console.WriteLine("Name:\t{0}", ttsVoice.VoiceInfo.Name);
-                Console.WriteLine("Desc:\t{0}", ttsVoice.VoiceInfo.Description);
-                Console.WriteLine("Id:\t{0}", ttsVoice.VoiceInfo.Id);
-                Console.WriteLine("Gender:\t{0}", ttsVoice.VoiceInfo.Gender);
-                Console.WriteLine("Age:\t{0}", ttsVoice.VoiceInfo.Age);
+            //Console.WriteLine("Listing installed speech synthesizer voices...");
+            //foreach (InstalledVoice ttsVoice in ttsSynth.GetInstalledVoices())
+            //{
+            //    Console.WriteLine("Name:\t{0}", ttsVoice.VoiceInfo.Name);
+            //    Console.WriteLine("Desc:\t{0}", ttsVoice.VoiceInfo.Description);
+            //    Console.WriteLine("Id:\t{0}", ttsVoice.VoiceInfo.Id);
+            //    Console.WriteLine("Gender:\t{0}", ttsVoice.VoiceInfo.Gender);
+            //    Console.WriteLine("Age:\t{0}", ttsVoice.VoiceInfo.Age);
 
-                Console.WriteLine("Supported Audio Formats:");
-                foreach (SpeechAudioFormatInfo audioFormat in ttsVoice.VoiceInfo.SupportedAudioFormats)
-                {
-                    Console.WriteLine("\tEncodingFormat:\t{0}", audioFormat.EncodingFormat);
-                    Console.WriteLine("\tChannelCount:\t{0}", audioFormat.ChannelCount);
-                    Console.WriteLine("\tBits/sec:\t{0}", audioFormat.BitsPerSample);
-                    Console.WriteLine("\tAvg Bytes/sec:\t{0}", audioFormat.AverageBytesPerSecond);
-                    Console.WriteLine("\tSamples/sec:\t{0}", audioFormat.SamplesPerSecond);
-                    Console.WriteLine("\tBlockAlign:\t{0}", audioFormat.BlockAlign);
-                }
+            //    Console.WriteLine("Supported Audio Formats:");
+            //    foreach (SpeechAudioFormatInfo audioFormat in ttsVoice.VoiceInfo.SupportedAudioFormats)
+            //    {
+            //        Console.WriteLine("\tEncodingFormat:\t{0}", audioFormat.EncodingFormat);
+            //        Console.WriteLine("\tChannelCount:\t{0}", audioFormat.ChannelCount);
+            //        Console.WriteLine("\tBits/sec:\t{0}", audioFormat.BitsPerSample);
+            //        Console.WriteLine("\tAvg Bytes/sec:\t{0}", audioFormat.AverageBytesPerSecond);
+            //        Console.WriteLine("\tSamples/sec:\t{0}", audioFormat.SamplesPerSecond);
+            //        Console.WriteLine("\tBlockAlign:\t{0}", audioFormat.BlockAlign);
+            //    }
 
-                Console.WriteLine("Additional Information:");
-                foreach (KeyValuePair<string, string> kvp in ttsVoice.VoiceInfo.AdditionalInfo)
-                    Console.WriteLine("\t{0}:  {1}", kvp.Key, kvp.Value);
-                Console.WriteLine();
-            }
+            //    Console.WriteLine("Additional Information:");
+            //    foreach (KeyValuePair<string, string> kvp in ttsVoice.VoiceInfo.AdditionalInfo)
+            //        Console.WriteLine("\t{0}:  {1}", kvp.Key, kvp.Value);
+            //    Console.WriteLine();
+            //}
 
     
 

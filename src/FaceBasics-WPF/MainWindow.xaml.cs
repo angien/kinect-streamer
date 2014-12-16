@@ -622,20 +622,20 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 }
             }
 
-            //generic audio debug messages
-            if (eyeTracker.getDoubleBlink())
-            {
-                speaker.OutputToAudio("double blink");
-                eyeTracker.resetDoubleBlink();
-            }
-            if (eyeTracker.getLongBlink())
-            {
-                speaker.OutputToAudio("long blink");
-                eyeTracker.resetLongBlink();
-                setProfile("Generic Profile");
-                toggleScreens();
-                
-
+            if (!EnrollmentManager.Active) {
+                //generic audio debug messages
+                if (eyeTracker.getDoubleBlink())
+                {
+                    speaker.OutputToAudio("double blink");
+                    eyeTracker.resetDoubleBlink();
+                }
+                if (eyeTracker.getLongBlink())
+                {
+                    speaker.OutputToAudio("long blink");
+                    eyeTracker.resetLongBlink();
+                    setProfile("Generic Profile");
+                    toggleScreens();
+                }
             }
 
             if (isVideoFeed)
