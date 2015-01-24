@@ -1,0 +1,70 @@
+05
+======
+- facial recognition
+
+Things we need
+- need Windows 8.1 (and visual studio?)
+- visual studio
+- open cv (I’m using 2.4)
+- eyetribe sdk
+- Kinect sdk C#
+
+FaceBasics: main (pulls data from the Kinect)
+ - pulls frames from Kinect -> to openCV
+FaceEnrollment: 
+ - openCV -> adapted for Kinect
+ - does the training
+ - 
+
+ FaceRecognition
+ - FaceRecognition.h: wrapper for bridging Kinect (C#) to OpenCV (C++)
+ 
+ - Train (in FaceRecognition.cpp) array
+ images: d.jpg, d.jpg, d.jpg, d.jpg
+ labels: dylan, dylan, dylan, dylan
+ crop: <x,y coordinates for where to crop>
+ --> calls the OpenCV train
+ FaceRecognitionResult: label (integer, needs to be mapped to database), confidence
+
+=====================
+
+Metro App
+
+have keyboard come up when look at bottom
+
+separate app WINDOWS APP!
+kinect feed (video feed)
+who is there
+
+https://dev.windows.com/en-us/getstarted
+
+What kind of information needs to be sent over network? 2 computers
+- specify where to dump the file of data
+- name, coordinate distance from kinect, in the future: bluetooth
+
+master folder
+- store images, id 
+
+Repo for EyeHome?
+Is the ocuhub online yet?
+
+What is the separateion between the ocuhub and the separate 
+
+OcuHub reads from a file on the desktop
+
+TODO
+- review videos of 118
+- run hey you and see what can be done with it for Kinect App
+
+
+Kinect App
+- context.txt (write 'company' or 'alone')
+- contacts.txt (people in the room) - (id, time they came in, distance)
+- /<id>/
+	+ info.txt (contains name, and later other details)
+	+ 10 x <date><time>.jpg buffer
+    	- 10 hertz (take face pics 10th of a second)
+
+Messenger
+- do windows app tutorial and make sure it resizes
+- start with template (video feed and "in-room buddy list")
