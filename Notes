@@ -5,9 +5,16 @@
 Things we need
 - need Windows 8.1 (and visual studio?)
 - visual studio
-- open cv (I’m using 2.4)
+- open cv (Must Use 2.4.9!!!)
++ make sure you set the path for this to work
 - eyetribe sdk
 - Kinect sdk C#
+
+
+
+
+Setup
+- make sure FaceBasics is bolded (select it and project > set as startup ...)
 
 FaceBasics: main (pulls data from the Kinect)
  - pulls frames from Kinect -> to openCV
@@ -68,3 +75,22 @@ Kinect App
 Messenger
 - do windows app tutorial and make sure it resizes
 - start with template (video feed and "in-room buddy list")
+
+
+=> Try making my own based off of FaceBasics, ask Dylan how he did the openCV connecting
+
+- training is done at the very beginning through the enrollment gui, then it opens up the video stream and "names" those people
+- does not know if someone is a new person (will try to map to most similar person, lol)
+ ****
+====== Next Meeting
+
+Hi everyone,
+
+I just wanted to update you all on my progress with the Kinect and OpenCV.
+
+I've been working with Frank from team 5 and we are finding the setup of their code to be difficult. We are getting a lot of errors on a clean install of their code and will probably need to work on this further with Dylan. It's hard to get schedules to work together, as well.
+
+While removing the GUI and the EyeTribe portions of the code sounds easy, it is proving to be much harder than it sounds!
+
+Cheers,
+Angie
