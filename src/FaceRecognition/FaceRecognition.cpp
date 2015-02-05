@@ -61,13 +61,13 @@ void FaceRecognizerBridge::Train(array<Bitmap^>^ images, array<int>^ labels, arr
 
 void FaceRecognizerBridge::Preview(Bitmap^ image, System::Windows::Rect faceCrop) {
 	Mat nativeImage = bitmapToMat(image);
-	imwrite("preview.jpg", cropAndResize(nativeImage, faceCrop));
+	imwrite("C:/Test/preview.jpg", cropAndResize(nativeImage, faceCrop));
 }
 
 void FaceRecognizerBridge::Save() {
-	(*faceRecognizer)->save("faceDB.txt");
+	(*faceRecognizer)->save("C:/Test/faceDB.txt");
 }
 
 void FaceRecognizerBridge::Load() {
-	(*faceRecognizer)->load("faceDB.txt");
+	(*faceRecognizer)->load("C:/Test/faceDB.txt");
 }

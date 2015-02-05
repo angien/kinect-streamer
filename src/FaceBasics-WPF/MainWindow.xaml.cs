@@ -332,7 +332,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             //transform the resulting image to so the view lines up with yours
             Matrix myMat = new Matrix(-1, 0, 0, 1, 0, 0);
             MatrixTransform matMirrorImage = new MatrixTransform(myMat);
-            this.drawingGroup.Transform = matMirrorImage;
+            //this.drawingGroup.Transform = matMirrorImage;
 
 
             // Create an image source that we can use in our image control
@@ -347,8 +347,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
             System.Diagnostics.Debug.Write("Is this looping?\n\n");
 
-            this.eyeTracker = new EyeTrackingWindow();
-            this.eyeTracker.Show();
+            //this.eyeTracker = new EyeTrackingWindow();
+            //this.eyeTracker.Show();
 
             conversationScreen.Visibility = System.Windows.Visibility.Collapsed;
 
