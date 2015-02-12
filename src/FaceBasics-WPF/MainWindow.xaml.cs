@@ -45,6 +45,10 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private int numberOfProfiles;
         private Random randomNum = new Random();
 
+
+        private static int x=0;
+        private static DateTime otherTime;
+
         private FaceRecognizerBridge faceRecognizer = new FaceRecognizerBridge();
         private Dictionary<int, string> labelToName = new Dictionary<int, string>();
         private FaceRecognitionResult[] faceToResult;
@@ -700,6 +704,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
                         using (KinectBuffer colorBuffer = colorFrame.LockRawImageBuffer())
                         {
+                     
                             this.colorBitmap.Lock();
 
                             // verify data and write the new color frame data to the display bitmap
@@ -746,6 +751,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private void Reader_BodyFrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
             if (isVideoFeed) {
+
+           
+                
                 using (var bodyFrame = e.FrameReference.AcquireFrame())
                 {
                     if (bodyFrame != null)
@@ -783,12 +791,38 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             DrawTheWholeFrame();
                         }
                     }
+                    else
+                    {
+                        //Debug.WriteLine("WHY");
+                         DateTime now = DateTime.UtcNow;
+                         TimeSpan difference = now.Subtract(otherTime); // could also write `now - otherTime`
+                         if (difference.TotalSeconds > 10)
+                         {
+                             if (File.ReadAllLines(@"C:\Test\context.txt").Length != 0)
+                             {
+                                 File.WriteAllText(@"C:\Test\context.txt", String.Empty);
+                             }
+                         }
+                    }
                 }
             }//end if isVideoFeed
         }
 
         int counter = 0; // delete this
-
+        void CreateThumbnail(string filename, BitmapSource image5)
+        {
+            Debug.WriteLine("Saving image");
+            if (filename != string.Empty)
+            {
+                using (FileStream stream5 = new FileStream(filename, FileMode.Create))
+                {
+                    PngBitmapEncoder encoder5 = new PngBitmapEncoder();
+                    encoder5.Frames.Add(BitmapFrame.Create(image5));
+                    encoder5.Save(stream5);
+                    stream5.Close();
+                }
+            }
+        }
         /// <summary>
         /// This method draws everything. Really. (called when body frame arrives)
         /// </summary>
@@ -796,10 +830,11 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         {
 
 
-            File.WriteAllText(@"C:\Test\context.txt", String.Empty);
 
             using (DrawingContext dc = this.drawingGroup.Open())
             {
+                
+
                 //TODO. draws the color frame into the display rect
                 dc.DrawImage(colorBitmap, this.displayRect);
                 // draw the dark background
@@ -817,12 +852,22 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         if (this.faceFrameResults[i] != null)
                         {
                             
-                            if (File.ReadAllLines(@"C:\Test\context.txt").Length == 0)
+                    
+
+                            DateTime now = DateTime.UtcNow;
+                            TimeSpan difference = now.Subtract(otherTime); // could also write `now - otherTime`
+                            if (difference.TotalSeconds > 10)
                             {
+                                otherTime = now;
+                                CreateThumbnail("C:\\Test\\Feed\\" + x++ + ".jpg", colorBitmap.Clone());
+                                if (File.ReadAllLines(@"C:\Test\context.txt").Length == 0)
+                                {
 
-                                File.WriteAllText(@"C:\Test\context.txt", "company");
+                                    File.WriteAllText(@"C:\Test\context.txt", "company");
 
+                                }
                             }
+
                             // draw face frame results
                             this.DrawFaceFrameResults(i, this.faceFrameResults[i], dc);
 
@@ -948,7 +993,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             double faceBoxThickness = DrawFaceShapeThickness;
 
             //determine if user is looking at the person. if so, bolden the user's face box
-            if (faceBox.Contains(colorBitmap.Width - gazeX, gazeY))
+            /*if (faceBox.Contains(colorBitmap.Width - gazeX, gazeY))
             {
                 faceBoxThickness *= 4;
                 if (eyeTracker.getDoubleBlink())
@@ -978,7 +1023,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             else
             {
                 //eyeTracker.ResetBlinkCount();
-            }
+            }*/
 
 
 
