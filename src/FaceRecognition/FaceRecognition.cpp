@@ -2,7 +2,10 @@
 
 #include "stdafx.h"
 
+#include "windows.h"
 #include "FaceRecognition.h"
+#include <string>
+#include <fstream>      // std::ifstream
 
 using namespace FaceRecognition;
 
@@ -41,6 +44,36 @@ FaceRecognitionResult^ FaceRecognizerBridge::Predict(Bitmap^ image, System::Wind
 	return result;
 }
 
+void FaceRecognizerBridge::Update(array<Bitmap^>^ images, array<int>^ labels, array<System::Windows::Rect>^ faceCrops) {
+	vector<Mat> nativeImages;
+	vector<int> nativeLabels;
+
+	for (int i = 0; i < images->Length; i++)
+	{
+		System::Windows::Rect faceCrop = faceCrops[i];
+
+		Mat image = bitmapToMat(images[i]);
+		Mat croppedImageResized = cropAndResize(image, faceCrop);
+
+		string directory = "C:\\Test\\" + to_string(labels[i]) + "\\";
+		string filename = to_string(i) + ".jpg";
+		bool check = imwrite(directory + filename, croppedImageResized);
+		if (check == false) {
+			string folderCreateCommand = "mkdir " + directory;
+			system(folderCreateCommand.c_str());
+			bool check2 = imwrite(directory + filename, croppedImageResized);
+
+		}
+		nativeImages.push_back(croppedImageResized);
+		int id = labels[i];
+		nativeLabels.push_back(id);
+
+	}
+
+	(*faceRecognizer)->update(nativeImages, nativeLabels);
+	Save();
+}
+
 void FaceRecognizerBridge::Train(array<Bitmap^>^ images, array<int>^ labels, array<System::Windows::Rect>^ faceCrops) {
 	vector<Mat> nativeImages;
 	vector<int> nativeLabels;
@@ -48,15 +81,28 @@ void FaceRecognizerBridge::Train(array<Bitmap^>^ images, array<int>^ labels, arr
 	for (int i = 0; i < images->Length; i++)
 	{
 		System::Windows::Rect faceCrop = faceCrops[i];
+
 		Mat image = bitmapToMat(images[i]);
 		Mat croppedImageResized = cropAndResize(image, faceCrop);
 
+		string directory = "C:\\Test\\" + to_string(labels[i]) + "\\";
+		string filename = to_string(i)+".jpg";
+		bool check = imwrite(directory + filename, croppedImageResized);
+		if (check == false) {
+			string folderCreateCommand = "mkdir " + directory;
+			system(folderCreateCommand.c_str());
+			bool check2 =imwrite(directory + filename, croppedImageResized);
+
+		}
 		nativeImages.push_back(croppedImageResized);
 		int id = labels[i];
 		nativeLabels.push_back(id);
+
 	}
 
 	(*faceRecognizer)->train(nativeImages, nativeLabels);
+	(*faceRecognizer)->update(nativeImages, nativeLabels);
+	Save();
 }
 
 void FaceRecognizerBridge::Preview(Bitmap^ image, System::Windows::Rect faceCrop) {
@@ -69,5 +115,5 @@ void FaceRecognizerBridge::Save() {
 }
 
 void FaceRecognizerBridge::Load() {
-	(*faceRecognizer)->load("C:/Test/faceDB.txt");
+		(*faceRecognizer)->load("C:/Test/faceDB.txt");
 }

@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System;
+using System.IO;
 
 namespace FaceEnrollment
 {
@@ -29,7 +31,12 @@ namespace FaceEnrollment
         {
             PersonTrainingData person = new PersonTrainingData();
             person.name = personName.Text;
-            person.trainingId = EnrollmentManager.currentTrainingId;
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Test\nameDB.txt", true))
+            {
+            }
+            string[] readText = File.ReadAllLines("C:\\Test\\nameDB.txt");
+            EnrollmentManager.actualTrainingId = readText.Length + EnrollmentManager.actualTrainingId;
+            person.trainingId = EnrollmentManager.actualTrainingId;
             EnrollmentManager.trainingData.Add(person);
             EnrollmentManager.window.Content = new Page4();
         }

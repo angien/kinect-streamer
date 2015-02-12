@@ -16,9 +16,10 @@ namespace FaceEnrollment
 
         internal static Window window;
         internal static int currentTrainingId;
+        internal static int actualTrainingId;
         internal static event Action<BitmapSource, IEnumerable<Rect>> OnFrameReceived;
 
-        public static event Action<bool, bool> Done;
+        public static event Action<bool> Done;
         public static List<PersonTrainingData> trainingData = new List<PersonTrainingData>();
         public static bool Active
         {
@@ -44,13 +45,13 @@ namespace FaceEnrollment
             }
         }
 
-        internal static void Finish(bool saveDB, bool loadDB)
+        internal static void Finish(bool loadDB)
         {
             isActive = false;
             window.Content = initialContent;
             if (Done != null)
             {
-                Done(saveDB, loadDB);
+                Done(loadDB);
             }
         }
     }

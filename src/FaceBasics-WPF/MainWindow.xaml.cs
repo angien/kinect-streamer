@@ -465,17 +465,21 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             }
         }
 
-        void EnrollmentManager_Done(bool saveDB, bool loadDB)
+        void EnrollmentManager_Done(bool loadDB)
         {
             if (loadDB)
             {
                 faceRecognizer.Load();
-                var lines = File.ReadAllLines("nameDB.txt");
+                var lines = File.ReadAllLines("C:\\Test\\nameDB.txt");
+
+                Debug.WriteLine("LINES" + lines.Count());
                 foreach (var line in lines)
                 {
                     var components = line.Split('|');
                     var label = int.Parse(components[0]);
                     var name = components[1];
+
+                    Debug.WriteLine("LOADING " + name);
                     labelToName[label] = name;
                 }
             }
@@ -493,15 +497,28 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         ids.Add(data.trainingId);
                     }
                     labelToName[data.trainingId] = data.name;
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Test\nameDB.txt", true))
+                    {
+                        file.WriteLine(data.trainingId + "|" + data.name);
+                    }
                 }
 
                 if (images.Count() > 1)
                 {
-                    faceRecognizer.Train(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                    if (EnrollmentManager.trainingData[0].trainingId == 0)
+                    {
+                        faceRecognizer.Train(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                    }
+                    else
+                    {
+                        Debug.WriteLine("DOING AN UPDATE");
+                        faceRecognizer.Load();
+                        faceRecognizer.Update(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                    }
                 }
             }
 
-            if (saveDB)
+            /*if (saveDB)
             {
                 faceRecognizer.Save();
                 List<string> lines = new List<string>();
@@ -510,8 +527,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     lines.Add(entry.Key.ToString() + '|' + entry.Value);
                 }
 
-                File.WriteAllLines("nameDB.txt", lines);
-            }
+                File.WriteAllLines("C:\\Test\\nameDB.txt", lines);
+            }*/
         }
 
         /// <summary>
@@ -611,8 +628,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private void Reader_ColorFrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
             //color frame dictates the frequency that gaze point is updated
-            this.gazeX = eyeTracker.GetX();
-            this.gazeY = eyeTracker.GetY();
+            //this.gazeX = eyeTracker.GetX();
+            //this.gazeY = eyeTracker.GetY();
 
 
             if (isConversationScreen)
@@ -652,7 +669,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 }
             }
 
-            if (!EnrollmentManager.Active) {
+            
+            /*if (!EnrollmentManager.Active) {
                 //generic audio debug messages
                 if (eyeTracker.getDoubleBlink())
                 {
@@ -666,7 +684,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     setProfile("Generic Profile");
                     toggleScreens();
                 }
-            }
+            }*/
 
             if (isVideoFeed)
             {
@@ -776,6 +794,10 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// </summary>
         private void DrawTheWholeFrame()
         {
+
+
+            File.WriteAllText(@"C:\Test\context.txt", String.Empty);
+
             using (DrawingContext dc = this.drawingGroup.Open())
             {
                 //TODO. draws the color frame into the display rect
@@ -789,9 +811,18 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     // check if a valid face is tracked in this face source
                     if (this.faceFrameSources[i].IsTrackingIdValid)
                     {
+
+
                         // check if we have valid face frame results
                         if (this.faceFrameResults[i] != null)
                         {
+                            
+                            if (File.ReadAllLines(@"C:\Test\context.txt").Length == 0)
+                            {
+
+                                File.WriteAllText(@"C:\Test\context.txt", "company");
+
+                            }
                             // draw face frame results
                             this.DrawFaceFrameResults(i, this.faceFrameResults[i], dc);
 
@@ -801,6 +832,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             if (!EnrollmentManager.Active && faceToResult[i] != null)
                             {
                                 FaceRecognitionResult result = faceToResult[i];
+                                //Debug.WriteLine("WHY U DO THIS" + labelToName.Count() + " " + result.label);
                                 string name = labelToName[result.label];
                                 string text = name;
                                 //string text = name + '\n' + result.confidence.ToString();
@@ -850,6 +882,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     }
                     else
                     {
+
+                    
+                        
                         // check if the corresponding body is tracked 
                         if (this.bodies[i].IsTracked)
                         {

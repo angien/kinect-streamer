@@ -16,6 +16,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Drawing.Imaging;
 
+using System.Diagnostics;
+
 namespace FaceEnrollment
 {
     /// <summary>
@@ -36,39 +38,50 @@ namespace FaceEnrollment
 
         private void ReceiveFrame(BitmapSource frame, IEnumerable<Rect> faceBoxes)
         {
-            Rect bounds = new Rect(new System.Windows.Size(frame.Width, frame.Height));
-            IEnumerable<Rect> filteredFaceBoxes = faceBoxes.Select((box) => Util.TransformFace(box));
-            filteredFaceBoxes = filteredFaceBoxes.Where((box) => Util.IsValidRect(box, bounds));
-            Rect faceBox = filteredFaceBoxes.FirstOrDefault();
-            foreach (Rect rect in filteredFaceBoxes)
+            Rect faceBox = Rect.Empty;
+            if (faceBoxes.Count() > 0)
             {
-                if (rect.Width > faceBox.Width)
+                //Debug.WriteLine("faceboxes COUNT: " + faceBoxes.Count());
+                Rect bounds = new Rect(new System.Windows.Size(frame.Width, frame.Height));
+                IEnumerable<Rect> filteredFaceBoxes = faceBoxes.Select((box) => Util.TransformFace(box));
+                filteredFaceBoxes = filteredFaceBoxes.Where((box) => Util.IsValidRect(box, bounds));
+                faceBox = filteredFaceBoxes.FirstOrDefault();
+                foreach (Rect rect in filteredFaceBoxes)
                 {
-                    faceBox = rect;
+                    if (rect.Width > faceBox.Width)
+                    {
+                        faceBox = rect;
+                    }
                 }
             }
-
             lastFaceBoxes = new List<Rect>();
-            if (faceBox != null)
-            {
-                ((List<Rect>)lastFaceBoxes).Add(faceBox);
-            }
+                if (!faceBox.Equals(Rect.Empty))
+                {
+                    
+                   // Debug.WriteLine("facebox: " + faceBox);
 
-            DrawingVisual drawingVisual = new DrawingVisual();
-            using (DrawingContext drawingContext = drawingGroup.Open())
-            {
-                drawingContext.DrawImage(frame, new Rect(new System.Windows.Size(frame.Width, frame.Height)));
-                var brush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
-                var pen = new System.Windows.Media.Pen(brush, 5);
-                drawingContext.DrawRectangle(null, pen, faceBox);
-            }
+                    //Debug.WriteLine("SOMETHING IS HAPPENING HERE" + lastFaceBoxes.Count());
+                    ((List<Rect>)lastFaceBoxes).Add(faceBox);
+                }
 
-            lastFrame = frame;
+                DrawingVisual drawingVisual = new DrawingVisual();
+                using (DrawingContext drawingContext = drawingGroup.Open())
+                {
+                    drawingContext.DrawImage(frame, new Rect(new System.Windows.Size(frame.Width, frame.Height)));
+                    var brush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red);
+                    var pen = new System.Windows.Media.Pen(brush, 5);
+                    drawingContext.DrawRectangle(null, pen, faceBox);
+                }
+
+                lastFrame = frame;
+            
+            
         }
 
         private void Snap_Click(object sender, RoutedEventArgs e)
         {
-            
+
+            Debug.WriteLine("SSNAPCLICK" + lastFaceBoxes.Count());
 
             if (lastFaceBoxes.Count() < 1)
             {
@@ -86,7 +99,7 @@ namespace FaceEnrollment
                 FaceRecognition.FaceRecognizerBridge.Preview(image, faceBox);
                 MemoryStream ms = new MemoryStream();
                 BitmapImage bi = new BitmapImage();
-                byte[] bytArray = File.ReadAllBytes(@"preview.jpg");
+                byte[] bytArray = File.ReadAllBytes(@"C:/Test/preview.jpg");
                 ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
                 bi.BeginInit();
                 bi.StreamSource = ms;
@@ -98,6 +111,7 @@ namespace FaceEnrollment
         private void Next_Click(object sender, RoutedEventArgs e)
         {
             EnrollmentManager.currentTrainingId++;
+            EnrollmentManager.actualTrainingId++;
             EnrollmentManager.OnFrameReceived -= ReceiveFrame;
             EnrollmentManager.window.Content = new Page3();
         }
@@ -105,7 +119,7 @@ namespace FaceEnrollment
         private void Done_Click(object sender, RoutedEventArgs e)
         {
             EnrollmentManager.OnFrameReceived -= ReceiveFrame;
-            EnrollmentManager.Finish(false, false);
+            EnrollmentManager.Finish(false);
         }
     }
 }
