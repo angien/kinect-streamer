@@ -99,3 +99,28 @@ How to tell if someone is in the room?
 - try to do the "company"
 
 ====== Next Meeting
+
+
+
+
+
+Known bugs
+- must have faceDB in file already
+- no update on faces that have already been made
+- need pop up for when a new face enters
+- figure out when there is a new unregistered person
+- not sure if company is updated at the right time
+- does not automatically take snapshots (need to have it take maybe 15?)
+- minimize gui as much as possible
+- FINISH SERVER SIDE FOR DESIGN
+- how preview works
+- Contact file should have name of people who are there! fix this
+
+HW: 2/12/15
+- come up with social media
+- check dropbox for the interview wav file
+- work on kinect stuff
+- ebook reader?
+
+UI will be
+- 4 sides, center circle with names of people who are in room
