@@ -7,7 +7,9 @@ Things we need
 - visual studio
 - open cv (Must Use 2.4.9!!!)
 + make sure you set the path for this to work
-+ add bin x86/vc12 (latest one) to path
+%OPENCV_DIR%/bin
++ add bin x86/vc12 (latest one) to path 
+setx -m OPENCV_DIR C:\opencv\build\x86\vc12
 - eyetribe sdk
 - Kinect sdk C#
 
