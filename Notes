@@ -13,6 +13,9 @@ setx -m OPENCV_DIR C:\opencv\build\x86\vc12
 - eyetribe sdk
 - Kinect sdk C#
 
+.NET framework needs to be 3.5
+https://msdn.microsoft.com/en-us/library/hh506443(v=vs.110).aspx
+
 
 Text file: FaceRecognition.cpp makes a faceDB.txt 
 
