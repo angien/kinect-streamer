@@ -86,11 +86,14 @@ Messenger
 
 FaceRecognition
 - opencv port
+- calls opencv methods
 
-FaceEnroll
+FaceEnrollment
 - contains the gui with the pages
+- page 4 controls some training
 
-Mainwindow
+FaceBasics-WPF
+- Mainwindow calls methods inside FaceRecognition
 - boxes (kinect face basics stuff)
 
 
@@ -114,14 +117,18 @@ Known bugs
 - no update on faces that have already been made
 - need pop up for when a new face enters
 - figure out when there is a new unregistered person
-- not sure if company is updated at the right time :(
+- not sure if company is updated at the right time :( (fix this!)
 - does not automatically take snapshots (need to have it take maybe 15?)
 - minimize gui as much as possible
 - FINISH SERVER SIDE FOR DESIGN
-- how preview works
+- how preview works (bugs?)
 - error on training when face is too far to the top
 - Contact file should have name of people who are there! fix this
 - when someone has the same name already
+- remove the done button and have it move on after 50 (constant variable) or so frames are made 
+- fix the next button and maybe have a back button on the main window page?
+- remove debug messages
+- look into eye widening: opencv EYE WIDENING (GOOGLE THIS!!)
 
 HW: 2/12/15
 - come up with social media
@@ -131,10 +138,6 @@ HW: 2/12/15
 + use webcam to check if eyes are wide open (using some repo that is there)
 + PLEX for media!! awesome!!
 
-UI will be
-- 4 sides, center circle with names of people who are in room
-- check dropbox for alphabet UI
-
 Plugins
 - Check dropbox
 
@@ -142,7 +145,6 @@ Combine tweets and fb as well as status updates!
 http://personalweb.about.com/od/facebookapps/ht/addtwittertofacebook.htm
 
 - look into teamviewer
-- look into eye widening: opencv EYE WIDENING (GOOGLE THIS!!)
 - uploading to a remote folder talk to brian
-
-- CONTACTS.txt <-- who is currently in the room
+- make label more noticeable
+- look into eye widening -> separate for now?

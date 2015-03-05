@@ -88,7 +88,12 @@ namespace FaceEnrollment
                     }
 
                     if (i == NUMBER_TO_TRAIN)
+                    {
+                    
                         i = 0;
+                        //EnrollmentManager.OnFrameReceived -= ReceiveFrame;
+                        //EnrollmentManager.Finish(false);
+                    }
      
                // }
             }
