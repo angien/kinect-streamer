@@ -20,7 +20,7 @@
                 <Image Name="snapshotImage" />
             </Border>
              
-            <Button Content="Snap Picture" Click="Snap_Click" HorizontalAlignment="Left" Margin="421,338,0,-160" VerticalAlignment="Top" Width="75" Height="25"/>
+           
             <Button Content="Next Person" Click="Next_Click" HorizontalAlignment="Left" Margin="421,368,0,-190" VerticalAlignment="Top" Width="75" Height="25"/>
             <Button Content="Done" Click="Done_Click" HorizontalAlignment="Left" Margin="421,398,0,-220" VerticalAlignment="Top" Width="75" Height="25"/>
             <Label Name="output" Content="" Margin="260,232,74.667,452.667"/>

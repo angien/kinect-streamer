@@ -126,7 +126,7 @@ namespace FaceEnrollment
                 }*/
             
         }
-
+        
         private void Snap_Click(object sender, RoutedEventArgs e)
         {
 
