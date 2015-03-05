@@ -109,7 +109,7 @@ Known bugs
 - no update on faces that have already been made
 - need pop up for when a new face enters
 - figure out when there is a new unregistered person
-- not sure if company is updated at the right time
+- not sure if company is updated at the right time :(
 - does not automatically take snapshots (need to have it take maybe 15?)
 - minimize gui as much as possible
 - FINISH SERVER SIDE FOR DESIGN
@@ -121,6 +121,21 @@ HW: 2/12/15
 - check dropbox for the interview wav file
 - work on kinect stuff
 - ebook reader?
++ use webcam to check if eyes are wide open (using some repo that is there)
++ PLEX for media!! awesome!!
 
 UI will be
 - 4 sides, center circle with names of people who are in room
+- check dropbox for alphabet UI
+
+Plugins
+- Check dropbox
+
+Combine tweets and fb as well as status updates!
+http://personalweb.about.com/od/facebookapps/ht/addtwittertofacebook.htm
+
+- look into teamviewer
+- look into eye widening: opencv EYE WIDENING (GOOGLE THIS!!)
+- uploading to a remote folder talk to brian
+
+- CONTACTS.txt <-- who is currently in the room

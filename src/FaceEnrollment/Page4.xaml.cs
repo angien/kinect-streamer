@@ -26,14 +26,20 @@ namespace FaceEnrollment
     public partial class Page4 : Page
     {
         private BitmapSource lastFrame;
-        private IEnumerable<Rect> lastFaceBoxes;
+        private List<Rect> lastFaceBoxes;
+        private List<BitmapSource> lastFrames;
         private DrawingGroup drawingGroup = new DrawingGroup();
+        private static int i;
+        private static DateTime otherTime;
 
         public Page4()
         {
             InitializeComponent();
             EnrollmentManager.OnFrameReceived += ReceiveFrame;
             liveImage.Source = new DrawingImage(drawingGroup);
+            lastFaceBoxes = new List<Rect>();
+            lastFrames = new List<BitmapSource>();
+            i = 0;
         }
 
         private void ReceiveFrame(BitmapSource frame, IEnumerable<Rect> faceBoxes)
@@ -54,14 +60,20 @@ namespace FaceEnrollment
                     }
                 }
             }
-            lastFaceBoxes = new List<Rect>();
+               
                 if (!faceBox.Equals(Rect.Empty))
-                {
-                    
-                   // Debug.WriteLine("facebox: " + faceBox);
-
-                    //Debug.WriteLine("SOMETHING IS HAPPENING HERE" + lastFaceBoxes.Count());
-                    ((List<Rect>)lastFaceBoxes).Add(faceBox);
+                {/*
+                    DateTime now = DateTime.UtcNow;
+                    TimeSpan difference = now.Subtract(otherTime); // could also write `now - otherTime`
+                    if (difference.TotalSeconds > 1)
+                    {
+                        // Debug.WriteLine("facebox: " + faceBox);
+                        otherTime = now;*/
+                        //Debug.WriteLine("SOMETHING IS HAPPENING HERE" + lastFaceBoxes.Count());
+                        ((List<Rect>)lastFaceBoxes).Insert(i, faceBox);
+                        ((List<BitmapSource>)lastFrames).Insert(i, frame);
+                        i = (i + 1) % 10;
+                    //}
                 }
 
                 DrawingVisual drawingVisual = new DrawingVisual();
@@ -81,30 +93,36 @@ namespace FaceEnrollment
         private void Snap_Click(object sender, RoutedEventArgs e)
         {
 
-            Debug.WriteLine("SSNAPCLICK" + lastFaceBoxes.Count());
 
-            if (lastFaceBoxes.Count() < 1)
+            if (lastFaceBoxes.Count() < 10)
             {
                 output.Content = "No faces found";
             }
             else
             {
-                Rect faceBox = lastFaceBoxes.First();
-                PersonTrainingData person = EnrollmentManager.trainingData[EnrollmentManager.currentTrainingId];
-                Bitmap image = Util.SourceToBitmap(lastFrame);
-                person.trainingImages.Add(image);
-                person.faceBoxes.Add(faceBox);
-                output.Content = "Success";
+                for (int j = 0; j < 10; j++ )
+                {
 
-                FaceRecognition.FaceRecognizerBridge.Preview(image, faceBox);
-                MemoryStream ms = new MemoryStream();
-                BitmapImage bi = new BitmapImage();
-                byte[] bytArray = File.ReadAllBytes(@"C:/Test/preview.jpg");
-                ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
-                bi.BeginInit();
-                bi.StreamSource = ms;
-                bi.EndInit();
-                snapshotImage.Source = bi;
+                    Debug.WriteLine("SSNAPCLICK" + lastFaceBoxes.Count());
+                    Rect faceBox = lastFaceBoxes[j];
+                    PersonTrainingData person = EnrollmentManager.trainingData[EnrollmentManager.currentTrainingId];
+                    Debug.WriteLine("lastframe" + lastFrames[j]);
+                    Bitmap image = Util.SourceToBitmap(lastFrames[j]);
+                    person.trainingImages.Add(image);
+                    person.faceBoxes.Add(faceBox);
+                    output.Content = "Success";
+
+                    FaceRecognition.FaceRecognizerBridge.Preview(image, faceBox);
+                    MemoryStream ms = new MemoryStream();
+                    BitmapImage bi = new BitmapImage();
+                    byte[] bytArray = File.ReadAllBytes(@"C:/Test/preview.jpg");
+                    ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
+                    bi.BeginInit();
+                    bi.StreamSource = ms;
+                    bi.EndInit();
+                    snapshotImage.Source = bi;
+                }
+               
             }
         }
 

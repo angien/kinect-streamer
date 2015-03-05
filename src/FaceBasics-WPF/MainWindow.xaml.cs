@@ -517,6 +517,18 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     {
                         Debug.WriteLine("DOING AN UPDATE");
                         faceRecognizer.Load();
+                        var lines = File.ReadAllLines("C:\\Test\\nameDB.txt");
+
+                        Debug.WriteLine("LINES" + lines.Count());
+                        foreach (var line in lines)
+                        {
+                            var components = line.Split('|');
+                            var label = int.Parse(components[0]);
+                            var name = components[1];
+
+                            Debug.WriteLine("LOADING " + name);
+                            labelToName[label] = name;
+                        }
                         faceRecognizer.Update(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
                     }
                 }
@@ -798,6 +810,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                          TimeSpan difference = now.Subtract(otherTime); // could also write `now - otherTime`
                          if (difference.TotalSeconds > 10)
                          {
+                             otherTime = now;
                              if (File.ReadAllLines(@"C:\Test\context.txt").Length != 0)
                              {
                                  File.WriteAllText(@"C:\Test\context.txt", String.Empty);
@@ -877,7 +890,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             if (!EnrollmentManager.Active && faceToResult[i] != null)
                             {
                                 FaceRecognitionResult result = faceToResult[i];
-                                //Debug.WriteLine("WHY U DO THIS" + labelToName.Count() + " " + result.label);
+                                Debug.WriteLine("label " + labelToName.Count() + " " + result.label);
                                 string name = labelToName[result.label];
                                 string text = name;
                                 //string text = name + '\n' + result.confidence.ToString();
