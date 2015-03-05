@@ -119,7 +119,9 @@ Known bugs
 - minimize gui as much as possible
 - FINISH SERVER SIDE FOR DESIGN
 - how preview works
+- error on training when face is too far to the top
 - Contact file should have name of people who are there! fix this
+- when someone has the same name already
 
 HW: 2/12/15
 - come up with social media

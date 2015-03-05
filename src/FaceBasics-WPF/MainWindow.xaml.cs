@@ -376,6 +376,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         {
             get
             {
+
+              
                 //return this.colorBitmap;
                 return this.imageSource;
             }
@@ -450,6 +452,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="e">event arguments</param>
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            Debug.WriteLine("mainwindow loaded");
             EnrollmentManager.Launch(this);
             EnrollmentManager.Done += EnrollmentManager_Done;
 
@@ -471,6 +474,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
         void EnrollmentManager_Done(bool loadDB)
         {
+            Debug.WriteLine("emanager done");
             if (loadDB)
             {
                 faceRecognizer.Load();
@@ -554,6 +558,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="e">event arguments</param>
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
+            Debug.WriteLine("mainwindow closing");
             for (int i = 0; i < this.bodyCount; i++)
             {
                 if (this.faceFrameReaders[i] != null)
@@ -583,6 +588,13 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 this.kinectSensor.Close();
                 this.kinectSensor = null;
             }
+
+
+                    Debug.WriteLine("No one in room");
+                    File.WriteAllText(@"C:\Test\context.txt", String.Empty);
+                    File.WriteAllText(@"C:\Test\contacts.txt", String.Empty);
+                
+            
         }
 
         /// <summary>
@@ -592,6 +604,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="e">event arguments</param>
         private void Reader_FaceFrameArrived(object sender, FaceFrameArrivedEventArgs e)
         {
+            Debug.WriteLine("face frame arrived");
             if (isVideoFeed)
             {
                 //System.Diagnostics.Debug.Write("Face Frame Arived\n");
@@ -626,6 +639,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <returns>the index of the face source in the face source array</returns>
         private int GetFaceSourceIndex(FaceFrameSource faceFrameSource)
         {
+            Debug.WriteLine("get face source");
             int index = -1;
 
             for (int i = 0; i < this.bodyCount; i++)
@@ -643,6 +657,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         //TODO
         private void Reader_ColorFrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
+            Debug.WriteLine("color frame arrived");
             //color frame dictates the frequency that gaze point is updated
             //this.gazeX = eyeTracker.GetX();
             //this.gazeY = eyeTracker.GetY();
@@ -745,6 +760,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                 myTransform.EndInit();
                                  * */
 
+                            
                             }
 
                             this.colorBitmap.Unlock();
@@ -761,8 +777,16 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="e">event arguments</param>
         private void Reader_BodyFrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
+            Debug.WriteLine("body frame arrivee");
             if (isVideoFeed) {
-
+        
+                    if ((File.ReadAllLines(@"C:\Test\context.txt").Length != 0) || (File.ReadAllLines(@"C:\Test\contacts.txt").Length != 0))
+                    {
+                        Debug.WriteLine("No one in room");
+                        File.WriteAllText(@"C:\Test\context.txt", String.Empty);
+                        File.WriteAllText(@"C:\Test\contacts.txt", String.Empty);
+                    }
+                
            
                 
                 using (var bodyFrame = e.FrameReference.AcquireFrame())
@@ -804,17 +828,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     }
                     else
                     {
-                        //Debug.WriteLine("WHY");
-                         DateTime now = DateTime.UtcNow;
-                         TimeSpan difference = now.Subtract(otherTime); // could also write `now - otherTime`
-                         if (difference.TotalSeconds > 10)
-                         {
-                             otherTime = now;
-                             if (File.ReadAllLines(@"C:\Test\context.txt").Length != 0)
-                             {
-                                 File.WriteAllText(@"C:\Test\context.txt", String.Empty);
-                             }
-                         }
+                        // originally here
                     }
                 }
             }//end if isVideoFeed
@@ -841,7 +855,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private void DrawTheWholeFrame()
         {
 
-
+            Debug.WriteLine("draw whole frame");
 
             using (DrawingContext dc = this.drawingGroup.Open())
             {
@@ -872,12 +886,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             {
                                 otherTime = now;
                                 CreateThumbnail("C:\\Test\\Feed\\" + x++ + ".jpg", colorBitmap.Clone());
-                                if (File.ReadAllLines(@"C:\Test\context.txt").Length == 0)
-                                {
-
-                                    File.WriteAllText(@"C:\Test\context.txt", "company");
-
-                                }
+                               
                             }
 
                             // draw face frame results
@@ -889,8 +898,34 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             if (!EnrollmentManager.Active && faceToResult[i] != null)
                             {
                                 FaceRecognitionResult result = faceToResult[i];
-                                Debug.WriteLine("label " + labelToName.Count() + " " + result.label);
+                          
                                 string name = labelToName[result.label];
+                                Debug.WriteLine("label " + name);
+
+                                Boolean addContact = true;
+                                foreach (string line in File.ReadLines(@"C:\Test\contacts.txt"))
+                                    {
+                                        if(line == name) { //already in there
+                                            addContact = false;
+                                            break;
+                                        }
+                                    }
+                                if (addContact)
+                                {
+                                    using (StreamWriter sw = File.AppendText(@"C:\Test\contacts.txt"))
+                                    {
+
+
+                                        sw.WriteLine(name);
+                                    }
+                                }
+                                if (File.ReadAllLines(@"C:\Test\context.txt").Length == 0)
+                                {
+
+                                    File.WriteAllText(@"C:\Test\context.txt", "company");
+
+                                }
+
                                 string text = name;
                                 //string text = name + '\n' + result.confidence.ToString();
                                 FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
@@ -990,6 +1025,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="drawingContext">drawing context to render to</param>
         private void DrawFaceFrameResults(int faceIndex, FaceFrameResult faceResult, DrawingContext drawingContext)
         {
+            Debug.WriteLine("face frame");
             // choose the brush based on the face index
             Brush drawingBrush = this.faceBrush[0];
             if (faceIndex < this.bodyCount)
@@ -1129,6 +1165,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <returns>success or failure</returns>
         private bool GetFaceTextPositionInColorSpace(int faceIndex, out Point faceTextLayout)
         {
+            Debug.WriteLine("text color space");
             faceTextLayout = new Point();
             bool isLayoutValid = false;
 
@@ -1161,6 +1198,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <returns>success or failure</returns>
         private bool ValidateFaceBoxAndPoints(FaceFrameResult faceResult)
         {
+            Debug.WriteLine("validate");
             bool isFaceValid = faceResult != null;
 
             if (isFaceValid)
@@ -1208,6 +1246,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// <param name="e">event arguments</param>
         private void Sensor_IsAvailableChanged(object sender, IsAvailableChangedEventArgs e)
         {
+            Debug.WriteLine("Sensor changed!");
             if (this.kinectSensor != null)
             {
                 // on failure, set the status text

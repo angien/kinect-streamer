@@ -26,10 +26,11 @@ namespace FaceEnrollment
     public partial class Page4 : Page
     {
         private BitmapSource lastFrame;
-        private List<Rect> lastFaceBoxes;
+        private List<Rect> lastFaceBoxes; // the rectangles of the faces
         private List<BitmapSource> lastFrames;
         private DrawingGroup drawingGroup = new DrawingGroup();
         private static int i;
+        private static int NUMBER_TO_TRAIN = 50;
         private static DateTime otherTime;
 
         public Page4()
@@ -45,38 +46,58 @@ namespace FaceEnrollment
         private void ReceiveFrame(BitmapSource frame, IEnumerable<Rect> faceBoxes)
         {
             Rect faceBox = Rect.Empty;
-            if (faceBoxes.Count() > 0)
+            if (faceBoxes.Count() == 1) // people in the shot, only want one right now
             {
-                //Debug.WriteLine("faceboxes COUNT: " + faceBoxes.Count());
+                Debug.WriteLine("faceboxes COUNT: " + faceBoxes.Count());
                 Rect bounds = new Rect(new System.Windows.Size(frame.Width, frame.Height));
                 IEnumerable<Rect> filteredFaceBoxes = faceBoxes.Select((box) => Util.TransformFace(box));
                 filteredFaceBoxes = filteredFaceBoxes.Where((box) => Util.IsValidRect(box, bounds));
                 faceBox = filteredFaceBoxes.FirstOrDefault();
-                foreach (Rect rect in filteredFaceBoxes)
-                {
-                    if (rect.Width > faceBox.Width)
+
+
+                PersonTrainingData person = EnrollmentManager.trainingData[EnrollmentManager.currentTrainingId];
+           
+
+
+                    Bitmap image = Util.SourceToBitmap(frame);
+               //if (image != null)
+                 //   {
+                    if (person.trainingImages.Count() == NUMBER_TO_TRAIN)
                     {
-                        faceBox = rect;
+                        person.trainingImages.RemoveAt(i);
+                        person.faceBoxes.RemoveAt(i);
                     }
-                }
+                    person.trainingImages.Insert(i, image);
+                    person.faceBoxes.Insert(i, faceBox);
+
+                    i = i + 1;
+                    //}
+
+                    if ((i % 10) == 0)
+                    {
+                        FaceRecognition.FaceRecognizerBridge.Preview(image, faceBox);
+                        MemoryStream ms = new MemoryStream();
+                        BitmapImage bi = new BitmapImage();
+                        byte[] bytArray = File.ReadAllBytes(@"C:/Test/preview.jpg");
+                        ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
+                        bi.BeginInit();
+                        bi.StreamSource = ms;
+                        bi.EndInit();
+                        snapshotImage.Source = bi;
+
+                    }
+
+                    if (i == NUMBER_TO_TRAIN)
+                        i = 0;
+     
+               // }
+            }
+            else if (faceBoxes.Count() > 1) {
+                Debug.WriteLine("Too many people in the shot: " + faceBoxes.Count());
             }
                
-                if (!faceBox.Equals(Rect.Empty))
-                {/*
-                    DateTime now = DateTime.UtcNow;
-                    TimeSpan difference = now.Subtract(otherTime); // could also write `now - otherTime`
-                    if (difference.TotalSeconds > 1)
-                    {
-                        // Debug.WriteLine("facebox: " + faceBox);
-                        otherTime = now;*/
-                        //Debug.WriteLine("SOMETHING IS HAPPENING HERE" + lastFaceBoxes.Count());
-                        ((List<Rect>)lastFaceBoxes).Insert(i, faceBox);
-                        ((List<BitmapSource>)lastFrames).Insert(i, frame);
-                        i = (i + 1) % 10;
-                    //}
-                }
-
-                DrawingVisual drawingVisual = new DrawingVisual();
+            // drawing the red boxes
+            DrawingVisual drawingVisual = new DrawingVisual();
                 using (DrawingContext drawingContext = drawingGroup.Open())
                 {
                     drawingContext.DrawImage(frame, new Rect(new System.Windows.Size(frame.Width, frame.Height)));
@@ -86,7 +107,23 @@ namespace FaceEnrollment
                 }
 
                 lastFrame = frame;
-            
+
+                /*if (!faceBox.Equals(Rect.Empty))
+                {
+                    DateTime now = DateTime.UtcNow;
+                    TimeSpan difference = now.Subtract(otherTime); // could also write `now - otherTime`
+                    if (difference.TotalSeconds > 1)
+                    {
+                        // Debug.WriteLine("facebox: " + faceBox);
+                        otherTime = now;
+                    //Debug.WriteLine("SOMETHING IS HAPPENING HERE" + lastFaceBoxes.Count());
+                    ((List<Rect>)lastFaceBoxes).Insert(i, faceBox);
+                    ((List<BitmapSource>)lastFrames).Insert(i, frame);
+                    i = (i + 1) % 10;
+                    //}
+
+             
+                }*/
             
         }
 
@@ -97,6 +134,8 @@ namespace FaceEnrollment
             if (lastFaceBoxes.Count() < 10)
             {
                 output.Content = "No faces found";
+
+                Debug.WriteLine("NO FACES FOUND" + lastFaceBoxes.Count());
             }
             else
             {

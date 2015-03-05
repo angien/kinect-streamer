@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
 using System.Windows;
+using System.Diagnostics;
 
 namespace FaceEnrollment
 {
@@ -15,20 +16,23 @@ namespace FaceEnrollment
     {
         public static Bitmap SourceToBitmap(BitmapSource source)
         {
+            Debug.WriteLine("source to bitmap" + source.PixelHeight + source.PixelWidth);
             Bitmap bmp = new Bitmap(
-            source.PixelWidth,
-            source.PixelHeight,
-            System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
-            BitmapData data = bmp.LockBits(
-              new System.Drawing.Rectangle(System.Drawing.Point.Empty, bmp.Size),
-              ImageLockMode.WriteOnly,
-              System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
-            source.CopyPixels(
-              Int32Rect.Empty,
-              data.Scan0,
-              data.Height * data.Stride,
-              data.Stride);
-            bmp.UnlockBits(data);
+          source.PixelWidth,
+          source.PixelHeight,
+         System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                BitmapData data = bmp.LockBits(
+                  new System.Drawing.Rectangle(System.Drawing.Point.Empty, bmp.Size),
+                  ImageLockMode.WriteOnly,
+                  System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                source.CopyPixels(
+                  Int32Rect.Empty,
+                  data.Scan0,
+                  data.Height * data.Stride,
+                  data.Stride);
+                bmp.UnlockBits(data);
+      
+          
             return bmp;
         }
 
