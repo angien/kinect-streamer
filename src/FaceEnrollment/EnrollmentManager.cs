@@ -33,7 +33,7 @@ namespace FaceEnrollment
         {
             isActive = true;
             initialContent = window.Content;
-            window.Content = new Welcome();
+            window.Content = new Page1();
             EnrollmentManager.window = window;
         }
 

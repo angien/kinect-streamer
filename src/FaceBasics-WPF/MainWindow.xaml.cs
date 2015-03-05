@@ -350,7 +350,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             this.InitializeComponent();
 
             System.Diagnostics.Debug.Write("Is this looping?\n\n");
-
+            /*
             //this.eyeTracker = new EyeTrackingWindow();
             //this.eyeTracker.Show();
 
@@ -360,7 +360,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             buttons[0] = Phrase1;
             buttons[1] = Phrase2;
             buttons[2] = Phrase3;
-            buttons[3] = toggleVoice;            
+            buttons[3] = toggleVoice;   */         
             
         }
 
@@ -648,7 +648,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             //this.gazeY = eyeTracker.GetY();
 
 
-            if (isConversationScreen)
+           /* if (isConversationScreen)
             {
                 //handle the events for the conversation screen
                 using (DrawingContext dc = this.gazeDrawingGroup.Open())
@@ -671,19 +671,18 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     dc.DrawEllipse(myBrush, drawingPen, new Point(gazeX, gazeY), 2, 2);
 
                     this.gazeDrawingGroup.ClipGeometry = new RectangleGeometry(this.displayRect);
-
+                    
                     System.Diagnostics.Debug.WriteLine("Phrase1 actual height, width: {0}, {1}", Phrase1.ActualHeight, Phrase1.ActualWidth);
                     System.Diagnostics.Debug.WriteLine("Phrase1 height, width: {0}, {1}", Phrase1.Height, Phrase1.Width);
                     System.Diagnostics.Debug.WriteLine("Phrase1 left, top: {0}, {1}", Canvas.GetLeft(Phrase1), Canvas.GetTop(Phrase1));
 
                     System.Diagnostics.Debug.WriteLine("Phrase1 content: {0}\n", Phrase1.Content);
-
-
+                    
                     //determine if gaze is on any button, and if a double blink occurs
                     handleButtons(buttons, gazeX, gazeY);
 
                 }
-            }
+            }*/
 
             
             /*if (!EnrollmentManager.Active) {
@@ -1221,7 +1220,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         {
 
         }
-        private void setProfile(string name)
+        /*private void setProfile(string name)
         {
             List<String> result = profiles.FirstOrDefault((profile) => profile[1].ToLower() == name.ToLower());
             int i = result == null ? 0 : int.Parse(result[0]);
@@ -1233,21 +1232,21 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             Phrase1.Content = profiles[i][3];
             Phrase2.Content = profiles[i][4];
             Phrase3.Content = profiles[i][5];
-        }
+        }*/
         private void toggleScreens()
         {
 
             if (isVideoFeed)
             {
                 videoFeed.Visibility = System.Windows.Visibility.Collapsed;
-                conversationScreen.Visibility = System.Windows.Visibility.Visible;
+                //conversationScreen.Visibility = System.Windows.Visibility.Visible;
                 isVideoFeed = false;
                 isConversationScreen = true;
 
                 bodyFrameReader.IsPaused = true;
 
             }
-            else if (isConversationScreen)
+           /* else if (isConversationScreen)
             {
                 conversationScreen.Visibility = System.Windows.Visibility.Collapsed;
                 videoFeed.Visibility = System.Windows.Visibility.Visible;
@@ -1255,7 +1254,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 isVideoFeed = true;
 
                 bodyFrameReader.IsPaused = false;
-            }
+            }*/
         }
 
         private bool buttonContains(Button button, double x, double y) {
@@ -1285,7 +1284,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         //if the voice toggle button
                         if (i == 3)
                         {
-                            voiceToggleText.Text = speaker.nextVoice(); //change voice style as well as set button text
+                            //voiceToggleText.Text = speaker.nextVoice(); //change voice style as well as set button text
 
                             speaker.OutputToAudio("How do you like this voice?");
                         }

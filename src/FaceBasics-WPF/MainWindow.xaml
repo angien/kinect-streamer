@@ -17,7 +17,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Name ="title" Grid.Row="0" Margin="0,0,661,9.667" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="#FF2BB802" FontFamily="Segoe UI" FontSize="24" FontWeight="Bold" Width="647" TextAlignment="Center">Hey, you!</TextBlock>
         <TextBlock Name ="placeHolder" Visibility="Hidden" Grid.Row="0" Margin="0 0 -1 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Hey, you!</TextBlock>
 
         <Viewbox Name="videoFeed" Visibility="Visible" Grid.Row="1" HorizontalAlignment="Center">
@@ -25,7 +24,7 @@
         </Viewbox>
 
 
-        <Viewbox Name="conversationScreen" Visibility="Visible" Grid.Row="1" HorizontalAlignment="Center">
+       <!-- <Viewbox Name="conversationScreen" Visibility="Visible" Grid.Row="1" HorizontalAlignment="Center">
             <Canvas Name="conversationScreenCanvas" Width="1920" Height="1080">
 
 
@@ -46,7 +45,7 @@
                 <TextBlock x:Name="voiceToggleText" Height="34" Width="236" Canvas.Left="115" Canvas.Top="377" Text="Male: US English" FontSize="24" TextAlignment="Center"/>
 
             </Canvas>
-        </Viewbox>
+        </Viewbox>-->
         <!--
         <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
             <StatusBarItem Content="{Binding StatusText}" />

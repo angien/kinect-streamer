@@ -30,7 +30,7 @@ namespace FaceEnrollment
             EnrollmentManager.Finish(true);
         }
         private void Button_Click2(object sender, RoutedEventArgs e)
-        {
+        {// yes click
             EnrollmentManager.window.Content = new Page3();
         }
     }
