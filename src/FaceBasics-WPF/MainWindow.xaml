@@ -12,7 +12,7 @@
         <SolidColorBrush x:Key="KinectPurpleBrush" Color="#ff52318f" />
         <SolidColorBrush x:Key="KinectBlueBrush" Color="#ff00BCF2" />
     </Window.Resources>
-    <Grid Margin="1,0,1.333,0">
+    <Grid Margin="1,0,3.333,3.333">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -22,8 +22,8 @@
         <Viewbox Name="videoFeed" Visibility="Visible" Grid.Row="1" HorizontalAlignment="Center">
             <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
         </Viewbox>
-        <Button Content="Add New Person" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Click="Button_Click_1" Margin="743,975.667,0,-1006.333" Grid.Row="1" Height="40"/>
-        <Button Content="Update A Person" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Click="Button_Click_2" Margin="1007,975.667,0,-1003.667" Grid.Row="1" Height="40"/>
+        <Button Content="Add New Person" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Click="Button_Click_1" Margin="542,838.667,0,-857.333" Grid.Row="1" Height="40" FontSize="20"/>
+        <Button Content="Update A Person" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Click="Button_Click_2" Margin="809,838.667,0,-856" Grid.Row="1" Height="40" FontSize="20" IsEnabled="False"/>
 
 
         <!-- <Viewbox Name="conversationScreen" Visibility="Visible" Grid.Row="1" HorizontalAlignment="Center">
