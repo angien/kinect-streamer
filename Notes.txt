@@ -97,7 +97,7 @@ FaceBasics-WPF
 How to tell if someone is in the room?
 - try to do the "company"
 
-====== Next Meeting
+======
 
 
 
@@ -106,40 +106,18 @@ How to tell if someone is in the room?
 Known bugs
 - must have faceDB in file already
 - no update on faces that have already been made
-- need pop up for when a new face enters
-- figure out when there is a new unregistered person
-- not sure if company is updated at the right time :( (fix this!)
-- does not automatically take snapshots (need to have it take maybe 15?)
-- minimize gui as much as possible
-- FINISH SERVER SIDE FOR DESIGN
-- how preview works (bugs?)
 - error on training when face is too far to the top
-- Contact file should have name of people who are there! fix this
 - when someone has the same name already
 - remove the done button and have it move on after 50 (constant variable) or so frames are made 
 - fix the next button and maybe have a back button on the main window page?
 - remove debug messages
-- look into eye widening: opencv EYE WIDENING (GOOGLE THIS!!)
-- check if there was someone in the last 5 seconds or w/e
-- teamviewer to use surface pro to run kinect stuff on the mac mini instead
+- does not tell you when training someone (add "Training Data" page so it doesn't look like its crashing)
+- generalize the filepath
+- not sure how to "merge the two kinects" so that we dont need to retrain
 
 
-
-Combine tweets and fb as well as status updates!
-http://personalweb.about.com/od/facebookapps/ht/addtwittertofacebook.htm
-
-- random exception for when box is at the top
+- random exception for when box is at the top?
 
 - fix bugs for when not connected to the internet (so there isnt an exception)
-- set up HashMap for kinect stuff (instead of writing automatically, add to hashmap (keep a count?) and then write to file whenever)
 - figure out what is causing error on faceimagecropped return
-- add "Training Data" page so it doesn't look like its crashing
 - add Remove button
-
-
-- Directory requirements
-- Feed/
-- contacts.txt
-- context.txt
-- faceDB.txt
-- nameDB.txt

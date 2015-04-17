@@ -28,6 +28,8 @@ namespace FaceEnrollment
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+           
+
             if (File.ReadAllLines(@"C:\Test\faceDB.txt").Length == 0)
             {
                 EnrollmentManager.window.Content = new Page3();

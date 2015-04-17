@@ -117,22 +117,7 @@ namespace FaceEnrollment
 
                 lastFrame = frame;
 
-                /*if (!faceBox.Equals(Rect.Empty))
-                {
-                    DateTime now = DateTime.UtcNow;
-                    TimeSpan difference = now.Subtract(otherTime); // could also write `now - otherTime`
-                    if (difference.TotalSeconds > 1)
-                    {
-                        // Debug.WriteLine("facebox: " + faceBox);
-                        otherTime = now;
-                    //Debug.WriteLine("SOMETHING IS HAPPENING HERE" + lastFaceBoxes.Count());
-                    ((List<Rect>)lastFaceBoxes).Insert(i, faceBox);
-                    ((List<BitmapSource>)lastFrames).Insert(i, frame);
-                    i = (i + 1) % 10;
-                    //}
-
-             
-                }*/
+              
             
         }
         

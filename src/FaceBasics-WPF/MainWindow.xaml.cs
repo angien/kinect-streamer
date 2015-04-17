@@ -364,7 +364,19 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             buttons[0] = Phrase1;
             buttons[1] = Phrase2;
             buttons[2] = Phrase3;
-            buttons[3] = toggleVoice;   */         
+            buttons[3] = toggleVoice;   */
+
+            // CREATE ALL THE FILES HERE!
+            if (!Directory.Exists(filepath))
+            {
+                Directory.CreateDirectory(filepath);
+                Directory.CreateDirectory(filepath + "feed");
+                File.Create(filepath + "contacts.txt");
+                File.Create(filepath + "context.txt");
+                File.Create(filepath + "nameDB.txt");
+                File.Create(filepath + "faceDB.txt");
+            }
+           
             
         }
 

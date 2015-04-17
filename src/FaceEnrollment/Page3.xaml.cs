@@ -31,9 +31,6 @@ namespace FaceEnrollment
         {
             PersonTrainingData person = new PersonTrainingData();
             person.name = personName.Text;
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Test\nameDB.txt", true))
-            {
-            }
             string[] readText = File.ReadAllLines("C:\\Test\\nameDB.txt");
             EnrollmentManager.actualTrainingId = readText.Length + EnrollmentManager.actualTrainingId;
             person.trainingId = EnrollmentManager.actualTrainingId;
