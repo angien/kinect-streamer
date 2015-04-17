@@ -16,9 +16,6 @@ setx -m OPENCV_DIR C:\opencv\build\x86\vc12
 .NET framework needs to be 3.5
 https://msdn.microsoft.com/en-us/library/hh506443(v=vs.110).aspx
 
-
-Text file: FaceRecognition.cpp makes a faceDB.txt 
-
 Setup
 - make sure FaceBasics is bolded (select it and project > set as startup ...)
 
@@ -48,12 +45,6 @@ have keyboard come up when look at bottom
 separate app WINDOWS APP!
 kinect feed (video feed)
 who is there
-
-https://dev.windows.com/en-us/getstarted
-
-What kind of information needs to be sent over network? 2 computers
-- specify where to dump the file of data
-- name, coordinate distance from kinect, in the future: bluetooth
 
 master folder
 - store images, id 
@@ -129,22 +120,26 @@ Known bugs
 - fix the next button and maybe have a back button on the main window page?
 - remove debug messages
 - look into eye widening: opencv EYE WIDENING (GOOGLE THIS!!)
+- check if there was someone in the last 5 seconds or w/e
+- teamviewer to use surface pro to run kinect stuff on the mac mini instead
 
-HW: 2/12/15
-- come up with social media
-- check dropbox for the interview wav file
-- work on kinect stuff
-- ebook reader?
-+ use webcam to check if eyes are wide open (using some repo that is there)
-+ PLEX for media!! awesome!!
 
-Plugins
-- Check dropbox
 
 Combine tweets and fb as well as status updates!
 http://personalweb.about.com/od/facebookapps/ht/addtwittertofacebook.htm
 
-- look into teamviewer
-- uploading to a remote folder talk to brian
-- make label more noticeable
-- look into eye widening -> separate for now?
+- random exception for when box is at the top
+
+- fix bugs for when not connected to the internet (so there isnt an exception)
+- set up HashMap for kinect stuff (instead of writing automatically, add to hashmap (keep a count?) and then write to file whenever)
+- figure out what is causing error on faceimagecropped return
+- add "Training Data" page so it doesn't look like its crashing
+- add Remove button
+
+
+- Directory requirements
+- Feed/
+- contacts.txt
+- context.txt
+- faceDB.txt
+- nameDB.txt

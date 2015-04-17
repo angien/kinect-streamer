@@ -9,6 +9,7 @@
 
 using namespace FaceRecognition;
 
+
 Mat bitmapToMat(Bitmap^ image) {
 	ImageConverter converter;
 	array<Byte>^ temp = gcnew array<Byte>(1);
@@ -38,9 +39,10 @@ FaceRecognitionResult^ FaceRecognizerBridge::Predict(Bitmap^ image, System::Wind
 	double confidence;
 	int label;
 	(*faceRecognizer)->predict(croppedImageResized, label, confidence); 
-	FaceRecognitionResult^ result = gcnew FaceRecognitionResult();
-	result->confidence = confidence;
-	result->label = label;
+	FaceRecognitionResult^ result= gcnew FaceRecognitionResult();
+		result->confidence = confidence;
+		result->label = label;
+
 	return result;
 }
 

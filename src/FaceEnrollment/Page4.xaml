@@ -19,11 +19,10 @@
             <Border BorderBrush="SaddleBrown" BorderThickness="3" HorizontalAlignment="Center" Margin="160,338,367,28" Width="100" Height="100">
                 <Image Name="snapshotImage" />
             </Border>
-             
-           
-            <Button Content="Next Person" Click="Next_Click" HorizontalAlignment="Left" Margin="421,368,0,-190" VerticalAlignment="Top" Width="75" Height="25"/>
             <Button Content="Done" Click="Done_Click" HorizontalAlignment="Left" Margin="421,398,0,-220" VerticalAlignment="Top" Width="75" Height="25"/>
             <Label Name="output" Content="" Margin="260,232,74.667,452.667"/>
+            <TextBlock x:Name="trainDataText" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Training Data....This may take some time." VerticalAlignment="Top" Margin="311,362,0,0"></TextBlock>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Only one person's face should be in the frame." VerticalAlignment="Top" Margin="101,29,0,0"/>
         </Grid>
     </Viewbox>
 </Page>

@@ -8,12 +8,11 @@
 	Title="Page1">
     <Viewbox>
         <Grid Height="284">
-            <Button Content="No" Click="Button_Click" HorizontalAlignment="Center" Margin="100,183,0,0" VerticalAlignment="Top" Width="75"/>
-            <Button Content="Yes" Click="Button_Click2" HorizontalAlignment="Center" Margin="-100,183,0,0" VerticalAlignment="Top" Width="75"/>
-           
+            <Button Content="START" Click="Button_Click" HorizontalAlignment="Center" Margin="10,183,12.667,0" VerticalAlignment="Top" Width="178"/>
+
             <Border BorderBrush="SaddleBrown" BorderThickness="3" HorizontalAlignment="Center" Margin="0,80,0,0" VerticalAlignment="Top">
 
-                <Label Content="Do you want to add a new person?" />
+                <Label Content="Welcome to EyeHome Kinect!" />
             </Border>
         </Grid>
     </Viewbox>

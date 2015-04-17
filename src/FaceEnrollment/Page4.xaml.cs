@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,6 +37,7 @@ namespace FaceEnrollment
         public Page4()
         {
             InitializeComponent();
+            trainDataText.Visibility = System.Windows.Visibility.Hidden;
             EnrollmentManager.OnFrameReceived += ReceiveFrame;
             liveImage.Source = new DrawingImage(drawingGroup);
             lastFaceBoxes = new List<Rect>();
@@ -45,6 +47,8 @@ namespace FaceEnrollment
 
         private void ReceiveFrame(BitmapSource frame, IEnumerable<Rect> faceBoxes)
         {
+
+
             Rect faceBox = Rect.Empty;
             if (faceBoxes.Count() == 1) // people in the shot, only want one right now
             {
@@ -132,54 +136,12 @@ namespace FaceEnrollment
             
         }
         
-        private void Snap_Click(object sender, RoutedEventArgs e)
-        {
-
-
-            if (lastFaceBoxes.Count() < 10)
-            {
-                output.Content = "No faces found";
-
-                Debug.WriteLine("NO FACES FOUND" + lastFaceBoxes.Count());
-            }
-            else
-            {
-                for (int j = 0; j < 10; j++ )
-                {
-
-                    Debug.WriteLine("SSNAPCLICK" + lastFaceBoxes.Count());
-                    Rect faceBox = lastFaceBoxes[j];
-                    PersonTrainingData person = EnrollmentManager.trainingData[EnrollmentManager.currentTrainingId];
-                    Debug.WriteLine("lastframe" + lastFrames[j]);
-                    Bitmap image = Util.SourceToBitmap(lastFrames[j]);
-                    person.trainingImages.Add(image);
-                    person.faceBoxes.Add(faceBox);
-                    output.Content = "Success";
-
-                    FaceRecognition.FaceRecognizerBridge.Preview(image, faceBox);
-                    MemoryStream ms = new MemoryStream();
-                    BitmapImage bi = new BitmapImage();
-                    byte[] bytArray = File.ReadAllBytes(@"C:/Test/preview.jpg");
-                    ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
-                    bi.BeginInit();
-                    bi.StreamSource = ms;
-                    bi.EndInit();
-                    snapshotImage.Source = bi;
-                }
-               
-            }
-        }
-
-        private void Next_Click(object sender, RoutedEventArgs e)
-        {
-            EnrollmentManager.currentTrainingId++;
-            EnrollmentManager.actualTrainingId++;
-            EnrollmentManager.OnFrameReceived -= ReceiveFrame;
-            EnrollmentManager.window.Content = new Page3();
-        }
 
         private void Done_Click(object sender, RoutedEventArgs e)
         {
+
+            trainDataText.Visibility = System.Windows.Visibility.Visible;
+
             EnrollmentManager.OnFrameReceived -= ReceiveFrame;
             EnrollmentManager.Finish(false);
         }

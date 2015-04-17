@@ -14,7 +14,7 @@ namespace FaceEnrollment
         private static object initialContent;
         private static bool isActive = false;
 
-        internal static Window window;
+        public static Window window;
         internal static int currentTrainingId;
         internal static int actualTrainingId;
         internal static event Action<BitmapSource, IEnumerable<Rect>> OnFrameReceived;
@@ -43,6 +43,11 @@ namespace FaceEnrollment
             {
                 OnFrameReceived(frame, faceBoxes);
             }
+        }
+
+        public static void Relaunch()
+        {
+            isActive = true;
         }
 
         internal static void Finish(bool loadDB)

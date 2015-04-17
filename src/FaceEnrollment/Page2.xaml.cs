@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace FaceEnrollment
 {
     /// <summary>
-    /// Interaction logic for Page2.xaml
+    /// Interaction logic for Page1.xaml
     /// </summary>
     public partial class Page2 : Page
     {
@@ -25,9 +25,13 @@ namespace FaceEnrollment
             InitializeComponent();
         }
 
-        private void Button_Click2(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            return;
+            EnrollmentManager.Finish(true);
+        }
+        private void Button_Click2(object sender, RoutedEventArgs e)
+        {// yes click
+            EnrollmentManager.window.Content = new Page3();
         }
     }
 }
