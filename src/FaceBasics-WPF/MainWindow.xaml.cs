@@ -202,29 +202,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         public MainWindow()
         {
             InitializeComponent();
-            //profiles object
-            profiles = new List<List<String>>();
-            
-            //creates the database
-            ReadWriteCsv.CsvFileReader read = new ReadWriteCsv.CsvFileReader("dbcsv.csv");
-            int count = 0;
-            while (true)
-            {
-                ReadWriteCsv.CsvRow row = new ReadWriteCsv.CsvRow();
-                if (!read.ReadRow(row))
-                {
-                    break;
-                }
-
-                profiles.Add(new List<String>());
-                foreach (String value in row)
-                {
-                    profiles[count].Add(value.Trim());
-                }
-                count++;
-            } //end creation of the database
-
-            numberOfProfiles = count;
+ 
 
 
             System.Diagnostics.Debug.Write("MainWindow\n\n");
@@ -366,16 +344,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             buttons[2] = Phrase3;
             buttons[3] = toggleVoice;   */
 
-            // CREATE ALL THE FILES HERE!
-            if (!Directory.Exists(filepath))
-            {
-                Directory.CreateDirectory(filepath);
-                Directory.CreateDirectory(filepath + "feed");
-                File.Create(filepath + "contacts.txt");
-                File.Create(filepath + "context.txt");
-                File.Create(filepath + "nameDB.txt");
-                File.Create(filepath + "faceDB.txt");
-            }
+           
            
             
         }
