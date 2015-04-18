@@ -14,13 +14,13 @@ namespace FaceEnrollment
         private static object initialContent;
         private static bool isActive = false;
 
+
         public static Window window;
-        internal static int currentTrainingId;
-        internal static int actualTrainingId;
         internal static event Action<BitmapSource, IEnumerable<Rect>> OnFrameReceived;
 
+        public static bool doUpdate = false;
         public static event Action<bool> Done;
-        public static List<PersonTrainingData> trainingData = new List<PersonTrainingData>();
+        public static PersonTrainingData personToTrain;
         public static bool Active
         {
             get
@@ -33,7 +33,7 @@ namespace FaceEnrollment
         {
             isActive = true;
             initialContent = window.Content;
-            window.Content = new Page1();
+            window.Content = new WelcomePage();
             EnrollmentManager.window = window;
         }
 

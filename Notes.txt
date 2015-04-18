@@ -103,18 +103,18 @@ How to tell if someone is in the room?
 
 
 
-Known bugs
-- must have faceDB in file already
-- no update on faces that have already been made
+Known bugs/ TODO
 - error on training when face is too far to the top
 - when someone has the same name already
 - remove the done button and have it move on after 50 (constant variable) or so frames are made 
-- fix the next button and maybe have a back button on the main window page?
 - remove debug messages
 - does not tell you when training someone (add "Training Data" page so it doesn't look like its crashing)
 - generalize the filepath
 - not sure how to "merge the two kinects" so that we dont need to retrain
-
+- optimize problem with saving/training pictures?
+- dont know how to remove a person
+- no update on faces that have already been made
+- fix UI because it doesn't matter which button they press for an update
 
 - random exception for when box is at the top?
 

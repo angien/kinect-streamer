@@ -513,8 +513,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 List<Bitmap> images = new List<Bitmap>();
                 List<int> ids = new List<int>();
                 List<Rect> faceCrops = new List<Rect>();
-                foreach (PersonTrainingData data in EnrollmentManager.trainingData)
-                {
+                //foreach (PersonTrainingData data in EnrollmentManager.personToTrain)
+                //{
+                PersonTrainingData data = EnrollmentManager.personToTrain;
                     images.AddRange(data.trainingImages);
                     faceCrops.AddRange(data.faceBoxes);
                     foreach (var image in data.trainingImages)
@@ -526,11 +527,11 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     {
                         file.WriteLine(data.trainingId + "|" + data.name);
                     }
-                }
+                //}
 
                 if (images.Count() > 1)
                 {
-                    if (EnrollmentManager.trainingData[0].trainingId == 0)
+                    if (!EnrollmentManager.doUpdate)
                     {
                         faceRecognizer.Train(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
                     }
@@ -552,6 +553,10 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         }
                         faceRecognizer.Update(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
                     }
+                }
+                else
+                {
+                    Debug.WriteLine("Not enough pictures to train.");
                 }
             }
 
@@ -1379,15 +1384,15 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             EnrollmentManager.Relaunch();
-            EnrollmentManager.window.Content = new Page2();
+            EnrollmentManager.window.Content = new EnterNamePage();
         }
 
 
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            //EnrollmentManager.Relaunch();
-            //EnrollmentManager.window.Content = new Page2();
+            EnrollmentManager.Relaunch();
+            EnrollmentManager.window.Content = new EnterNamePage();
         }
 
     }

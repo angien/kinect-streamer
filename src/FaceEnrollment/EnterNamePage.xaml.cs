@@ -20,9 +20,9 @@ namespace FaceEnrollment
     /// <summary>
     /// Interaction logic for Page3.xaml
     /// </summary>
-    public partial class Page3 : Page
+    public partial class EnterNamePage : Page
     {
-        public Page3()
+        public EnterNamePage()
         {
             InitializeComponent();
         }
@@ -32,10 +32,30 @@ namespace FaceEnrollment
             PersonTrainingData person = new PersonTrainingData();
             person.name = personName.Text;
             string[] readText = File.ReadAllLines("C:\\Test\\nameDB.txt");
-            EnrollmentManager.actualTrainingId = readText.Length + EnrollmentManager.actualTrainingId;
-            person.trainingId = EnrollmentManager.actualTrainingId;
-            EnrollmentManager.trainingData.Add(person);
-            EnrollmentManager.window.Content = new Page4();
+            int pos = Array.IndexOf(readText, person.name);
+            if (pos > -1)
+            {
+                EnrollmentManager.doUpdate = true;
+                // the array contains the string and the pos variable
+                // will have its position in the array
+
+                person.trainingId = pos;
+            }
+            else
+            {
+
+                EnrollmentManager.doUpdate = false;
+                person.trainingId = readText.Length;
+            }
+            EnrollmentManager.personToTrain = person;
+            EnrollmentManager.window.Content = new TrainingPage();
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+          
+            EnrollmentManager.Finish(true);
+        
         }
     }
 }

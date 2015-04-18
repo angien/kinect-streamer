@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -18,20 +19,24 @@ namespace FaceEnrollment
     /// <summary>
     /// Interaction logic for Page1.xaml
     /// </summary>
-    public partial class Page2 : Page
+    public partial class WelcomePage : Page
     {
-        public Page2()
+        public WelcomePage()
         {
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            EnrollmentManager.Finish(true);
+           
+
+            if (File.ReadAllLines(@"C:\Test\faceDB.txt").Length == 0)
+            {
+                EnrollmentManager.window.Content = new EnterNamePage();
+            }
+            else
+                EnrollmentManager.Finish(true);
         }
-        private void Button_Click2(object sender, RoutedEventArgs e)
-        {// yes click
-            EnrollmentManager.window.Content = new Page3();
-        }
+       
     }
 }

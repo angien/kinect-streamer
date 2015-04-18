@@ -1,4 +1,4 @@
-﻿<Page x:Class="FaceEnrollment.Page3"
+﻿<Page x:Class="FaceEnrollment.EnterNamePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,6 +11,7 @@
             <Label Content="Enter Name" HorizontalAlignment="Center" Margin="0,80,0,0" VerticalAlignment="Top"/>
             <TextBox Name="personName" HorizontalAlignment="Center" Margin="-100,183,0,0" VerticalAlignment="Top" Width="75"/>
             <Button Content="Enter" Click="Enter_Click" HorizontalAlignment="Center" Margin="100,183,0,0" VerticalAlignment="Top" Width="75"/>
-    </Grid>
+            <Button Content="Cancel" Click="Cancel_Click" HorizontalAlignment="Center" Margin="49,220,50.667,0" VerticalAlignment="Top" Width="75"/>
+        </Grid>
     </Viewbox>
 </Page>
