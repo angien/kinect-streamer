@@ -104,6 +104,7 @@ How to tell if someone is in the room?
 
 
 Known bugs/ TODO
+- FIX RESOLUTION ON SOME OF THE PAGES!
 - error on training when face is too far to the top
 - when someone has the same name already
 - remove the done button and have it move on after 50 (constant variable) or so frames are made 
