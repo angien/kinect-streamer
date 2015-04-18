@@ -28,7 +28,9 @@ namespace FaceEnrollment
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-           
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Test\faceDB.txt", true))
+            {
+            }
 
             if (File.ReadAllLines(@"C:\Test\faceDB.txt").Length == 0)
             {

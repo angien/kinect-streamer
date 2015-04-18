@@ -31,18 +31,20 @@ namespace FaceEnrollment
         private List<BitmapSource> lastFrames;
         private DrawingGroup drawingGroup = new DrawingGroup();
         private static int i;
+        private static int j;
         private static int NUMBER_TO_TRAIN = 50;
         private static DateTime otherTime;
 
         public TrainingPage()
         {
             InitializeComponent();
-            trainDataText.Visibility = System.Windows.Visibility.Hidden;
+            //trainDataText.Visibility = System.Windows.Visibility.Hidden;
             EnrollmentManager.OnFrameReceived += ReceiveFrame;
             liveImage.Source = new DrawingImage(drawingGroup);
             lastFaceBoxes = new List<Rect>();
             lastFrames = new List<BitmapSource>();
             i = 0;
+            j = 0;
         }
 
         private void ReceiveFrame(BitmapSource frame, IEnumerable<Rect> faceBoxes)
@@ -50,6 +52,10 @@ namespace FaceEnrollment
 
 
             Rect faceBox = Rect.Empty;
+
+            PersonTrainingData person = EnrollmentManager.personToTrain;
+            
+
             if (faceBoxes.Count() == 1) // people in the shot, only want one right now
             {
                 //Debug.WriteLine("faceboxes COUNT: " + faceBoxes.Count());
@@ -58,26 +64,17 @@ namespace FaceEnrollment
                 filteredFaceBoxes = filteredFaceBoxes.Where((box) => Util.IsValidRect(box, bounds));
                 faceBox = filteredFaceBoxes.FirstOrDefault();
 
-                PersonTrainingData person = EnrollmentManager.personToTrain;
            
 
 
                     Bitmap image = Util.SourceToBitmap(frame);
-               //if (image != null)
-                 //   {
-                    if (person.trainingImages.Count() == NUMBER_TO_TRAIN)
-                    {
-                        person.trainingImages.RemoveAt(i);
-                        person.faceBoxes.RemoveAt(i);
-                    }
-                    person.trainingImages.Insert(i, image);
-                    person.faceBoxes.Insert(i, faceBox);
+    
 
-                    i = i + 1;
-                    //}
-
-                    if ((i % 10) == 0)
+                    i++;
+         
+                    if ((i % 4) == 0)
                     {
+
                         FaceRecognition.FaceRecognizerBridge.Preview(image, faceBox);
                         MemoryStream ms = new MemoryStream();
                         BitmapImage bi = new BitmapImage();
@@ -87,6 +84,15 @@ namespace FaceEnrollment
                         bi.StreamSource = ms;
                         bi.EndInit();
                         snapshotImage.Source = bi;
+
+                        if (person.trainingImages.Count() == NUMBER_TO_TRAIN)
+                        {
+                            EnrollmentManager.OnFrameReceived -= ReceiveFrame;
+                            EnrollmentManager.Finish(false);
+                        }
+                        person.trainingImages.Insert(j, image);
+                        person.faceBoxes.Insert(j, faceBox);
+                        j++;
 
                     }
 
@@ -124,7 +130,6 @@ namespace FaceEnrollment
         private void Done_Click(object sender, RoutedEventArgs e)
         {
 
-            trainDataText.Visibility = System.Windows.Visibility.Visible;
 
             EnrollmentManager.OnFrameReceived -= ReceiveFrame;
             EnrollmentManager.Finish(false);
