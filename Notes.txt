@@ -122,3 +122,19 @@ Known bugs/ TODO
 - fix bugs for when not connected to the internet (so there isnt an exception)
 - figure out what is causing error on faceimagecropped return
 - add Remove button
+- fix problem with facial recogniation??
+
+HOW TO ADD AN APP TO EYEHOME
+1. make physical folder in Documents > eyehome > “Test”
+2. add a file “test” into folder for the scripts (can name anything, as long as its a ahk)
+3. Open eyehome on visual studio and edit the menu.json to include the new application (use other examples in there as template)
+4. Add an image to images/menu folder, same name as the ID from menu.json (needs to be png, ex. test.png)
+5. Include new image to project with right click + “Include …”
+6. if need be, in common.js, add one line of code:
+
+localStorage.clear(); 
+
+to “reload” the menu.json
+
+
+
