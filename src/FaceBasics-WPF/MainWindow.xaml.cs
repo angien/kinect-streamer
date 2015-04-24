@@ -897,7 +897,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                 contacts[name]++;
                                 
                                 string text = name;
-                                //string text = name + '\n' + result.confidence.ToString();
+                                Debug.WriteLine(result.label + name + ' ' + result.confidence.ToString());
                                 FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
                                     System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 40,
                                     faceBrush[i]);
