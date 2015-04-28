@@ -52,6 +52,26 @@ namespace FaceEnrollment
 
             
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            EnrollmentManager.isKinect2();
+            // CREATE ALL THE FILES HERE!
+            if (!Directory.Exists(filepath))
+            {
+               
+                EnrollmentManager.window.Content = new ErrorPage();
+            }
+            else
+            {
+                if (File.ReadAllLines(@"C:\Test\faceDB.txt").Length == 0)
+                {
+                    EnrollmentManager.window.Content = new EnterNamePage();
+                }
+                else
+                    EnrollmentManager.Finish(true);
+            }
+        }
        
     }
 }

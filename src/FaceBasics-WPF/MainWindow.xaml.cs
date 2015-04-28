@@ -202,8 +202,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         public MainWindow()
         {
             InitializeComponent();
- 
 
+        
 
             System.Diagnostics.Debug.Write("MainWindow\n\n");
             // one sensor is currently supported
@@ -461,6 +461,13 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         void EnrollmentManager_Done(bool loadDB)
         {
            // Debug.WriteLine("emanager done");
+
+            // don't allow enrollment when on KinectNum2
+            if (EnrollmentManager.KinectNum2)
+            {
+                AddNew.Visibility = System.Windows.Visibility.Hidden;
+                Update.Visibility = System.Windows.Visibility.Hidden;
+            }
             if (loadDB)
             {
                 faceRecognizer.Load();
@@ -840,8 +847,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         /// </summary>
         private void DrawTheWholeFrame()
         {
-
-
             using (DrawingContext dc = this.drawingGroup.Open())
             {
                 //TODO. draws the color frame into the display rect
@@ -854,20 +859,18 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     contacts[entry] = 0;
                 }
 
-                // iterate through each face source
+                // iterate through each face source/body count
                 for (int i = 0; i < this.bodyCount; i++)
                 {
+                    Debug.WriteLine("Number of people in room: " + this.bodyCount);
                     // check if a valid face is tracked in this face source
                     if (this.faceFrameSources[i].IsTrackingIdValid)
                     {
-
-
                         // check if we have valid face frame results
                         if (this.faceFrameResults[i] != null)
                         {
                             
-                    
-                            // add a thumbnail of their face every 10 seconds  that they are in the frame
+                            // add a screenshot of the current scenery, 10 seconds that someone are in the frame
                             DateTime now = DateTime.UtcNow;
                             TimeSpan difference = now.Subtract(otherTime); // could also write `now - otherTime`
                             if (difference.TotalSeconds > 10)
@@ -877,12 +880,13 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                
                             }
 
-                            // draw face frame results (the frame around the face)
+                            // draw face frame results (the frame around the face) of i
                             this.DrawFaceFrameResults(i, this.faceFrameResults[i], dc);
 
                             RectI recti = faceFrameResults[i].FaceBoundingBoxInColorSpace;
                             Rect rect = new Rect(recti.Left, recti.Top, recti.Right - recti.Left, recti.Bottom - recti.Top);
 
+                            // Give a name to the i
                             if (!EnrollmentManager.Active && faceToResult[i] != null)
                             {
                                 FaceRecognitionResult result = faceToResult[i];
@@ -890,22 +894,28 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                 string name = labelToName[result.label];
                                 //Debug.WriteLine("label " + name);
 
-                                if (!contacts.ContainsKey(name))
+                                // if a name is associated
+                                if (name != null)
                                 {
-                                    contacts[name] = 0; // add that person, set the person that is here to 0
-                                }
-                                contacts[name]++;
+                                    if (!contacts.ContainsKey(name))
+                                    {
+                                        contacts[name] = 0; // add that person, set the person that is here to 0
+                                    }
+                                    contacts[name]++;
                                 
-                                string text = name;
-                                Debug.WriteLine(result.label + name + ' ' + result.confidence.ToString());
-                                FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
-                                    System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 40,
-                                    faceBrush[i]);
-                                
-                                dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Top - 1.0*(rect.Bottom - rect.Top)));
-                              
-                            }
+                                    string text = name;
+                          
+                                    Debug.WriteLine(result.label + name + ' ' + result.confidence.ToString());
+                                    FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
+                                   System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 40,
+                                   faceBrush[i]);
 
+                                    dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Top - 1.5 * (rect.Bottom - rect.Top)));
+                              
+                                }
+                               
+                            }
+                            // mapping the face with the prediction? only predict face every 200 or something
                             if (faceToCounter[i] > 200 && !EnrollmentManager.Active)
                             {
                                 faceToCounter[i] = 0;
@@ -914,6 +924,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
                                 Thread thread = new Thread(new ThreadStart(() =>
                                 {
+                                    // checks if valid rectangle to perform prediction on
                                     Rect transformedFace = Util.TransformFace(rect);
                                     Rect bounds = new Rect(new System.Windows.Size(colorBitmapBuffer.Width, colorBitmapBuffer.Height));
                                     if (Util.IsValidRect(transformedFace, bounds))
@@ -944,7 +955,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     }
                     else
                     {
-
                         // check if the corresponding body is tracked 
                         if (this.bodies[i].IsTracked)
                         {

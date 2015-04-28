@@ -22,8 +22,8 @@
         <Viewbox Name="videoFeed" Visibility="Visible" Grid.Row="1" HorizontalAlignment="Center">
             <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
         </Viewbox>
-        <Button Content="Add New Person" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Click="Button_Click_1" Margin="476,26.667,0,-40" Grid.Row="1" Height="40" FontSize="20"/>
-        <Button Content="Update A Person" HorizontalAlignment="Left" VerticalAlignment="Top" Width="213" Click="Button_Click_2" Margin="742,27.667,0,-39.667" Grid.Row="1" Height="40" FontSize="20" IsEnabled="False"/>
+        <Button x:Name="AddNew" Content="Add New Person" HorizontalAlignment="Left" VerticalAlignment="Top" Width="324" Click="Button_Click_1" Margin="588,10,0,-34" Grid.Row="1" Height="61" FontSize="20"/>
+        <Button x:Name="Update" Content="Update A Person" HorizontalAlignment="Left" VerticalAlignment="Top" Width="327" Click="Button_Click_2" Margin="988,10,0,-32" Grid.Row="1" Height="61" FontSize="20" IsEnabled="False"/>
 
 
         <!-- <Viewbox Name="conversationScreen" Visibility="Visible" Grid.Row="1" HorizontalAlignment="Center">

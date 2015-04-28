@@ -8,12 +8,14 @@
 	Title="Page1">
     <Viewbox>
         <Grid Height="284">
-            <Button Content="START" Click="Button_Click" HorizontalAlignment="Center" Margin="10,183,12.667,0" VerticalAlignment="Top" Width="178"/>
+            <Button Content="Kinect 1" Click="Button_Click" HorizontalAlignment="Center" Margin="10,183,110,0" VerticalAlignment="Top" Width="81" Height="21">
+            </Button>
 
             <Border BorderBrush="SaddleBrown" BorderThickness="3" HorizontalAlignment="Center" Margin="0,80,0,0" VerticalAlignment="Top">
 
-                <Label Content="Welcome to EyeHome Kinect!" />
+                <Label Content="Welcome to EyeHome Kinect! &#xD;&#xA;        Which Kinect is this?" Height="48" />
             </Border>
+            <Button Content="Kinect 2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="91" Margin="96,183,0,0" Height="21" Click="Button_Click_1"/>
         </Grid>
     </Viewbox>
 </Page>

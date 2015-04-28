@@ -13,6 +13,7 @@ namespace FaceEnrollment
     {
         private static object initialContent;
         private static bool isActive = false;
+        private static bool kinectNum = false; // false means that this is kinect number 1
 
 
         public static Window window;
@@ -26,6 +27,14 @@ namespace FaceEnrollment
             get
             {
                 return isActive;
+            }
+        }
+
+        public static bool KinectNum2
+        {
+            get
+            {
+                return kinectNum;
             }
         }
 
@@ -48,6 +57,11 @@ namespace FaceEnrollment
         public static void Relaunch()
         {
             isActive = true;
+        }
+
+        public static void isKinect2()
+        {
+            kinectNum = true;
         }
 
         internal static void Finish(bool loadDB)
