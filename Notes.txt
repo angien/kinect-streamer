@@ -13,6 +13,8 @@ setx -m OPENCV_DIR C:\opencv\build\x86\vc12
 - eyetribe sdk
 - Kinect sdk C#
 
+- must remember to set filepath in FaceRecognition.cpp and EnrollmentManager.cs
+
 .NET framework needs to be 3.5
 https://msdn.microsoft.com/en-us/library/hh506443(v=vs.110).aspx
 
@@ -112,7 +114,6 @@ Known bugs/ TODO
 - remove debug messages
 - does not tell you when training someone (add "Training Data" page so it doesn't look like its crashing)
 - generalize the filepath
-- not sure how to "merge the two kinects" so that we dont need to retrain
 - optimize problem with saving/training pictures?
 - dont know how to remove a person
 - no update on faces that have already been made!! this is still kinda broken

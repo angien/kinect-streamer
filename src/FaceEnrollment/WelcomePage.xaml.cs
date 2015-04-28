@@ -21,7 +21,7 @@ namespace FaceEnrollment
     /// </summary>
     public partial class WelcomePage : Page
     {
-        private string filepath = @"C:\Test\";
+
         public WelcomePage()
         {
             InitializeComponent();
@@ -30,19 +30,19 @@ namespace FaceEnrollment
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // CREATE ALL THE FILES HERE!
-            if (!Directory.Exists(filepath))
+            if (!Directory.Exists(EnrollmentManager.filepath))
             {
-                Directory.CreateDirectory(filepath);
-                Directory.CreateDirectory(filepath + "feed");
-                File.Create(filepath + "contacts.txt");
-                File.Create(filepath + "context.txt");
-                File.Create(filepath + "nameDB.txt");
-                File.Create(filepath + "faceDB.txt");
+                Directory.CreateDirectory(EnrollmentManager.filepath);
+                Directory.CreateDirectory(EnrollmentManager.filepath + "feed");
+                File.Create(EnrollmentManager.filepath + "contacts.txt");
+                File.Create(EnrollmentManager.filepath + "context.txt");
+                File.Create(EnrollmentManager.filepath + "nameDB.txt");
+                File.Create(EnrollmentManager.filepath + "faceDB.txt");
                 EnrollmentManager.window.Content = new EnterNamePage();
             }
             else
             {
-                if (File.ReadAllLines(@"C:\Test\faceDB.txt").Length == 0)
+                if (File.ReadAllLines(EnrollmentManager.filepath + "faceDB.txt").Length == 0)
                 {
                     EnrollmentManager.window.Content = new EnterNamePage();
                 }
@@ -57,14 +57,14 @@ namespace FaceEnrollment
         {
             EnrollmentManager.isKinect2();
             // CREATE ALL THE FILES HERE!
-            if (!Directory.Exists(filepath))
+            if (!Directory.Exists(EnrollmentManager.filepath))
             {
                
                 EnrollmentManager.window.Content = new ErrorPage();
             }
             else
             {
-                if (File.ReadAllLines(@"C:\Test\faceDB.txt").Length == 0)
+                if (File.ReadAllLines(EnrollmentManager.filepath + "faceDB.txt").Length == 0)
                 {
                     EnrollmentManager.window.Content = new EnterNamePage();
                 }

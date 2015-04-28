@@ -31,7 +31,8 @@ namespace FaceEnrollment
         {
             PersonTrainingData person = new PersonTrainingData();
             person.name = personName.Text;
-            string[] readText = File.ReadAllLines("C:\\Test\\nameDB.txt");
+            string[] readText = File.ReadAllLines(EnrollmentManager.filepath+"nameDB.txt");
+            // checks to see if name is already in the database
             int pos = Array.IndexOf(readText, person.name);
             if (pos > -1)
             {
@@ -49,6 +50,8 @@ namespace FaceEnrollment
             }
             EnrollmentManager.personToTrain = person;
             EnrollmentManager.window.Content = new TrainingPage();
+
+
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

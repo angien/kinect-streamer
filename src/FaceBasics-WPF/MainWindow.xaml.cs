@@ -48,12 +48,13 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
         private static int x=0;
         private static DateTime otherTime;
+        private static DateTime otherTime2;
 
         private FaceRecognizerBridge faceRecognizer = new FaceRecognizerBridge();
         private Dictionary<int, string> labelToName = new Dictionary<int, string>();
         private Dictionary<string, int> contacts = new Dictionary<string, int>();
         //private string filepath = @"\\NARENDRAN-PC\Users\Narendran\Documents\eyehome\metadata\";
-        private string filepath = @"C:\Test\";
+
 
         private FaceRecognitionResult[] faceToResult;
         private int[] faceToCounter;
@@ -471,7 +472,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
             if (loadDB)
             {
                 faceRecognizer.Load();
-                var lines = File.ReadAllLines("C:\\Test\\nameDB.txt");
+                var lines = File.ReadAllLines(EnrollmentManager.filepath+"nameDB.txt");
 
                 Debug.WriteLine("LINES" + lines.Count());
                 foreach (var line in lines)
@@ -499,7 +500,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         ids.Add(data.trainingId);
                     }
                     labelToName[data.trainingId] = data.name;
-                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Test\nameDB.txt", true))
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(EnrollmentManager.filepath+"nameDB.txt", true))
                     {
                         file.WriteLine(data.trainingId + "|" + data.name);
                     }
@@ -515,7 +516,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     {
                         Debug.WriteLine("DOING AN UPDATE");
                         faceRecognizer.Load();
-                        var lines = File.ReadAllLines("C:\\Test\\nameDB.txt");
+                        var lines = File.ReadAllLines(EnrollmentManager.filepath+"nameDB.txt");
 
                         Debug.WriteLine("LINES" + lines.Count());
                         foreach (var line in lines)
@@ -589,8 +590,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
 
                     Debug.WriteLine("No one in room");
-                    File.WriteAllText(filepath+"context.txt", String.Empty);
-                    File.WriteAllText(filepath+"contacts.txt", String.Empty);
+                    File.WriteAllText(EnrollmentManager.filepath+"context.txt", String.Empty);
+                    File.WriteAllText(EnrollmentManager.filepath+"contacts.txt", String.Empty);
                 
             
         }
@@ -862,7 +863,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 // iterate through each face source/body count
                 for (int i = 0; i < this.bodyCount; i++)
                 {
-                    Debug.WriteLine("Number of people in room: " + this.bodyCount);
                     // check if a valid face is tracked in this face source
                     if (this.faceFrameSources[i].IsTrackingIdValid)
                     {
@@ -876,7 +876,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             if (difference.TotalSeconds > 10)
                             {
                                 otherTime = now;
-                                CreateThumbnail("C:\\Test\\Feed\\" + x++ + ".jpg", colorBitmap.Clone());
+                                CreateThumbnail(EnrollmentManager.filepath + "Feed\\" + x++ + ".jpg", colorBitmap.Clone());
                                
                             }
 
@@ -905,17 +905,16 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                 
                                     string text = name;
                           
-                                    Debug.WriteLine(result.label + name + ' ' + result.confidence.ToString());
                                     FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
-                                   System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 40,
+                                   System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 45,
                                    faceBrush[i]);
 
-                                    dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Top - 1.5 * (rect.Bottom - rect.Top)));
+                                    dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Top - 1.3 * (rect.Bottom - rect.Top)));
                               
                                 }
                                
                             }
-                            // mapping the face with the prediction? only predict face every 200 or something
+                            // mapping the face with the prediction? only predict face every 200 or something??
                             if (faceToCounter[i] > 200 && !EnrollmentManager.Active)
                             {
                                 faceToCounter[i] = 0;
@@ -930,9 +929,12 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                     if (Util.IsValidRect(transformedFace, bounds))
                                     {
                                         FaceRecognitionResult faceResult = faceRecognizer.Predict(colorBitmapBuffer, Util.TransformFace(rect));
+
+                                        //Debug.WriteLine(faceResult.label + ' ' + faceResult.confidence.ToString());
                                         bool valid = true;
                                         for (int j = 0; j < faceToResult.Length; j++)
                                         {
+                                            // WHAT DOES THIS DO?
                                             if (j == i) break;
                                             if (faceToResult[j] == null) break;
                                             if (faceFrameResults[j] == null) break;
@@ -975,32 +977,42 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                    
                 }
                 // add list of people to contacts.txt
-                if (namesInRoom.Count == 0)
+
+                DateTime now2 = DateTime.UtcNow;
+                TimeSpan difference2 = now2.Subtract(otherTime2); // could also write `now - otherTime`
+                if (difference2.TotalSeconds > 2)
                 {
-                    // no one in room
-                    if (File.ReadAllLines(filepath + "contacts.txt").Length != 0)
+                    otherTime2 = now2;
+                    Debug.WriteLine("WRITING TO FILE!");
+                    if (namesInRoom.Count == 0)
                     {
-                        File.WriteAllText(filepath + "contacts.txt", String.Empty);
-                    }
-                    if (File.ReadAllLines(filepath + "context.txt").Length != 0)
-                    {
-                        File.WriteAllText(filepath + "context.txt", String.Empty);
-                    }
+                        // no one in room
+                        if (File.ReadAllLines(EnrollmentManager.filepath + "contacts.txt").Length != 0)
+                        {
+                            File.WriteAllText(EnrollmentManager.filepath + "contacts.txt", String.Empty);
+                        }
+                        if (File.ReadAllLines(EnrollmentManager.filepath + "context.txt").Length != 0)
+                        {
+                            File.WriteAllText(EnrollmentManager.filepath + "context.txt", String.Empty);
+                        }
 
+                    }
+                    else
+                    {
+                        string[] temp = (string[])namesInRoom.ToArray(typeof(string));
+                        File.WriteAllLines(EnrollmentManager.filepath + "contacts.txt", temp);
+
+                        if (File.ReadAllLines(EnrollmentManager.filepath + "context.txt").Length == 0)
+                        {
+
+                            File.WriteAllText(EnrollmentManager.filepath + "context.txt", "company");
+
+                        }
+                    }
                 }
-                else
-                {
-                    string[] temp = (string[]) namesInRoom.ToArray(typeof(string));
-                    File.WriteAllLines(filepath + "contacts.txt", temp);
-                       
-                    if (File.ReadAllLines(filepath + "context.txt").Length == 0)
-                    {
 
-                        File.WriteAllText(filepath + "context.txt", "company");
-
-                    }
-                }
-                
+               
+               
                 
 
 

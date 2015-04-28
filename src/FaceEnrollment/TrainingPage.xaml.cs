@@ -32,7 +32,7 @@ namespace FaceEnrollment
         private DrawingGroup drawingGroup = new DrawingGroup();
         private static int i;
         private static int j;
-        private static int NUMBER_TO_TRAIN = 50;
+        private static int NUMBER_TO_TRAIN = 20;
         private static DateTime otherTime;
 
         public TrainingPage()
@@ -78,7 +78,7 @@ namespace FaceEnrollment
                         FaceRecognition.FaceRecognizerBridge.Preview(image, faceBox);
                         MemoryStream ms = new MemoryStream();
                         BitmapImage bi = new BitmapImage();
-                        byte[] bytArray = File.ReadAllBytes(@"C:/Test/preview.jpg");
+                        byte[] bytArray = File.ReadAllBytes(EnrollmentManager.filepath+"preview.jpg");
                         ms.Write(bytArray, 0, bytArray.Length); ms.Position = 0;
                         bi.BeginInit();
                         bi.StreamSource = ms;
