@@ -9,7 +9,8 @@
 
 using namespace FaceRecognition;
 
-string filepath = "\\\\NARENDRAN-PC\\Users\\Narendran\\Documents\\eyehome\\Test\\";
+//string filepath = "\\\\NARENDRAN-PC\\Users\\Narendran\\Documents\\eyehome\\Test\\";
+string filepath = "C:\\Test\\";
 
 Mat bitmapToMat(Bitmap^ image) {
 	ImageConverter converter;
@@ -41,12 +42,18 @@ FaceRecognitionResult^ FaceRecognizerBridge::Predict(Bitmap^ image, System::Wind
 	int label;
 	// This is where the prediction happens
 
+	// added this to see what would happen and it's just returning -1 this time
+	//(*faceRecognizer)->set("threshold", 50.0);
 
+	//while (confidence < 100) { // keep predicting until we get a confidence that is over 100?
 		(*faceRecognizer)->predict(croppedImageResized, label, confidence);
+	//	cerr << "ID:  " << label << " Confidence: " << confidence << "\n";
+	//}
 		FaceRecognitionResult^ result = gcnew FaceRecognitionResult();
 		result->confidence = confidence;
 		result->label = label;
-		cerr << label << " confi " << confidence;
+		cerr << "Final ID:  " << label << " Confidence: " << confidence << "\n";
+
 	return result;
 }
 
@@ -57,6 +64,8 @@ void FaceRecognizerBridge::Update(array<Bitmap^>^ images, array<int>^ labels, ar
 	for (int i = 0; i < images->Length; i++)
 	{
 		System::Windows::Rect faceCrop = faceCrops[i];
+
+		// delete all the old pictures in the folder?
 
 		Mat image = bitmapToMat(images[i]);
 		Mat croppedImageResized = cropAndResize(image, faceCrop);
@@ -89,6 +98,7 @@ void FaceRecognizerBridge::Train(array<Bitmap^>^ images, array<int>^ labels, arr
 		Mat image = bitmapToMat(images[i]);
 		Mat croppedImageResized = cropAndResize(image, faceCrop);
 
+		// save the image into the feed folder
 		string directory = filepath + to_string(labels[i]);
 		string filename = to_string(i)+".jpg";
 		bool check = imwrite(directory +"\\"+ filename, croppedImageResized);
@@ -100,6 +110,7 @@ void FaceRecognizerBridge::Train(array<Bitmap^>^ images, array<int>^ labels, arr
 		}
 		nativeImages.push_back(croppedImageResized);
 		int id = labels[i];
+		cerr << "training id:" << id << " native size: " << nativeImages.size() << "\n";
 		nativeLabels.push_back(id);
 
 	}

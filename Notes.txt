@@ -22,6 +22,8 @@ Setup
 - make sure FaceBasics is bolded (select it and project > set as startup ...)
 - open Network folder, make sure to connect to main ocuhub computer
 
+When switching folders, must change in FaceRecognition.cpp and EnrollmentManager.c
+
 FaceBasics: main (pulls data from the Kinect)
  - pulls frames from Kinect -> to openCV
 FaceEnrollment: 
@@ -126,6 +128,8 @@ Known bugs/ TODO
 - add Remove button
 - fix problem with facial recogniation??
 - set up folder \\NARENDRAN-PC\Users\Narendran\Documents\eyehome
+ + very slow on network
+- does it actually update on both kinects? (FORCE UPDATE ON KINECT 2 EVERY NOW AND THEN!!!!)
 
 
 HOW TO ADD AN APP TO EYEHOME
@@ -139,6 +143,5 @@ HOW TO ADD AN APP TO EYEHOME
 localStorage.clear(); 
 
 to “reload” the menu.json
-
 
 

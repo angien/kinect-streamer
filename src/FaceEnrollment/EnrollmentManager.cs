@@ -23,8 +23,8 @@ namespace FaceEnrollment
         public static event Action<bool> Done;
         public static PersonTrainingData personToTrain;
 
-       // public const string filepath = @"C:\Test\";
-        public const string filepath = @"\\NARENDRAN-PC\Users\Narendran\Documents\eyehome\Test\";
+        public const string filepath = @"C:\Test\";
+        //public const string filepath = @"\\NARENDRAN-PC\Users\Narendran\Documents\eyehome\Test\";
 
         public static bool Active
         {

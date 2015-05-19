@@ -16,7 +16,7 @@ namespace FaceEnrollment
     {
         public static Bitmap SourceToBitmap(BitmapSource source)
         {
-            Debug.WriteLine("source to bitmap" + source.PixelHeight + source.PixelWidth);
+            //Debug.WriteLine("source to bitmap" + source.PixelHeight + source.PixelWidth);
             Bitmap bmp = new Bitmap(
           source.PixelWidth,
           source.PixelHeight,

@@ -829,9 +829,9 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         }
 
         int counter = 0; // delete this
-        void CreateThumbnail(string filename, BitmapSource image5)
+        void SaveFeedImage(string filename, BitmapSource image5)
         {
-            Debug.WriteLine("Saving image");
+            Debug.WriteLine("Saving Feed Image");
             if (filename != string.Empty)
             {
                 using (FileStream stream5 = new FileStream(filename, FileMode.Create))
@@ -870,13 +870,13 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                         if (this.faceFrameResults[i] != null)
                         {
                             
-                            // add a screenshot of the current scenery, 10 seconds that someone are in the frame
+                            // add a screenshot of the current scenery, 10 seconds that someone is detected in the frame
                             DateTime now = DateTime.UtcNow;
                             TimeSpan difference = now.Subtract(otherTime); // could also write `now - otherTime`
                             if (difference.TotalSeconds > 10)
                             {
                                 otherTime = now;
-                                CreateThumbnail(EnrollmentManager.filepath + "Feed\\" + x++ + ".jpg", colorBitmap.Clone());
+                                SaveFeedImage(EnrollmentManager.filepath + "Feed\\" + x++ + ".jpg", colorBitmap.Clone());
                                
                             }
 
@@ -928,26 +928,33 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                     Rect bounds = new Rect(new System.Windows.Size(colorBitmapBuffer.Width, colorBitmapBuffer.Height));
                                     if (Util.IsValidRect(transformedFace, bounds))
                                     {
+
+                                        Debug.WriteLine("How often are we going in here?");
+
                                         FaceRecognitionResult faceResult = faceRecognizer.Predict(colorBitmapBuffer, Util.TransformFace(rect));
 
-                                        //Debug.WriteLine(faceResult.label + ' ' + faceResult.confidence.ToString());
-                                        bool valid = true;
-                                        for (int j = 0; j < faceToResult.Length; j++)
+                                        if (faceResult.confidence > 100)
                                         {
-                                            // WHAT DOES THIS DO?
-                                            if (j == i) break;
-                                            if (faceToResult[j] == null) break;
-                                            if (faceFrameResults[j] == null) break;
-                                            if (faceToResult[j].label == faceResult.label && faceResult.confidence > faceToResult[j].confidence)
+                                            //Debug.WriteLine(faceResult.label + ' ' + faceResult.confidence.ToString());
+                                            bool valid = true;
+                                            for (int j = 0; j < faceToResult.Length; j++)
                                             {
-                                                valid = false;
+                                                // WHAT DOES THIS DO?
+                                                if (j == i) break;
+                                                if (faceToResult[j] == null) break;
+                                                if (faceFrameResults[j] == null) break;
+                                                if (faceToResult[j].label == faceResult.label && faceResult.confidence > faceToResult[j].confidence)
+                                                {
+                                                    valid = false;
+                                                }
+                                            }
+
+                                            if (valid)
+                                            {
+                                                faceToResult[index] = faceResult;
                                             }
                                         }
-
-                                        if (valid)
-                                        {
-                                            faceToResult[index] = faceResult;
-                                        }
+                                        
                                     }
                                 }));
                                 thread.Start();
@@ -983,7 +990,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                 if (difference2.TotalSeconds > 2)
                 {
                     otherTime2 = now2;
-                    Debug.WriteLine("WRITING TO FILE!");
+                    //Debug.WriteLine("WRITING TO FILE!");
                     if (namesInRoom.Count == 0)
                     {
                         // no one in room

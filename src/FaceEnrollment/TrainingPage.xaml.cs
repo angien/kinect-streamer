@@ -33,7 +33,6 @@ namespace FaceEnrollment
         private static int i;
         private static int j;
         private static int NUMBER_TO_TRAIN = 20;
-        private static DateTime otherTime;
 
         public TrainingPage()
         {
@@ -45,7 +44,7 @@ namespace FaceEnrollment
             lastFrames = new List<BitmapSource>();
             i = 0;
             j = 0;
-        }
+        } 
 
         private void ReceiveFrame(BitmapSource frame, IEnumerable<Rect> faceBoxes)
         {
