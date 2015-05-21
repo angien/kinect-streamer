@@ -1,4 +1,4 @@
-﻿05
+﻿SETUP
 ======
 - facial recognition
 
@@ -18,18 +18,18 @@ setx -m OPENCV_DIR C:\opencv\build\x86\vc12
 .NET framework needs to be 3.5
 https://msdn.microsoft.com/en-us/library/hh506443(v=vs.110).aspx
 
-Setup
 - make sure FaceBasics is bolded (select it and project > set as startup ...)
 - open Network folder, make sure to connect to main ocuhub computer
 
 When switching folders, must change in FaceRecognition.cpp and EnrollmentManager.c
+
+======= How it works
 
 FaceBasics: main (pulls data from the Kinect)
  - pulls frames from Kinect -> to openCV
 FaceEnrollment: 
  - openCV -> adapted for Kinect
  - does the training
- - 
 
  FaceRecognition
  - FaceRecognition.h: wrapper for bridging Kinect (C#) to OpenCV (C++)
@@ -41,9 +41,6 @@ FaceEnrollment:
  --> calls the OpenCV train
  FaceRecognitionResult: label (integer, needs to be mapped to database), confidence
 
-=====================
-
-Kinect App
 - context.txt (write 'company' or 'alone')
 - contacts.txt (people in the room) - (id, time they came in, distance)
 - /<id>/
@@ -67,21 +64,7 @@ FaceBasics-WPF
 - Mainwindow calls methods inside FaceRecognition
 - boxes (kinect face basics stuff)
 
-
-=> Try making my own based off of FaceBasics, ask Dylan how he did the openCV connecting
-
-- training is done at the very beginning through the enrollment gui, then it opens up the video stream and "names" those people
-- does not know if someone is a new person (will try to map to most similar person, lol)
- ****
-
-How to tell if someone is in the room?
-- try to do the "company"
-
 ======
-
-
-
-
 
 Known bugs/ TODO
 - FIX RESOLUTION ON SOME OF THE PAGES!
@@ -89,23 +72,22 @@ Known bugs/ TODO
 - when someone has the same name already
 - remove the done button and have it move on after 50 (constant variable) or so frames are made 
 - remove debug messages
+- does not know if someone is a new person (will try to map to most similar person, lol)
 - does not tell you when training someone (add "Training Data" page so it doesn't look like its crashing)
-- generalize the filepath
 - optimize problem with saving/training pictures?
 - dont know how to remove a person
 - no update on faces that have already been made!! this is still kinda broken
 - fix UI because it doesn't matter which button they press for an update
 
-- random exception for when box is at the top?
-
 - fix bugs for when not connected to the internet (so there isnt an exception)
 - figure out what is causing error on faceimagecropped return
 - add Remove button
 - fix problem with facial recogniation??
-- set up folder \\NARENDRAN-PC\Users\Narendran\Documents\eyehome
- + very slow on network
 - does it actually update on both kinects? (FORCE UPDATE ON KINECT 2 EVERY NOW AND THEN!!!!)
 
+- crashes when it attempts to predict someone new other than the first person
+
+======= This is notes from Brian
 
 HOW TO ADD AN APP TO EYEHOME
 1. make physical folder in Documents > eyehome > “Test”
