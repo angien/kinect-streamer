@@ -512,19 +512,22 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                     {
                         if (EnrollmentManager.firstTime)
                         {
-                            Debug.WriteLine("Creating model for the first time");
-                            faceRecognizer.Train(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                            //Debug.WriteLine("Creating model for the first time");
+                            //faceRecognizer.Train(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
                             EnrollmentManager.firstTime = false;
+                          
+                            faceRecognizer.Update(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                       
                         }
                         else
                         {
                             Debug.WriteLine("Updating the model with new faces (after doing a load)");
-                            faceRecognizer.Load();
+                            //faceRecognizer.Load();
                             faceRecognizer.Update(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
                         }
                     }
                     else
-                    {
+                    {/*
                         Debug.WriteLine("DOING AN UPDATE");
                         faceRecognizer.Load();
                         var lines = File.ReadAllLines(EnrollmentManager.filepath+"nameDB.txt");
@@ -539,7 +542,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             Debug.WriteLine("LOADING " + name);
                             labelToName[label] = name;
                         }
-                        faceRecognizer.Update(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                        faceRecognizer.Update(images.ToArray(), ids.ToArray(), faceCrops.ToArray());*/
                     }
                 }
                 else

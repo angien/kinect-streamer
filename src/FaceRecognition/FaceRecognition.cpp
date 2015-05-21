@@ -23,7 +23,7 @@ Mat bitmapToMat(Bitmap^ image) {
 	pin_ptr<unsigned char> pointer = &data[0];
 	unsigned char* rawData = (unsigned char*)pointer;
 
-	vector<char> buffer(rawData, rawData + size);
+	vector<unsigned char> buffer(rawData, rawData + size);
 	return imdecode(buffer, CV_LOAD_IMAGE_GRAYSCALE);
 }
 
@@ -38,15 +38,35 @@ FaceRecognitionResult^ FaceRecognizerBridge::Predict(Bitmap^ image, System::Wind
 	Mat nativeImage = bitmapToMat(image);
 	Mat croppedImageResized = cropAndResize(nativeImage, faceCrop);
 
-	double confidence;
-	int label;
+	double confidence = 0.0;
+	int label = -1;
 	// This is where the prediction happens
 
 	// added this to see what would happen and it's just returning -1 this time
 	//(*faceRecognizer)->set("threshold", 100.0);
 
 	//while (confidence < 100) { // keep predicting until we get a confidence that is over 100?
+
+	cv::Size s = nativeImage.size();
+	int rows = s.height;
+	int cols = s.width;
+
+	cv::Size ts = croppedImageResized.size();
+	int srows = ts.height;
+	int scols = ts.width;
+	if (scols == 0 || srows == 0 || rows == 0 || cols == 0) {
+
+		cerr << "IMAGES WERE NULL" << endl;
+	}
+
+	try {
+
 		(*faceRecognizer)->predict(croppedImageResized, label, confidence);
+	}
+	catch (...) {
+		cerr << "hello" << endl;
+		label = -1;
+	}
 	//	cerr << "ID:  " << label << " Confidence: " << confidence << "\n";
 	//}
 		FaceRecognitionResult^ result = gcnew FaceRecognitionResult();
@@ -58,7 +78,7 @@ FaceRecognitionResult^ FaceRecognizerBridge::Predict(Bitmap^ image, System::Wind
 }
 
 void FaceRecognizerBridge::Update(array<Bitmap^>^ images, array<int>^ labels, array<System::Windows::Rect>^ faceCrops) {
-	vector<Mat> nativeImages;
+	/*vector<Mat> nativeImages;
 	vector<int> nativeLabels;
 
 	for (int i = 0; i < images->Length; i++)
@@ -81,6 +101,37 @@ void FaceRecognizerBridge::Update(array<Bitmap^>^ images, array<int>^ labels, ar
 
 	}
 
+	(*faceRecognizer)->update(nativeImages, nativeLabels);
+	Save();*/
+
+	vector<Mat> nativeImages;
+	vector<int> nativeLabels;
+
+	for (int i = 0; i < images->Length; i++)
+	{
+		System::Windows::Rect faceCrop = faceCrops[i];
+
+		Mat image = bitmapToMat(images[i]);
+		Mat croppedImageResized = cropAndResize(image, faceCrop);
+
+		// save the image into the feed folder
+		string directory = filepath + to_string(labels[i]);
+		string filename = to_string(i) + ".jpg";
+		bool check = imwrite(directory + "\\" + filename, croppedImageResized);
+		if (check == false) {
+
+			mkdir(directory.c_str());
+			bool check2 = imwrite(directory + "\\" + filename, croppedImageResized);
+
+		}
+		nativeImages.push_back(croppedImageResized);
+		int id = labels[i];
+		cerr << "training id:" << id << " native size: " << nativeImages.size() << "\n";
+		nativeLabels.push_back(id);
+
+	}
+
+	//(*faceRecognizer)->train(nativeImages, nativeLabels);
 	(*faceRecognizer)->update(nativeImages, nativeLabels);
 	Save();
 }
