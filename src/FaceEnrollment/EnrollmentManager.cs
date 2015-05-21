@@ -13,15 +13,17 @@ namespace FaceEnrollment
     {
         private static object initialContent;
         private static bool isActive = false;
+
         private static bool kinectNum = false; // false means that this is kinect number 1
 
 
         public static Window window;
         internal static event Action<BitmapSource, IEnumerable<Rect>> OnFrameReceived;
 
-        public static bool doUpdate = false;
+        public static bool doManualUpdate = false;
         public static event Action<bool> Done;
         public static PersonTrainingData personToTrain;
+        public static bool firstTime = false;
 
         public const string filepath = @"C:\Test\";
         //public const string filepath = @"\\NARENDRAN-PC\Users\Narendran\Documents\eyehome\Test\";
@@ -61,6 +63,8 @@ namespace FaceEnrollment
         public static void Relaunch()
         {
             isActive = true;
+            initialContent = window.Content;
+            window.Content = new EnterNamePage();
         }
 
         public static void isKinect2()

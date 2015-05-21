@@ -43,7 +43,7 @@ FaceRecognitionResult^ FaceRecognizerBridge::Predict(Bitmap^ image, System::Wind
 	// This is where the prediction happens
 
 	// added this to see what would happen and it's just returning -1 this time
-	//(*faceRecognizer)->set("threshold", 50.0);
+	//(*faceRecognizer)->set("threshold", 100.0);
 
 	//while (confidence < 100) { // keep predicting until we get a confidence that is over 100?
 		(*faceRecognizer)->predict(croppedImageResized, label, confidence);
@@ -64,8 +64,6 @@ void FaceRecognizerBridge::Update(array<Bitmap^>^ images, array<int>^ labels, ar
 	for (int i = 0; i < images->Length; i++)
 	{
 		System::Windows::Rect faceCrop = faceCrops[i];
-
-		// delete all the old pictures in the folder?
 
 		Mat image = bitmapToMat(images[i]);
 		Mat croppedImageResized = cropAndResize(image, faceCrop);
@@ -116,7 +114,7 @@ void FaceRecognizerBridge::Train(array<Bitmap^>^ images, array<int>^ labels, arr
 	}
 
 	(*faceRecognizer)->train(nativeImages, nativeLabels);
-	(*faceRecognizer)->update(nativeImages, nativeLabels);
+	//(*faceRecognizer)->update(nativeImages, nativeLabels);
 	Save();
 }
 

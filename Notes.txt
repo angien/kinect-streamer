@@ -43,29 +43,6 @@ FaceEnrollment:
 
 =====================
 
-Metro App
-
-have keyboard come up when look at bottom
-
-separate app WINDOWS APP!
-kinect feed (video feed)
-who is there
-
-master folder
-- store images, id 
-
-Repo for EyeHome?
-Is the ocuhub online yet?
-
-What is the separateion between the ocuhub and the separate 
-
-OcuHub reads from a file on the desktop
-
-TODO
-- review videos of 118
-- run hey you and see what can be done with it for Kinect App
-
-
 Kinect App
 - context.txt (write 'company' or 'alone')
 - contacts.txt (people in the room) - (id, time they came in, distance)
@@ -74,11 +51,9 @@ Kinect App
 	+ 10 x <date><time>.jpg buffer
     	- 10 hertz (take face pics 10th of a second)
 
-Messenger
-- do windows app tutorial and make sure it resizes
-- start with template (video feed and "in-room buddy list")
+Flow at start of program
 
-
+MainWindow -> EnrollmentManager -> WelcomePage -> EnterNamePage -> TrainingPage -> MainWindow -> FaceRecognition
 
 FaceRecognition
 - opencv port

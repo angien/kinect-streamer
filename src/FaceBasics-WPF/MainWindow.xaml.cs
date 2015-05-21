@@ -508,9 +508,20 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
                 if (images.Count() > 1)
                 {
-                    if (!EnrollmentManager.doUpdate)
+                    if (!EnrollmentManager.doManualUpdate)
                     {
-                        faceRecognizer.Train(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                        if (EnrollmentManager.firstTime)
+                        {
+                            Debug.WriteLine("Creating model for the first time");
+                            faceRecognizer.Train(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                            EnrollmentManager.firstTime = false;
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Updating the model with new faces (after doing a load)");
+                            faceRecognizer.Load();
+                            faceRecognizer.Update(images.ToArray(), ids.ToArray(), faceCrops.ToArray());
+                        }
                     }
                     else
                     {
@@ -890,28 +901,32 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                             if (!EnrollmentManager.Active && faceToResult[i] != null)
                             {
                                 FaceRecognitionResult result = faceToResult[i];
-                      
-                                string name = labelToName[result.label];
-                                //Debug.WriteLine("label " + name);
 
-                                // if a name is associated
-                                if (name != null)
+                                if (result.label != -1)
                                 {
-                                    if (!contacts.ContainsKey(name))
-                                    {
-                                        contacts[name] = 0; // add that person, set the person that is here to 0
-                                    }
-                                    contacts[name]++;
-                                
-                                    string text = name;
-                          
-                                    FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
-                                   System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 45,
-                                   faceBrush[i]);
+                                    string name = labelToName[result.label];
+                                    //Debug.WriteLine("label " + name);
 
-                                    dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Top - 1.3 * (rect.Bottom - rect.Top)));
-                              
+                                    // if a name is associated
+                                    if (name != null)
+                                    {
+                                        if (!contacts.ContainsKey(name))
+                                        {
+                                            contacts[name] = 0; // add that person, set the person that is here to 0
+                                        }
+                                        contacts[name]++;
+
+                                        string text = name;
+
+                                        FormattedText ftext = new FormattedText(text, CultureInfo.CurrentCulture,
+                                       System.Windows.FlowDirection.LeftToRight, new Typeface("Georgia"), 45,
+                                       faceBrush[i]);
+
+                                        dc.DrawText(ftext, new Point(rect.X + rect.Width / 2, rect.Top - 1.3 * (rect.Bottom - rect.Top)));
+
+                                    }
                                 }
+                                
                                
                             }
                             // mapping the face with the prediction? only predict face every 200 or something??
@@ -933,8 +948,8 @@ namespace Microsoft.Samples.Kinect.FaceBasics
 
                                         FaceRecognitionResult faceResult = faceRecognizer.Predict(colorBitmapBuffer, Util.TransformFace(rect));
 
-                                        if (faceResult.confidence > 100)
-                                        {
+                                       // if (faceResult.confidence > 100)
+                                       // {
                                             //Debug.WriteLine(faceResult.label + ' ' + faceResult.confidence.ToString());
                                             bool valid = true;
                                             for (int j = 0; j < faceToResult.Length; j++)
@@ -953,7 +968,7 @@ namespace Microsoft.Samples.Kinect.FaceBasics
                                             {
                                                 faceToResult[index] = faceResult;
                                             }
-                                        }
+                                       // }
                                         
                                     }
                                 }));
@@ -1382,7 +1397,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             EnrollmentManager.Relaunch();
-            EnrollmentManager.window.Content = new EnterNamePage();
         }
 
 
@@ -1390,7 +1404,6 @@ namespace Microsoft.Samples.Kinect.FaceBasics
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             EnrollmentManager.Relaunch();
-            EnrollmentManager.window.Content = new EnterNamePage();
         }
 
     }

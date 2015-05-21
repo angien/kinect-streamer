@@ -36,7 +36,7 @@ namespace FaceEnrollment
             int pos = Array.IndexOf(readText, person.name);
             if (pos > -1)
             {
-                EnrollmentManager.doUpdate = true;
+                EnrollmentManager.doManualUpdate = true;
                 // the array contains the string and the pos variable
                 // will have its position in the array
 
@@ -45,7 +45,7 @@ namespace FaceEnrollment
             else
             {
 
-                EnrollmentManager.doUpdate = false;
+                EnrollmentManager.doManualUpdate = false;
                 person.trainingId = readText.Length;
             }
             EnrollmentManager.personToTrain = person;

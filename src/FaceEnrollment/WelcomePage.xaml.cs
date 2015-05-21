@@ -30,6 +30,7 @@ namespace FaceEnrollment
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // CREATE ALL THE FILES HERE!
+            // if you are trying to reset the database, you must remove the entire folder
             if (!Directory.Exists(EnrollmentManager.filepath))
             {
                 Directory.CreateDirectory(EnrollmentManager.filepath);
@@ -38,12 +39,16 @@ namespace FaceEnrollment
                 File.Create(EnrollmentManager.filepath + "context.txt");
                 File.Create(EnrollmentManager.filepath + "nameDB.txt");
                 File.Create(EnrollmentManager.filepath + "faceDB.txt");
+                // no one in database
+                EnrollmentManager.firstTime = true;
                 EnrollmentManager.window.Content = new EnterNamePage();
             }
             else
             {
+                // no one in database
                 if (File.ReadAllLines(EnrollmentManager.filepath + "faceDB.txt").Length == 0)
                 {
+                    EnrollmentManager.firstTime = true;
                     EnrollmentManager.window.Content = new EnterNamePage();
                 }
                 else
@@ -64,12 +69,8 @@ namespace FaceEnrollment
             }
             else
             {
-                if (File.ReadAllLines(EnrollmentManager.filepath + "faceDB.txt").Length == 0)
-                {
-                    EnrollmentManager.window.Content = new EnterNamePage();
-                }
-                else
-                    EnrollmentManager.Finish(true);
+                // kinect 2 should not be doing any enrollment manager stuff
+                EnrollmentManager.Finish(true);
             }
         }
        
